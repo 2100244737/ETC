@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--<%@ page contentType="text/html;charset=utf-8"%>-->
+<html lang="en">
+<head>
+    <meta http-equiv="expires" content="0"/>
+    <!-- <%@ include file="/WEB-INF/jsp/assets.jsp" %>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <style>
+        html,
+        body,
+        #container {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #409EFF;
+            font-weight: 700;
+            margin-left: 0;
+        }
+
+        ul li {
+            list-style: none;
+            padding-left: 0px;
+        }
+
+        ul {
+            padding-left: 0px;
+        }
+
+        #intervals {
+            padding-left: 10px;
+            /* height: 600px;
+              overflow-y: auto; */
+            background: #fff;
+            text-align: left;
+        }
+
+        .left_menu_bg {
+            text-align: center;
+        }
+
+        .left_menu {
+            z-index: 9999999;
+        }
+        h3 {
+            margin: 5px 0;
+        }
+        .btnShow {
+            background: #25A5F7;
+            color: #fff;
+            width: 60px;
+            height: 50px;
+            border-radius: 15px;
+            position: fixed;
+            top: 5%;
+            right: 5%;
+            border: none;
+            z-index: 999999999;
+            cursor: pointer;
+        }
+
+
+
+
+        .cradpath {
+            cursor:pointer;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+        }
+        .pathBox {
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+        }
+        .origin {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            background: #3e91d9;
+            position: relative;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .origin:after {
+            content: ':';
+            position: absolute ;
+            color: #333;
+            top: 21px;
+            left: 14px;
+            font-size: 20px;
+            display: block;
+        }
+        .terminus {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            border-radius: 50%;
+            background: #d43050;
+            color: #fff;
+        }
+        .pathHead {
+            display: flex;
+            width: 100%;
+            background: #ffffff;
+            margin-bottom: 30px;
+        }
+        .pathtext {
+            height: 100%;
+            padding: 10px;
+            width: 100%;
+        }
+        .pathtext p {
+            width: 100%;
+        }
+        .pathtext #text1 {
+            padding-bottom: 10px;
+            padding-top: 10px;
+            border-bottom: 1px solid #888;
+            margin-bottom: 10px;
+        }
+        .pathBoutton {
+            width: 100%;
+            padding: 10px;
+            background: #fff;
+        }
+        .pathList {
+          line-height: 50px;
+            cursor:pointer;
+        }
+        .pathListItem {
+
+            padding-bottom: 7px;
+            border-bottom: 1px solid #888;
+        }
+        .pathListspan2 {
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+        .pathListSpan {
+            padding: 5px;
+            background: #888;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .active {
+            background: #409eff;
+        }
+        .Pathbtn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-top: 20px;
+        }
+        .pahtInfo:hover {
+            color: #409EFF;
+        }
+        .btns {
+            cursor:pointer;
+            width: 80px;
+            padding: 8px;
+            border: none;
+            color: #fff;
+            background: #409eff;
+        }
+        .pathImg {
+            width: 25px;
+            height: 25px;
+            background: url("./all.png") no-repeat;
+            background-size: 20px;
+            background-position: center center;
+        }
+        .btns1 {
+            cursor:pointer;
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #888;
+            background: #fff;
+        }
+    </style>
+    <title>路径还原</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=key=142567df3f87fb5698fcd0056ee0b842&plugin=AMap.PolyEditor"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+
+</head>
+<body>
+
+
+<div id="container"></div>
+<!-- 路径还原选择 -->
+<!--<div class="left_menu hidden-xs"-->
+<!--     style="padding:0px 0px 0px 0px;height:6%;width:10%;position:fixed; top:10%; left:10% ;">-->
+<!--    <div class="left_menu_bg">-->
+<!--        <ul>-->
+<!--            <li class="has-sub " id="mySelection">-->
+<!--                <a href="#none">-->
+<!--                    <div class="menu_wz" style="text-align:center"> 选择路径</div>-->
+<!--                    <div class="menu_jt">-->
+<!--                        <i class="fa fa-caret-down fa-lg"></i></div>-->
+<!--                </a>-->
+
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- 收费单元 -->
+<div class="left_menu hidden-xs"
+     style="padding:0px 0px 0px 0px;height:6%;width:18%;position:fixed; top:7px; right:330px ; min-height: calc(90% - 160px); height: calc(90% - 120px); overflow-y: auto;">
+    <div class="left_menu_bg">
+        <ul id="intervals">
+        </ul>
+    </div>
+</div>
+
+<div class="cradpath">
+    <div class="pathHead">
+      <div class="pathBox">
+          <span class="origin">起点</span>
+          <span class="terminus">终点</span>
+      </div>
+        <div class="pathtext">
+            <p id="text1">北京市大羊坊收费站</p>
+            <p id="text2">利水城收费站</p>
+        </div>
+    </div>
+    <div class="pathBoutton">
+        <div id="pathList" class="pathList">
+
+        </div>
+        <div class="Pathbtn">
+            <span id="pathImg" class="pathImg"></span>
+            <span class="pahtInfo" id="btnShow">路径详情</span>
+            <button class="btns1" onclick="back()">返回</button>
+            <button class="btns" onclick="affirmPath()">确认路线</button>
+        </div>
+    </div>
+</div>
+<script>
+    var btnShow = document.getElementById("btnShow");
+    var pathImg = document.getElementById("pathImg");
+    var intervals = document.getElementById("intervals");
+    intervals.style.display = 'none'
+    btnShow.onclick = function () {
+        if (btnShow.innerHTML === "显示地图") {
+            this.innerHTML = "路径详情";
+            pathImg.style.backgroundImage = "url('./all.png')";
+            pathImg.style.backgroundSize = '20px'
+            intervals.style.display = "none";
+        } else {
+            pathImg.style.backgroundImage = "url('./loction.png')";
+            pathImg.style.backgroundSize = '30px'
+            this.innerHTML = "显示地图";
+            intervals.style.display = "block";
+        }
+        return false;
+    }
+</script>
+<!--  初始化地图和路径 -->
+<script type="text/javascript">
+
+    var strData = JSON.parse(sessionStorage.getItem("ipadJSON"))
+
+    var jsonData = JSON.parse(strData);
+    var map2 = jsonData;
+    var valueIndex = '0'
+    getpath(jsonData, 0)
+    $(function () {
+        if (jsonData == null) {
+            alert("未找到路径还原")
+            drawLine4Empty();
+        } else {
+           // showSelection(jsonData);
+            showIntervals(jsonData, 0);
+            map2 = drawLine(jsonData, 0);
+        }
+
+    })
+
+    function  showSelection(jsonData) {
+        var route = jsonData.route;
+        var a = "<ul class='sub'>"
+        for (var i = 0; i < route.length; i++) {
+            a += ("<li><a href='#' onclick='selectionOnclick(" + i + ")'>路径" + (i + 1) + "<div class='menu_jt'></div></a></li>");
+        }
+        a += "</ul>";
+        $("#mySelection").append(a);
+
+    }
+   function showTime (val){
+        if(val<60){
+            return val + "秒";
+        }else{
+            var min_total = Math.floor(val / 60); // 分钟
+            if(min_total<60){
+                return min_total + "分钟";
+            }else{
+                var hour_total = Math.floor(min_total / 60); // 小时数
+                var min = Math.floor(min_total % 60); // 余分钟
+                return hour_total + "小时" + min + "分钟";
+            }
+        }
+    }
+    function getpath(jsonData) {
+        var list = []
+        for (var t = 0 ; t < jsonData.route.length; t++ ) {
+            var kilometre = (jsonData.route[t].distance / 1000).toFixed() + '公里'
+            var dataTime = showTime(jsonData.route[t].eta)
+            var obj  = new Object()
+            obj.name = '方案'+ (t+1)
+            obj.time = dataTime
+            obj.journey = kilometre
+            list.push(obj)
+        }
+
+
+        for(var i = 0; i< list.length; i++) {
+            if(i==0) {
+                var p = '<p class="pathListItem" onclick="getpatnlist(' + i + ')">'
+                p+= ("<span class='pathListSpan active'>" + list[i].name + "</span> <span class='pathListspan2'>" + list[i].journey + "</span>| <span>" + list[i].time + "</span>")
+                p+= '</p>'
+                $("#pathList").append(p);
+            }else {
+                var p = '<p class="pathListItem" onclick="getpatnlist(' + i +')">'
+                p+= ("<span class='pathListSpan'>" + list[i].name + "</span> <span class='pathListspan2'>" + list[i].journey + "</span>| <span>" + list[i].time + "</span>")
+                p+= '</p>'
+                $("#pathList").append(p);
+            }
+
+        }
+
+    }
+    function getpatnlist(val){
+        var pathList  = document.getElementsByClassName('pathListSpan');
+          valueIndex = val;
+        for(var i =0; i<pathList.length;i++) {
+            if(i == val) {
+                pathList[i].className = 'pathListSpan active'
+            }else {
+                pathList[i].className = 'pathListSpan'
+            }
+        }
+        console.log(valueIndex);
+        showIntervals(jsonData, valueIndex);
+        map = drawLine(jsonData, valueIndex);
+    }
+    function affirmPath() {
+        // 确认
+
+        map = drawLine(jsonData, valueIndex);
+    }
+    function back() {
+        // 返回
+        let message = false;
+        window.parent.postMessage(message,"*");
+    }
+    function showIntervals(jsonData, index) {
+        // 清除
+        $("#intervals").empty();
+
+        var dataMap = new Map();
+        // 获取收费公路下的收费单元
+        var unit = jsonData.route[index].unit;
+        for (var k = 0; k < unit.length; k++) {
+            var roadName = unit[k].roadName;
+
+            var entry = dataMap.get(roadName);
+            if (entry == null) {
+                entry = new Array();
+                entry[0] = unit[k].id;
+                dataMap.set(roadName, entry);
+            } else {
+                entry[entry.length] = unit[k].id;
+                dataMap.set(roadName, entry);
+            }
+        }
+
+        var hash = {};
+        var i = 0;
+        var res = [];
+        unit.forEach(function (item) {
+            var name = item.roadName;
+            hash[name] ? res[hash[name] - 1].id.push(item.id) : hash[name] = ++i && res.push({
+                id: [item.id],
+                provune: item.id,
+                amendStatus: item.amendStatus,
+                roadName: item.roadName,
+                nodeName: item.nodeName,
+            })
+
+        });
+
+        const container = document.getElementById('intervals');
+        const keyData = {
+            "37": "山东",
+            "35": "福建",
+            "13": "河北",
+            "41": "河南",
+            "50": "重庆",
+            "42": "湖北",
+            "43": "湖南",
+            "36": "江西",
+            "46": "海南",
+            "23": "黑龙江",
+            "12": "天津",
+            "52": "贵州",
+            "61": "陕西",
+            "65": "新疆",
+            "32": "江苏",
+            "34": "安徽",
+            "54": "西藏",
+            "22": "吉林",
+            "31": "上海",
+            "14": "山西",
+            "62": "甘肃",
+            "64": "宁夏",
+            "51": "四川",
+            "33": "浙江",
+            "45": "广西",
+            "53": "云南",
+            "15": "内蒙古",
+            "21": "辽宁",
+            "44": "广东",
+            "63": "青海",
+            "11": "北京"
+        }
+
+        res.forEach(item => {
+            for (var int in keyData) {
+                if (int == item.provune.slice(5, 7)) {
+                    item.name = keyData[int]
+                }
+            }
+        })
+        var moth = [],
+            flag = 0,
+            list = res;
+        var wdy = {
+            title: '',
+            name: ''
+        }
+        for (var i = 0; i < list.length; i++) {
+            var az = '';
+            for (var j = 0; j < moth.length; j++) {
+                if (moth[j].title == list[i]['name']) {
+                    flag = 1;
+                    az = j;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var ab = moth[az];
+                ab.name.push(list[i]);
+                flag = 0;
+
+            } else if (flag == 0) {
+                wdy = {};
+                wdy.title = list[i]['name'];
+                wdy.name = new Array();
+                wdy.name.push(list[i]);
+                moth.push(wdy);
+            }
+        }
+        const originUl = document.createElement('ul');
+        moth.forEach(item => {
+            var h3 = document.createElement('h3');
+            var ulA = document.createElement('ul');
+            var liA = document.createElement('li');
+            h3.style.color = '#333';
+            h3.className = 'A';
+            h3.innerText = item.title;
+            liA.appendChild(h3)
+            h3.addEventListener('click', function () {
+                if (ulA.style.display == '') {
+                    ulA.style.display = 'none';
+                } else if (ulA.style.display == 'block') {
+                    ulA.style.display = 'none';
+                } else {
+                    ulA.style.display = 'block';
+                }
+            })
+            item.name.forEach(str => {
+                if (str.amendStatus) {
+                    var div = document.createElement('div');
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    div.style.color = '#4095ee';
+                    div.className = 'B';
+                    div.style.paddingLeft = '10px'
+                    div.innerText = str.nodeName;
+
+                    li.appendChild(div)
+                    ulA.appendChild(li)
+                    liA.appendChild(ulA)
+                    div.addEventListener('click', function () {
+
+                        if (ul.style.display == '') {
+                            ul.style.display = 'none';
+                        } else if (ul.style.display == 'block') {
+                            ul.style.display = 'none';
+                        } else {
+                            ul.style.display = 'block';
+                        }
+                    })
+                    str.id.forEach(val => {
+                        var lic = document.createElement('li');
+                        lic.innerText = val
+                        lic.style.color = '#4095ee';
+                        ul.className = "C"
+                        // ul.style.backgroundColor = '#8888';
+                        ul.style.paddingLeft = '20px'
+                        ul.appendChild(lic)
+                        li.appendChild(ul)
+                    })
+                    originUl.appendChild(liA)
+
+                } else {
+
+                    var div = document.createElement('div');
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    div.style.color = '#238E68';
+                    div.className = 'B';
+                    div.style.paddingLeft = '10px'
+                    div.innerText = str.nodeName;
+
+                    li.appendChild(div)
+                    ulA.appendChild(li)
+                    liA.appendChild(ulA)
+                    div.addEventListener('click', function () {
+                        if (ul.style.display == '') {
+                            ul.style.display = 'none';
+                        } else if (ul.style.display == 'block') {
+                            ul.style.display = 'none';
+                        } else {
+                            ul.style.display = 'block';
+                        }
+                    })
+                    str.id.forEach(val => {
+                        var lic = document.createElement('li');
+                        lic.innerText = val
+                        lic.style.color = '#238E68';
+                        ul.className = "C"
+                        // ul.style.backgroundColor = '#8888';
+                        ul.style.paddingLeft = '30px'
+                        ul.appendChild(lic)
+                        li.appendChild(ul)
+                    })
+                    originUl.appendChild(liA)
+                }
+            })
+        })
+        container.appendChild(originUl);
+
+
+    }
+
+    function selectionOnclick(index) {
+        // 显示路径的收费单元
+        showIntervals(jsonData, index);
+        // 画路径还原点
+        map = drawLine(jsonData, index);
+    }
+
+    function drawLine(jsonData, index) {
+        // 初始化地图
+        var map = new AMap.Map("container", {
+            center: [116.395577, 39.892257],
+            zoom: 14
+        });
+
+        var link = jsonData.route[index].link;
+        // 获取不同类型的路径还原点
+        // 全量
+        var path = new Array();
+        var k = 0;
+
+        var pathNull = new Array();
+        var k1 = 0;
+        var pathNONE = new Array();
+        var k2 = 0;
+        var pathADD = new Array();
+        var k3 = 0;
+        for (var i = 0; i < link.length; i++) {
+            var amendStatus = link[i].amendStatus;
+            var geometry = link[i].geometry;
+
+            if (amendStatus == null) {
+                var latLng = new Array();
+                for (var j = 0; j < geometry.length; j++) {
+                    console.log(amendStatus);
+                    latLng[j] = new Array(geometry[j].lng, geometry[j].lat);
+
+                    path[k] = new Array(geometry[j].lng, geometry[j].lat);
+                    k++;
+                }
+                if (latLng.length != 0) {
+                    pathNull[k1] = latLng;
+                    k1++;
+                }
+            } else {
+                switch (amendStatus) {
+                    case 'NONE':
+                        var latLng = new Array();
+                        for (var j = 0; j < geometry.length; j++) {
+                            latLng[j] = new Array(geometry[j].lng, geometry[j].lat);
+
+                            path[k] = new Array(geometry[j].lng, geometry[j].lat);
+                            k++;
+                        }
+                        if (latLng.length != 0) {
+                            pathNONE[k2] = latLng;
+                            k2++;
+                        }
+                        break;
+                    case 'ADD':
+                        var latLng = new Array();
+                        for (var j = 0; j  < geometry.length; j++) {
+                            latLng[j] = new Array(geometry[j].lng, geometry[j].lat);
+
+                            path[k] = new Array(geometry[j].lng, geometry[j].lat);
+                            k++;
+                        }
+                        if (latLng.length != 0) {
+                            pathADD[k3] = latLng;
+                            k3++;
+                        }
+                        break;
+                }
+            }
+
+        }
+        // 1、为空路径
+        if (pathNull.length != 0) {
+
+            pathNull.forEach(function (value) {
+                setPolyline(map, value, "#238E68");
+            });
+        }
+
+        // 2、NONE类型路径
+        if (pathNONE.length != 0) {
+            pathNONE.forEach(function (value) {
+                setPolyline(map, value, "#238E68");
+            });
+        }
+
+        // 3、ADD类型路径
+        if (pathADD.length != 0) {
+            pathADD.forEach(function (value) {
+                setPolyline(map, value, "#2894FF");
+            });
+        }
+
+        // 入出口位置标示
+        var enNode = jsonData.route[index].enNode.nodeName;
+        var exNode = jsonData.route[index].exNode.nodeName;
+        // var enNode = "${enTollStationName}"
+        // var exNode = "${exTollStationName}"
+        if (enNode == null) {
+            enNode = "出口位置";
+        }
+        if (exNode == null) {
+            exNode = "入口位置";
+        }
+        $('#text1').html(exNode)
+        $('#text2').html(enNode)
+        var endIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: 'https://a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-95, -3)
+        });
+        var marker = new AMap.Marker({
+            icon: endIcon,
+            position: path[path.length - 1],
+            zIndex: 100
+        });
+        marker.setLabel({
+            offset: new AMap.Pixel(0, -30),  //设置文本标注偏移量
+            content: "<div style='top:-2rem;padding: .75rem 1.25rem;margin-bottom: 1rem;border-radius: .25rem;position: fixed;background-color: white;width: auto;border-width: 0;right: 1rem;box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);'>" + enNode + "</div>", //设置文本标注内容
+            direction: 'top' //设置文本标注方位
+        });
+        marker.setMap(map);
+
+        var startIcon = new AMap.Icon({
+            size: new AMap.Size(25, 34),
+            image: 'https://a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',
+            imageSize: new AMap.Size(135, 40),
+            imageOffset: new AMap.Pixel(-9, -3)
+        });
+        var marker2 = new AMap.Marker({
+            icon: startIcon,
+            position: path[0],
+            zIndex: 100
+        });
+        marker2.setLabel({
+            offset: new AMap.Pixel(0, -30),  //设置文本标注偏移量
+            content: "<div style='top:-2rem;padding: .75rem 1.25rem;margin-bottom: 1rem;border-radius: .25rem;position: fixed;background-color: white;width: auto;border-width: 0;right: 1rem;box-shadow: 0 2px 6px 0 rgba(114, 124, 245, .5);'>" + exNode + "</div>", //设置文本标注内容
+            direction: 'top' //设置文本标注方位
+        });
+        marker2.setMap(map);
+
+        // 缩放地图到合适的视野级别
+        map.setFitView([marker, marker2])
+        return map;
+    }
+
+    function setPolyline(map, myPath, color) {
+        var polyline = new AMap.Polyline({
+            path: myPath,
+            isOutline: true,
+            outlineColor: color,
+            strokeColor: color,
+            strokeOpacity: 1,
+            // 折线样式还支持 'dashed'
+            strokeStyle: "solid",
+            // strokeStyle是dashed时有效
+            strokeDasharray: [10, 5],
+            lineJoin: 'round',
+            lineCap: 'round',
+            zIndex: 50,
+        })
+        polyline.setMap(map);
+    }
+
+    function drawLine4Empty() {
+        // 初始化地图
+        var map = new AMap.Map("container", {
+            center: [116.395577, 39.892257],
+            zoom: 14
+        });
+    }
+
+    function hasSubOnClick(self) {
+        var e = $(self).next(".sub");
+        var t = ".left_menu > ul > li.has-sub > .sub";
+        $(t).not(e).slideUp(250);
+        $(e).slideToggle(250)
+    }
+
+</script>
+</body>
+</html>

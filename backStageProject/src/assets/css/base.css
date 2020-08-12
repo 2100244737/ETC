@@ -1,0 +1,154 @@
+html, body, #app {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+
+    min-width: 1200px;
+    overflow-y: auto;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+h3 {
+    margin-top: 0;
+
+}
+
+.marginTop2 {
+    margin-top: 20px;
+}
+
+.marginLift2 {
+    margin-left: 20px;
+}
+
+.star {
+    color: red;
+}
+
+.star:after {
+    content: '*';
+    color: red;
+    margin-right: 5px;
+    position: relative;
+    top: -32px;
+    left: 29px;
+}
+
+.colorRed {
+    color: red;
+}
+
+.clearFix::after,
+.clearFix::before {
+    content: "";
+    height: 0;
+    display: block;
+    visibility: hidden;
+    line-height: 0;
+    clear: both;
+}
+
+.fl {
+    float: left
+}
+
+.fr {
+    float: right
+}
+/*加载中*/
+.el-loading-spinner i {
+    font-size: 30px;
+}
+
+.el-loading-mask {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 11px 5px rgba(227, 227, 227, 0.5);
+    border-radius: 10px;
+}
+
+.el-loading-spinner .el-loading-text {
+    font-size: 16px;
+    margin-left: 11px;
+}
+
+/*左侧边栏*/
+#nprogress .bar {
+    /*background: #409eff !important;*/
+}
+
+.el-icon-arrow-down:before {
+    color: #ffffff;
+}
+
+.el-menu-item-group__title {
+    padding: 0;
+}
+
+.el-menu-item, .el-submenu__title {
+    height: 36px; /*no*/
+    line-height: 36px; /*no*/
+    margin-bottom: 10px;
+}
+
+.el-submenu .el-menu-item {
+    height: 36px; /*no*/
+    line-height: 36px; /*no*/
+}
+
+.submenu-title-noDropdown:hover,
+.el-submenu__title:hover {
+    width: 100%;
+    height: 36px; /*no*/
+    background: rgba(130, 178, 255, 1) !important;
+    box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
+    border-radius: 100px 0px 0px 100px;
+}
+
+.el-submenu__title {
+    border-radius: 100px 0px 0px 100px;
+}
+
+.is-active > .el-submenu__title {
+    color: #f4f4f5 !important;
+}
+
+/*.nest-menu .el-submenu > .el-submenu__title,*/
+/*.el-submenu .el-menu-item {*/
+/*    background-color: #1f2d3d !important;*/
+/*}*/
+.nest-menu .el-submenu > .el-submenu__title:hover,
+.el-submenu .el-menu-item:hover,
+.el-menu-item:hover {
+    width: 100%;
+    height: 36px; /*no*/
+
+    background: rgba(130, 178, 255, 1) !important;
+    box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
+    border-radius: 100px 0px 0px 100px;
+}
+
+.el-submenu {
+
+    overflow: hidden;
+}
+
+.el-submenu .el-menu-item {
+    box-sizing: border-box;
+    margin-left: 20px;
+    border-radius: 100px 0px 0px 100px;
+}
+
+.el-menu-item.is-active {
+    display: inline-block;
+    width: 100%;
+    height: 36px; /*no*/
+    line-height: 36px; /*no*/
+    color: #fff;
+    background: rgba(130, 178, 255, 1) !important;
+    box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
+    border-radius: 100px 0px 0px 100px;
+}

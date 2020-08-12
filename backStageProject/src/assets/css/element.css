@@ -1,0 +1,205 @@
+/*// 表单*/
+.formBox-top {
+  /*border-bottom: 1px solid #cccccc;*/
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+    border-radius:10px;
+    padding: 30px 10px 0 10px;
+    margin-bottom: 40px; /*no*/
+    box-sizing: border-box;
+
+}
+.el-button {
+    border: 0px solid #DCDFE6;
+}
+.tableWp {
+
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+    border-radius:10px;
+    padding: 3px ;
+    /*margin-bottom: 50px;*/
+}
+
+/*弹窗*/
+.el-dialog {
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+    border-radius:8px;
+     width: 38%;
+}
+.el-dialog .el-dialog__body {
+    padding-right: 50px;
+}
+.el-dialog__header {
+    text-align: center !important;
+  border-bottom: 1px solid #ccc;
+}
+.dialogTitle {
+
+    height:37px;
+    font-size:26px;
+
+    font-weight:600;
+    color:rgba(56,67,118,1);
+    line-height:37px;
+}
+.el-dialog__footer {
+  /*border-top: 1px solid #ccc;*/
+    text-align: center !important;
+}
+.el-dialog__footer  .el-button:nth-child(1) {
+    margin-right: 30px;
+}
+/*表格数据背景色*/
+.el-table th {
+    /*background-color: #888;*/
+  /*background-color: #344065;*/
+  background-color: rgba(251,251,251,1);
+    font-size:14px ;/*no*/
+    color:rgba(154,157,174,1)
+}
+.el-table , .el-table__expand-icon {
+    font-size: 14px;/*no*/
+    color:rgba(102,102,102,1);
+}
+
+.el-icon-s-promotion {
+    color: #ffffff !important;
+}
+/*tabs*/
+.el-tabs--border-card {
+    background: rgba(245, 247, 250, 1);
+    border: none;
+    box-shadow: none;
+}
+.el-tabs__nav-prev,.el-tabs__nav-next {
+    bottom: -6px;/*no*/
+}
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active,
+.el-tabs--border-card>.el-tabs__header {
+    border: none;
+}
+/*.el-table--border,*/
+/*.el-table--group {*/
+/*    border-color: #777;*/
+/*}*/
+
+/*.el-table td,*/
+/*.el-table th.is-leaf {*/
+/*    border-bottom: 1px solid #777;*/
+/*}*/
+
+/*.el-table--border th,*/
+/*.el-table--border th.gutter:last-of-type {*/
+/*    border-bottom: 1px solid #777;*/
+/*}*/
+
+/*.el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {*/
+/*    border-right: 1px solid #777;*/
+/*        border-bottom: 1px solid #777;*/
+/*}*/
+/*表单输入框，下拉框样式*/
+.el-input--mini .el-input__inner {
+    width:180px; /*no*/
+    height: 33px; /*no*/
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 4px 2px rgba(154,157,172,0.2);
+    border-radius:21px;
+    border:1px solid rgba(242,243,245,0.3);
+}
+.el-input__inner {
+    font-size: 14px;
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 4px 2px rgba(154,157,172,0.2);
+    border-radius:21px;
+    border:1px solid rgba(242,243,245,0.3);
+}
+.el-pagination__editor.el-input .el-input__inner {
+    border-radius: 0px;
+    box-shadow: transparent;
+    border:1px solid rgba(242,243,245,0.3)
+}
+.el-input__inner:focus{
+    background:rgba(255,255,255,1);
+    box-shadow:0px 0px 4px 2px rgba(23,127,255,0.2);
+    border-radius:21px;
+    border:1px solid rgba(70,178,255,0.2);
+}
+.el-form-item__label {
+    font-weight:400;
+    font-size: 15px;
+    color:rgba(154,157,172,1);
+}
+/*按钮颜色*/
+.el-message-box__btns button:nth-child(1) {
+    color: #fff;
+    background:linear-gradient(270deg,rgba(255,165,167,1) 0%,rgba(246,120,122,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(253,155,157,0.5);
+}
+.yellowBtn {
+    width: 100px; /*no*/
+    height: 33px; /*no*/
+    font-size:14px;
+    color: #fff;
+    /*padding: 7px 36px !important;*/
+    background:linear-gradient(270deg,rgba(255,216,125,1) 0%,rgba(246,188,51,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(253,200,93,0.5);
+}
+
+.el-button:focus, .el-button:hover {
+    color: #fff;
+    border-color: transparent;
+    background-color: transparent;
+}
+.el-button {
+    border-color: transparent;
+}
+.cyanBtn {
+
+    font-size:14px;
+    color: #fff;
+    width: 100px; /*no*/
+    height: 33px; /*no*/
+    background:linear-gradient(270deg,rgba(21,225,239,1) 0%,rgba(13,199,236,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(19,215,232,0.5);
+}
+.cyanTableBtn {
+    color: #fff;
+    background:linear-gradient(270deg,rgba(21,225,239,1) 0%,rgba(13,199,236,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(19,215,232,0.5);
+    border-radius:13px;
+}
+.blueBtn {
+    color: #fff;
+    width: 100px; /*no*/
+    height: 33px; /*no*/
+    font-size:14px;
+    background:linear-gradient(270deg,rgba(137,215,248,1) 0%,rgba(80,147,252,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(134,211,248,0.5);
+
+}
+.blueTableBtn {
+    color: #fff;
+    background:linear-gradient(270deg,rgba(137,215,248,1) 0%,rgba(80,147,252,1) 100%);
+    box-shadow:0px 2px 4px 0px rgba(134,211,248,0.5);
+    border-radius:13px;
+}
+.el-message-box__btns .el-button {
+    color: #fff;
+    background:linear-gradient(270deg,rgba(137,215,248,1) 0%,rgba(80,147,252,1) 100%);
+    box-shadow:0px 2px 4px 0px rgba(134,211,248,0.5);
+    border-radius:13px;
+}
+.redBtn {
+    color: #fff;
+    width: 100px; /*no*/
+    height: 33px; /*no*/
+    background:linear-gradient(270deg,rgba(255,165,167,1) 0%,rgba(246,120,122,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(253,155,157,0.5);
+}
+.redTableBtn {
+    color: #fff;
+    background:linear-gradient(270deg,rgba(255,165,167,1) 0%,rgba(246,120,122,1) 100%);
+    box-shadow:0px 0px 4px 2px rgba(253,155,157,0.5);
+}

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>简单折线</title>
+</head>
+<script charset="utf-8" src="https://map.qq.com/api/gljs?v=1.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        font-size: 14px;
+    }
+    .left_menu_bg {
+        text-align: center;
+    }
+    a {
+        text-decoration: none;
+        color: #409EFF;
+        font-weight: 700;
+        margin-left: 0;
+    }
+
+    ul li {
+        list-style: none;
+        padding-left: 0px;
+    }
+
+    ul {
+        padding-left: 0px;
+    }
+    .left_menu {
+        z-index: 9999999;
+    }
+    #intervals {
+        padding-left: 10px;
+        /* height: 600px;
+          overflow-y: auto; */
+        background: #fff;
+        text-align: left;
+    }
+    .btnShow {
+        background: #25A5F7;
+        color: #fff;
+        width: 60px;
+        height: 50px;
+        border-radius: 15px;
+        position: fixed;
+        top: 5%;
+        right: 7%;
+        border: none;
+        z-index: 999999999;
+        cursor: pointer;
+    }
+    button {
+        outline:0 none !important; blr:expression(this.onFocus=this.blur());
+    }
+    #mapContainer {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+
+<body>
+<button class="btnShow" id="btnShow">展开</button>
+<!-- 路径还原选择 -->
+<div class="left_menu hidden-xs"
+     style="padding:0px 0px 0px 0px;height:6%;width:10%;position:fixed; top:10%; left:10% ;">
+    <div class="left_menu_bg">
+        <ul>
+            <li class="has-sub " id="mySelection">
+                <a href="#none">
+                    <div class="menu_wz" style="text-align:center"> 选择路径</div>
+                    <div class="menu_jt">
+                        <i class="fa fa-caret-down fa-lg"></i></div>
+                </a>
+
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="mapContainer"></div>
+<!-- 收费单元 -->
+<div class="left_menu hidden-xs"
+     style="padding:0px 0px 0px 0px;height:6%;width:15%;position:fixed; top:5%; left:70% ; min-height: calc(90% - 160px); height: calc(90% - 120px); overflow-y: auto;">
+    <div class="left_menu_bg">
+        <ul id="intervals">
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script>
+    var btnShow = document.getElementById("btnShow");
+    var intervals = document.getElementById("intervals");
+    intervals.style.display = 'none'
+    btnShow.onclick = function () {
+        if (btnShow.innerHTML === "收起") {
+            this.innerHTML = "展开";
+            intervals.style.display = "none";
+        } else {
+            this.innerHTML = "收起";
+            intervals.style.display = "block";
+        }
+        return false;
+    }
+
+
+
+</script>
+<script>
+    var json = JSON.parse(sessionStorage.getItem("QQMAPJSON")).data
+    //var json = JSON.parse(sessionStorage.getItem("QQMAPJSON"))
+    //var dataJSON = JSON.parse(json)
+    var dataJSON = json
+    window.οnlοad = getData()
+    function getData () {
+
+        // var dataJSON = json.result[0].links
+        if (dataJSON) {
+            initMap(dataJSON, 0)
+            showIntervals(dataJSON, 0);
+            showSelection(dataJSON)
+        }else {
+            alert("未找到路径还原")
+        }
+    }
+    function showSelection(jsonData) {
+        var route = jsonData.result;
+        var a = "<ul class='sub'>"
+        for (var i = 0; i < route.length; i++) {
+            a += ("<li><a href='#' onclick='selectionOnclick(" + i + ")'>路径" + (i + 1) + "<div class='menu_jt'></div></a></li>");
+        }
+        a += "</ul>";
+        $("#mySelection").append(a);
+
+    }
+    function selectionOnclick (index) {
+        showIntervals(dataJSON, index);
+        $("#mapContainer").empty();
+       initMap(dataJSON, index);
+    }
+    function showIntervals(jsonData, index) {
+        // 清除
+        $("#intervals").empty();
+        //var dataMap = new Map();
+        // 获取收费公路下的收费单元
+        var unit = jsonData.result[index].units
+
+        var hash = {};
+        var i = 0;
+        var res = [];
+        unit.forEach(function (item) {
+            var name = item.roadName;
+            hash[name] ? res[hash[name] - 1].id.push(item.id) : hash[name] = ++i && res.push({
+                id: [item.id],
+                provune: item.id,
+                amendStatus: item.amendStatus,
+                roadName: item.roadName,
+            })
+
+        });
+        const container = document.getElementById('intervals');
+        const keyData = {
+            "37": "山东",
+            "35": "福建",
+            "13": "河北",
+            "41": "河南",
+            "50": "重庆",
+            "42": "湖北",
+            "43": "湖南",
+            "36": "江西",
+            "46": "海南",
+            "23": "黑龙江",
+            "12": "天津",
+            "52": "贵州",
+            "61": "陕西",
+            "65": "新疆",
+            "32": "江苏",
+            "34": "安徽",
+            "54": "西藏",
+            "22": "吉林",
+            "31": "上海",
+            "14": "山西",
+            "62": "甘肃",
+            "64": "宁夏",
+            "51": "四川",
+            "33": "浙江",
+            "45": "广西",
+            "53": "云南",
+            "15": "内蒙古",
+            "21": "辽宁",
+            "44": "广东",
+            "63": "青海",
+            "11": "北京"
+        }
+        res.forEach(item => {
+            for (var int in keyData) {
+                if (int == item.provune.slice(5, 7)) {
+                    item.name = keyData[int]
+                }
+            }
+        })
+        var moth = [],
+            flag = 0,
+            list = res;
+        var wdy = {
+            title: '',
+            name: ''
+        }
+        for (var i = 0; i < list.length; i++) {
+            var az = '';
+            for (var j = 0; j < moth.length; j++) {
+                if (moth[j].title == list[i]['name']) {
+                    flag = 1;
+                    az = j;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var ab = moth[az];
+                ab.name.push(list[i]);
+                flag = 0;
+
+            } else if (flag == 0) {
+                wdy = {};
+                wdy.title = list[i]['name'];
+                wdy.name = new Array();
+                wdy.name.push(list[i]);
+                moth.push(wdy);
+            }
+        }
+        const originUl = document.createElement('ul');
+        moth.forEach(item => {
+            var h3 = document.createElement('h3');
+            var ulA = document.createElement('ul');
+            var liA = document.createElement('li');
+            h3.style.color = '#333';
+            h3.className = 'A';
+            h3.innerText = item.title;
+            liA.appendChild(h3)
+            h3.addEventListener('click', function () {
+                if (ulA.style.display == '') {
+                    ulA.style.display = 'none';
+                } else if (ulA.style.display == 'block') {
+                    ulA.style.display = 'none';
+                } else {
+                    ulA.style.display = 'block';
+                }
+            })
+            item.name.forEach(str => {
+                if (str.amendStatus == 1) {
+                    var div = document.createElement('div');
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    div.style.color = '#4095ee';
+                    div.className = 'B';
+                    div.style.paddingLeft = '10px'
+                    div.innerText = str.roadName;
+
+                    li.appendChild(div)
+                    ulA.appendChild(li)
+                    liA.appendChild(ulA)
+                    div.addEventListener('click', function () {
+                        if (ul.style.display == '') {
+                            ul.style.display = 'none';
+                        } else if (ul.style.display == 'block') {
+                            ul.style.display = 'none';
+                        } else {
+                            ul.style.display = 'block';
+                        }
+                    })
+                    str.id.forEach(val => {
+                        var lic = document.createElement('li');
+                        lic.innerText = val
+                        lic.style.color = '#4095ee';
+                        ul.className = "C"
+                        // ul.style.backgroundColor = '#8888';
+                        ul.style.paddingLeft = '20px'
+                        ul.appendChild(lic)
+                        li.appendChild(ul)
+                    })
+                    originUl.appendChild(liA)
+
+                } else {
+
+                    var div = document.createElement('div');
+                    var ul = document.createElement('ul');
+                    var li = document.createElement('li');
+                    div.style.color = '#238E68';
+                    div.className = 'B';
+                    div.style.paddingLeft = '10px'
+                    div.innerText = str.roadName;
+
+                    li.appendChild(div)
+                    ulA.appendChild(li)
+                    liA.appendChild(ulA)
+                    div.addEventListener('click', function () {
+                        if (ul.style.display == '') {
+                            ul.style.display = 'none';
+                        } else if (ul.style.display == 'block') {
+                            ul.style.display = 'none';
+                        } else {
+                            ul.style.display = 'block';
+                        }
+                    })
+                    str.id.forEach(val => {
+                        var lic = document.createElement('li');
+                        lic.innerText = val
+                        lic.style.color = '#238E68';
+                        ul.className = "C"
+                        // ul.style.backgroundColor = '#8888';
+                        ul.style.paddingLeft = '30px'
+                        ul.appendChild(lic)
+                        li.appendChild(ul)
+                    })
+                    originUl.appendChild(liA)
+                }
+            })
+        })
+        container.appendChild(originUl);
+        // 生成收费单元列表
+        // dataMap.forEach(function (values, key) {
+        //     var a = "<li class='has-sub' ><a href='#' onClick='hasSubOnClick(this)'><div class='menu_wz' style ='text-align:center;padding-left:20px'>"
+        //         + key + "</div><div class='menu_jt'><i class='fa fa-caret-down fa-lg'></i></div></a>";
+        //     var ul = "<ul class='sub'>";
+        //
+        //     for (var i = 0; i < values.length; i++) {
+        //         ul += "<li ><a href='#' style='color: #E6A23C'>" + values[i] + "<div class='menu_jt'></div></a></li>"
+        //     }
+        //
+        //     ul += "</ul>";
+        //
+        //     a += ul;
+        //     a += "</li>"
+        //     $("#intervals").append(a);
+        // });
+    }
+    function initMap(dataJSON, vl) {
+        var list = dataJSON.result[vl].links
+        var path = [];
+        var paths = [];
+        var last_amendStatus=0;
+        var pathall = []
+        var k = 0
+        for (var i = 0; i < list.length; i++) {
+            var amendStatus = list[i].amendStatus;
+            var geometry = list[i].geometry;
+            for (var j = 0; j < geometry.length; j++) {
+                pathall[k] = new Array(geometry[j].lat, geometry[j].lng);
+                k++;
+                path.push(new TMap.LatLng(geometry[j].lat, geometry[j].lng));
+                if((last_amendStatus != amendStatus&& i != 0)||i==list.length-1){
+                    if(amendStatus==0)
+                        style='style_red';
+                    else
+                        style='style_blue';
+                    paths.push({'id': 'pl_2_', 'styleId': style,'paths': path});
+                    var a=path[path.length-1];
+                    path=[];
+                    path.push(a);
+                }
+            }
+
+            last_amendStatus = amendStatus;
+        }
+
+        //初始化地图
+        var map = new TMap.Map('mapContainer', {
+            center: new TMap.LatLng(pathall[0][0],pathall[0][1]),//地图显示中心点
+            zoom:8	//缩放级别
+        });
+        //创建 MultiPolyline
+        lineLayer (map,paths);
+        //标记起终点marker
+        var marker = new TMap.MultiMarker({
+            id: 'marker-layer',
+            map: map,
+            styles: {
+                "start": new TMap.MarkerStyle({
+                    "width": 25,
+                    "height": 35,
+                    "anchor": { x: 16, y: 32 },
+                    "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/start.png'
+                }),
+                "end": new TMap.MarkerStyle({
+                    "width": 25,
+                    "height": 35,
+                    "anchor": { x: 16, y: 32 },
+                    "src": 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png'
+                })
+            },
+            geometries: [{
+                "id": 'start',
+                "styleId": 'start',
+                "position": new TMap.LatLng(pathall[0][0],pathall[0][1])
+            }, {
+                "id": 'end',
+                "styleId": 'end',
+                "position": new TMap.LatLng(pathall[pathall.length -1][0],pathall[pathall.length -1][1])
+            }]
+        });
+        // var label = new TMap.MultiLabel({
+        //     id: 'label-layer',
+        //     map: map,
+        //     styles: {
+        //         'label': new TMap.LabelStyle({
+        //             'color': '#3777FF', //颜色属性
+        //             'size': 20, //文字大小属性
+        //             'offset': { x: -20, y: 20 }, //文字偏移属性单位为像素
+        //         })
+        //     },
+        //     geometries: [
+        //         {
+        //         'id': 'label', //点图形数据的标志信息
+        //         'styleId': 'label', //样式id
+        //         'position':  new TMap.LatLng(pathall[0][0],pathall[0][1]), //标注点位置
+        //         'content': '腾讯北京总部', //标注文本
+        //         'properties': { //标注点的属性数据
+        //             'title': 'label'
+        //         }
+        //     },{
+        //         'id': 'label', //点图形数据的标志信息
+        //         'styleId': 'label', //样式id
+        //         'position': new TMap.LatLng(pathall[pathall.length -1][0],pathall[pathall.length -1][1]), //标注点位置
+        //         'content': '腾讯', //标注文本
+        //         'properties': { //标注点的属性数据
+        //             'title': 'label'
+        //         }
+        //     }
+        //     ]
+        // });
+    }
+    function lineLayer (map,pl) {
+        var polylineLayer = new TMap.MultiPolyline({
+            id: 'polyline-layer', //图层唯一标识
+            map: map,//绘制到目标地图
+            //折线样式定义
+            styles: {
+                'style_blue': new TMap.PolylineStyle({
+                    'color': '#409eff', //线填充色
+                    'width': 6, //折线宽度
+
+                    'lineCap': 'butt' //线端头方式
+                }),
+                'style_red': new TMap.PolylineStyle({
+                    'color': '#238E68', //线填充色
+                    'width': 6, //折线宽度
+                    'lineCap': 'round' //线端头方式
+                })
+            },
+            //折线数据定义
+            geometries: pl
+        });
+    }
+</script>
