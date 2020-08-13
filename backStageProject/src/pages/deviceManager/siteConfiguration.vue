@@ -37,13 +37,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="设备ID：">
-                    <el-input size="mini" clearable maxlength="150" v-model="formItem.deviceId" placeholder="请输入设备ID"></el-input>
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.deviceId" placeholder="请输入设备ID"></el-input>
                 </el-form-item>
                 <el-form-item label="收费站ID：">
-                    <el-input size="mini" clearable maxlength="150" v-model="formItem.stationId" placeholder="请输入收费站ID"></el-input>
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.stationId" placeholder="请输入收费站ID"></el-input>
                 </el-form-item>
                 <el-form-item label="收费站名称：">
-                    <el-input size="mini" clearable maxlength="150" v-model="formItem.stationName"
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.stationName"
                               placeholder="请输入收费站名称"></el-input>
                 </el-form-item>
                 <br>
@@ -200,7 +200,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item label="设备ID：">
-                            <el-input clearable maxlength="150" v-model="stepsData.deviceId"
+                            <el-input clearable  @keyup.enter.native="getDeviceData" maxlength="150" v-model="stepsData.deviceId"
                                       placeholder="请输入设备ID"></el-input>
                         </el-form-item>
 
@@ -265,7 +265,7 @@
                         </el-form-item>
 
                         <el-form-item>
-                            <el-button class="yellowBtn"  size="mini" round @click="getSiteData">查询</el-button>
+                            <el-button class="yellowBtn"   size="mini" round @click="getSiteData">查询</el-button>
 
                         </el-form-item>
                     </el-form>

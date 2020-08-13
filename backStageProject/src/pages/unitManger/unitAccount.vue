@@ -4,7 +4,7 @@
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
 
                 <el-form-item label="单位名称">
-                    <el-input clearable size="mini" v-model="formItem.name" placeholder="请输入单位名称"></el-input>
+                    <el-input clearable size="mini" @keyup.enter.native="getData" v-model="formItem.name" placeholder="请输入单位名称"></el-input>
                 </el-form-item>
                 <el-form-item label="单位类型">
                     <el-select clearable size="mini" v-model="formItem.companyType" filterable placeholder="请输入单位类型">
@@ -156,8 +156,9 @@
                 </el-form-item>
                 <el-form-item label="管理员手机号：">
                     <div style="display: flex; align-items: center;">
-                        <el-input clearable v-model="addEdit.managerTel" placeholder="请输入管理员手机号"></el-input>
+                        <el-input clearable   @keyup.enter.native="getSSO(addEdit.managerTel, 'add')" v-model="addEdit.managerTel" placeholder="请输入管理员手机号"></el-input>
                         <el-button style="margin: 0 30px;" class="yellowBtn" size="mini" round
+
                                    @click="getSSO(addEdit.managerTel, 'add')">查询
                         </el-button>
                     </div>
@@ -251,8 +252,9 @@
                 </el-form-item>
                 <el-form-item label="新管理员手机号：">
                     <div style="display: flex; align-items: center;">
-                        <el-input clearable v-model="updataAdd.managerTel" placeholder="请输入管理员手机号"></el-input>
+                        <el-input clearable    @keyup.enter.native="getSSO(updataAdd.managerTel,'updata')" v-model="updataAdd.managerTel" placeholder="请输入管理员手机号"></el-input>
                         <el-button style="margin: 0 30px;" class="yellowBtn" size="mini" round
+
                                    @click="getSSO(updataAdd.managerTel,'updata')">查询
                         </el-button>
                     </div>
@@ -274,7 +276,7 @@
     import {getDataTime} from '@/assets/js/time';
     import api from '../../uitls/api/basic'; //基础数据
     export default {
-        name: "nuitAccount",
+        name: "unitAccount",
 
         data() {
             return {
@@ -411,7 +413,7 @@
                             openId: _t.$cookie.get('openId'),
                             province: _t.amend.province,
                             id: _t.amend.id,
-                            mame: _t.amend.name,
+                            name: _t.amend.name,
                             creditCode: _t.amend.licence,
                         };
                         var filename = api.COMPANY_UPDATE + getDataTime() + '.json';

@@ -4,7 +4,7 @@
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
                 <el-form-item label="收费站名称">
-                    <el-input clearable size="mini" v-model="formItem.stationName" placeholder="请输入收费站名称"></el-input>
+                    <el-input @keyup.enter.native="getData" clearable size="mini" v-model="formItem.stationName" placeholder="请输入收费站名称"></el-input>
                 </el-form-item>
                 <el-form-item label="省份" prop="province">
                     <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">

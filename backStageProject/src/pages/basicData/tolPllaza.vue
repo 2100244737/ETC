@@ -38,10 +38,10 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="ID:">
-                    <el-input size="mini"  clearable  v-model="formItem.id" placeholder="请输入ID"></el-input>
+                    <el-input size="mini" @keyup.enter.native="getData" clearable  v-model="formItem.id" placeholder="请输入ID"></el-input>
                 </el-form-item>
                 <el-form-item label="名称:">
-                    <el-input  size="mini" clearable  v-model="formItem.name" placeholder="请输入名称"></el-input>
+                    <el-input  size="mini" @keyup.enter.native="getData" clearable  v-model="formItem.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">

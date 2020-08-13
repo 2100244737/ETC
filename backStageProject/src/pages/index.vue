@@ -32,7 +32,7 @@
                             <span>退出登录</span>
                         </div>
                         <div class="operation-item">
-                            <i id="hamburger-container"  :class="[ active? 'el-icon-s-unfold': 'el-icon-s-fold' ]"
+                            <i id="hamburger-container" :class="[ active? 'el-icon-s-unfold': 'el-icon-s-fold' ]"
                                @click="handleClick"></i>
                             <span>收起导航</span>
                         </div>
@@ -45,7 +45,7 @@
                             <i class="el-icon-switch-button"></i>
                         </div>
                         <div class="operation-item">
-                            <i   :class="[ active? 'el-icon-s-unfold': 'el-icon-s-fold' ]"
+                            <i :class="[ active? 'el-icon-s-unfold': 'el-icon-s-fold' ]"
                                @click="handleClick"></i>
                         </div>
                     </div>
@@ -71,6 +71,7 @@
                         </el-tab-pane>
                     </el-tabs>
                 </div>
+
                 <div v-loading="loading"
                      element-loading-text="拼命加载中..."
                      element-loading-spinner="el-icon-loading"
@@ -172,7 +173,7 @@
         },
         methods: {
             // 侧边栏展开收起
-            toggleCollapse () {
+            toggleCollapse() {
 
             },
             handleClick() {
@@ -234,14 +235,14 @@
                 this.$cookie.delete('username');
                 this.$cookie.delete('roleName');
                 sessionStorage.removeItem("MENU_LIST");
-                sessionStorage.removeItem ('openId')
+                sessionStorage.removeItem('openId')
             },
             loginOut() {
                 var _t = this;
                 //退出
                 window.close()
 
-                var url = 'https://testdevice.datasw.cn/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')
+                var url = 'https://testweb.datasw.cn/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')
                 window.location.replace(url)
                 _t.clearCache()
                 // window.open(url);    //跳转
@@ -258,6 +259,7 @@
 </script>
 
 <style scoped>
+
     /deep/ .el-scrollbar .el-scrollbar__wrap {
         overflow-x: hidden;
     }
@@ -292,21 +294,21 @@
     }
 
     .el-tabs /deep/ .el-tabs__item {
-        color:rgba(154,157,172,1);
-        height: 30px !important;/*no*/
+        color: rgba(154, 157, 172, 1);
+        height: 30px !important; /*no*/
         line-height: 30px !important; /*no*/
-        background:rgba(255,255,255,1);
-        box-shadow:0px 0px 4px 0px rgba(188,188,188,0.5);
-        border-radius:30px;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 0px 4px 0px rgba(188, 188, 188, 0.5);
+        border-radius: 30px;
         margin-right: 25px;
     }
 
     /deep/ .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-active {
         /*标签页选中背景颜色*/
         color: #fff;
-        background:linear-gradient(270deg,rgba(137,215,248,1) 0%,rgba(80,147,252,1) 100%);
-        box-shadow:0px 0px 4px 0px rgba(134,211,248,0.5);
-        border-radius:30px
+        background: linear-gradient(270deg, rgba(137, 215, 248, 1) 0%, rgba(80, 147, 252, 1) 100%);
+        box-shadow: 0px 0px 4px 0px rgba(134, 211, 248, 0.5);
+        border-radius: 30px
     }
 
     .headerimg .img {
@@ -384,6 +386,7 @@
         /*position: absolute;*/
         /*bottom: 0;*/
     }
+
     .user-box {
         /*width: 60px;*/
         display: flex;
@@ -391,11 +394,13 @@
         justify-content: center;
         flex-direction: column;
     }
+
     .user-picture {
         width: 50px;
         height: 50px;
         margin-top: 30px;
     }
+
     .line-box2 {
         width: 49px;
         height: 2px;
@@ -412,11 +417,13 @@
         padding: 0 15px;
         margin-bottom: 15px;
     }
+
     .operation-message-tow {
         display: flex;
         box-sizing: border-box;
         flex-direction: column;
     }
+
     .operation-item {
         display: flex;
         flex-direction: column;
@@ -438,8 +445,8 @@
     }
 
     .profile-img {
-        height: 80px;/*no*/
-        width: 80px;/*no*/
+        height: 80px; /*no*/
+        width: 80px; /*no*/
         margin-top: 70px;
     }
 
@@ -451,6 +458,7 @@
         background: rgba(199, 224, 255, 1);
         border-radius: 1px;
     }
+
     .line-user {
         width: 29px;
         height: 2px;
@@ -459,19 +467,21 @@
         background: rgba(199, 224, 255, 1);
         border-radius: 1px;
     }
+
     .right {
         overflow: hidden;
         /*width: 100%;*/
         /*height: 100%;*/
         flex: 1;
-        padding-top: 30px ;
+        padding-top: 30px;
         background: rgba(245, 247, 250, 1);
         border-radius: 31px 0px 0px 31px;
     }
 
-     .tabs {
-         padding: 0 30px;
-     }
+    .tabs {
+        padding: 0 30px;
+    }
+
     .template-tabs {
         height: 30px;
         margin-left: -1px;

@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix" inline>
                 <el-form-item label="角色名称：">
-                    <el-input size="mini" clearable v-model="formItem.roleName" placeholder="请输入角色名称"></el-input>
+                    <el-input size="mini" @keyup.enter.native="getData" clearable v-model="formItem.roleName" placeholder="请输入角色名称"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class=" fr marBottom7">
@@ -27,8 +27,8 @@
                 <el-table-column prop="comments" label="描述" header-align="center" align="center"/>
                 <el-table-column label="操作" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button v-if="!scope.row.systemRole" class="cyanTableBtn" size="mini" round @click="upDataBtn(scope.row)">更新</el-button>
-                        <el-button v-if="!scope.row.systemRole" class="blueTableBtn" size="mini" round @click="allocation(scope.row)">配置</el-button>
+                        <el-button  class="cyanTableBtn" size="mini" round @click="upDataBtn(scope.row)">更新</el-button>
+                        <el-button  class="blueTableBtn" size="mini" round @click="allocation(scope.row)">配置</el-button>
                         <el-button v-if="!scope.row.systemRole" class="redTableBtn" size="mini" round @click="deleteRole(scope.row)">删除</el-button>
 <!--                        <span v-if="scope.row.systemRole">系统默认角色</span>-->
                     </template>
@@ -214,11 +214,9 @@
 
             // 配置
             allocation(row) {
-                console.log(row);
-                this.allocationVisible = true;
                 this.roleId = row.id
                 this.getMenu({parenId:''})
-                this.geShowMenu()
+
             },
             getMenu(row) {
                 var _t = this
@@ -231,9 +229,9 @@
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
+                        _t.allocationVisible = true;
                         _t.menuList =  JSON.parse(res.bizContent).nodes
-                        console.log(_t.menuList);
-
+                        _t.geShowMenu()
                     } else {
                         _t.alertDialogTip(_t, res.errorMsg);
                     }
@@ -270,6 +268,7 @@
                 this.allocationVisible = false;
                 this.menuList = []
             },
+            // 角色回显
             geShowMenu () {
                 var _t = this;
                 const params = {
@@ -283,8 +282,11 @@
                     if (res.statusCode == 0) {
 
                          var MenuData = JSON.parse(res.bizContent).menuIds ? JSON.parse(res.bizContent).menuIds : []
+
                         MenuData.forEach(item => {
-                            if(item.menuType == '2') {
+
+                            if(item.menuType == 2) {
+                                console.log(item,'22222');
                                 _t.$nextTick(function () {
                                     _t.$refs.tree.setChecked(item.id, true, false)
                                 })
@@ -401,11 +403,13 @@
                 })
             },
             refreshHandle() {
+                this.formItem.roleName = ''
+                this.getData()
 
             },
             upDataBtn(row) {
                 // 更新
-                console.log(row);
+
                 this.upDateVisible = true;
                 this.upDataForm.id = row.id;
                 this.upDataForm.name = row.name;
@@ -448,13 +452,13 @@
                 // 改变当前页码
                 var _t = this;
                 _t.options.currentPage = val;
-                _t.refreshHandle()
+                _t.getData()
             },
             handleSizeChangeSub(val) {
                 // 改变每页显示条数
                 var _t = this;
                 _t.options.pageSize = val;
-                _t.refreshHandle()
+                _t.getData()
             },
             deleteRole(row) {
                 // 删除

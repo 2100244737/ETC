@@ -6,6 +6,7 @@
     >
 
     </div>
+
 </template>
 
 <script>
@@ -71,10 +72,10 @@
                                     cancelButtonText: '取消',
                                     type: 'warning'
                                 }).then(() => {
-                                    var url = 'https://testdevice.datasw.cn/device/webLogin/common/logout?openId='
+                                    var url = 'https://testweb.datasw.cn/device/webLogin'
                                     window.location.replace(url)
                                 }).catch(() => {
-                                    var url = 'https://testdevice.datasw.cn/device/webLogin /common/logout?openId='
+                                    var url = 'https://testweb.datasw.cn/device/webLogin'
                                     window.location.replace(url)
                                     return false
                                 });
@@ -116,39 +117,5 @@
 
 <style scoped>
 
-    .title-container {
-        color: #333;
-        font-size: 20px;
-        margin-bottom: 10px;
-    }
 
-    .login-container {
-        display: flex;
-        flex-direction:row-reverse;
-        box-sizing: border-box;
-        padding-top: 10%;
-        padding-right: 10%;
-        width: 100%;
-        height: 100%;
-        background: url("../assets/img/login.jpg") no-repeat;
-        background-size: 100% 100%;
-
-    }
-
-    .login-form {
-        margin-top: 20px;
-        width: 350px;
-        height: 230px;
-        max-width: 350px;
-        min-width: 300px;
-        padding: 20px;
-        border-radius: 8px;
-        background:hsla(0 ,0% ,100%,.3);
-        /*opacity: .8;*/
-        /*box-shadow: 0 0 10px -1px #ccc inset*/
-    }
-
-    .width {
-
-    }
 </style>

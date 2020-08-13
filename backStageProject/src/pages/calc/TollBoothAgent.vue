@@ -1,10 +1,10 @@
 <template>
     <div>
-        <!--  计费相邻节点-->
+        <!--  收费站代理-->
         <div class="formBox-top">
-            <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
-                <el-form-item label="省份" prop="province">
-                    <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
+            <el-form ref="provinceForm"  :model="formItem" class="clearFix" inline>
+                <el-form-item  label="省份" prop="province">
+                    <el-select clearable  size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
                         <el-option label="河北" value="13"></el-option>
@@ -38,13 +38,13 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="ID:">
-                    <el-input  clearable size="mini" v-model="formItem.id" placeholder="请输入ID"></el-input>
+                    <el-input  clearable size="mini" @keyup.enter.native="getData" v-model="formItem.id" placeholder="请输入ID"></el-input>
                 </el-form-item>
-                <el-form-item label="入口节点编号:">
-                    <el-input  clearable size="mini" v-model="formItem.enRoadNodeId" placeholder="请输入入口节点编号"></el-input>
+                <el-form-item label="名称:">
+                    <el-input  clearable size="mini" @keyup.enter.native="getData"  v-model="formItem.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
-                <el-form-item label="出口节点编号:">
-                    <el-input  clearable size="mini" v-model="formItem.exRoadNodeId" placeholder="请输入出口节点编号"></el-input>
+                <el-form-item label="收费站编号:">
+                    <el-input  clearable size="mini" @keyup.enter.native="getData" v-model="formItem.stationId" placeholder="请输入名称"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">
@@ -55,11 +55,12 @@
         </div>
         <div class="tableWp marginTop2">
             <el-table :data="tableData" size="small" stripe>
-                <el-table-column type="index" width="80px" label="序号" header-align="center" align="center"/>
+                <el-table-column  type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
-                <el-table-column prop="enRoadNodeId" label="入口节点编号" header-align="center" align="center"/>
-                <el-table-column prop="exRoadNodeId" label="出口节点编号" header-align="center" align="center"/>
-                <el-table-column prop="miles" label="物理里程（米）" header-align="center" align="center"/>
+                <el-table-column prop="stationId" label="收费站编号" header-align="center" align="center"/>
+                <el-table-column prop="name" label="收费站名称" header-align="center" align="center"/>
+                <el-table-column prop="tollPlazaCount" label="收费广场数量" header-align="center" align="center"/>
+                <el-table-column prop="chargeUnit" label="代收收费单元" header-align="center" align="center"/>
             </el-table>
             <Pages
                 class="pages"
@@ -74,20 +75,20 @@
 
 <script>
     import Pages from "../../components/pages";
-    import {getDataTime} from '@/assets/js/time'
+    import {getDataTime} from '@/assets/js/time';
     import api from '../../uitls/api/basic'; //基础数据
     export default {
-        name: "BillingNode",
+        name: "TollBoothAgent",
         data() {
             return {
                 formItem: {
-                    province: '',
+                    province:'',
                     id: '',
-                    enRoadNodeId: '',
-                    exRoadNodeId: ''
+                    name: '',
+                    stationId:''
                 },
-                tableData: [],
-                keyData: this.$store.state.province, // 省份
+                tableData:[],
+                keyData :this.$store.state.province, // 省份
                 // 分页
                 options: {
                     total: 0, // 总条数
@@ -101,39 +102,38 @@
         },
         mounted() {
         },
+
         methods: {
-            resetHandle() {
+            resetHandle () {
                 // 重置
                 this.formItem.province = '';
                 this.formItem.id = '';
-                this.formItem.enRoadNodeId = '';
-                this.formItem.exRoadNodeId = '';
+                this.formItem.name = '';
+                this.formItem.stationId = '';
                 this.getData()
             },
             getData() {
                 var _t = this;
-                // 查询
                 _t.$nextTick(function () {
                     _t.tableData = []
                 })
                 _t.$store.commit('set_loading', true);
+                // 查询
                 const params = {
+                    openId: _t.$cookie.get('openId'),
                     province: _t.formItem.province?_t.formItem.province: null,
                     id: _t.formItem.id?_t.formItem.id: null,
-                    openId: _t.$cookie.get('openId'),
-                    enRoadNodeId: _t.formItem.enRoadNodeId?_t.formItem.enRoadNodeId:null,
-                    exRoadNodeId: _t.formItem.exRoadNodeId?_t.formItem.exRoadNodeId: null,
+                    name: _t.formItem.name?_t.formItem.name:null,
+                    stationId: _t.formItem.stationId?_t.formItem.stationId:null,
                     pageNo: _t.options.currentPage, // 当前页
                     pageSize: _t.options.pageSize, // 显示条数
-
                 };
-                var filename = api.NODE + getDataTime() + '.json';
+                var filename = api.AGENCY + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
-                console.log(999);
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
-                        _t.tableData = JSON.parse(res.bizContent).data ? JSON.parse(res.bizContent).data : [];
-                        _t.tableData.forEach(item => {
+                        _t.tableData = JSON.parse(res.bizContent).data?JSON.parse(res.bizContent).data:[];
+                        _t.tableData.forEach(item =>{
                             for (var int in _t.keyData) {
                                 if (int == item.province) {
                                     item.province = _t.keyData[int]
@@ -143,9 +143,8 @@
                         _t.$store.commit('set_loading', false);
                         var pages = JSON.parse(res.bizContent).totalCount
                         _t.options.total = pages ? pages : 0;
-                    } else {
+                    }else {
                         _t.alertDialogTip(_t, res.errorMsg)
-                        _t.$store.commit('set_loading', false);
                     }
                 })
             },

@@ -34,8 +34,9 @@ export default  {
     ADDRESS_BIND:'DEVICE_ADDRESS_BIND_REQ_' + number, // 查询 设备
     ADDRESS_UNBIND:'DEVICE_ADDRESS_UNBIND_REQ_' + number, // 解绑
     // APP软件管理
-    APP_UPLOAD:'DEVICE_APP_UPLOAD_REQ_' + number, // 上传保存功能
+    APP_ADD:'DEVICE_APP_ADD_REQ_' + number, // 上传保存功能
     APP_PAGE:'DEVICE_APP_PAGE_REQ_' + number, // 查询
+    TOKEN_GAIN:'CSC_TOKEN_GAIN_REQ_' + number, // 获取key
     //SDK 管理
     SDK_PAGE:'DEVICE_SDK_PAGE_REQ_' + number, // 查询
 }

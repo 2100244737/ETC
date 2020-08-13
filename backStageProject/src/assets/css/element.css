@@ -44,6 +44,7 @@
     color:rgba(56,67,118,1);
     line-height:37px;
 }
+
 .el-dialog__footer {
   /*border-top: 1px solid #ccc;*/
     text-align: center !important;

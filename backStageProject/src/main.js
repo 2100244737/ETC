@@ -148,10 +148,10 @@ router.beforeEach((to, from, next) => {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var url = 'https://testdevice.datasw.cn/device/webLogin/common/logout?openId='
+                var url = 'https://testweb.datasw.cn/device/webLogin'
                 window.location.replace(url)
             }).catch(() => {
-                var url = 'https://testdevice.datasw.cn/device/webLogin/common/logout?openId='
+                var url = 'https://testweb.datasw.cn/device/webLogin'
                 window.location.replace(url)
                 return false
             });

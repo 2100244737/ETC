@@ -137,6 +137,36 @@ const routers = new Router({
             ]
         },
         {
+            path: '/calc', name: 'calc', meta: {title: '计费数据'},
+            component: index,
+            children: [
+                {
+                    path: 'BillingNode',
+                    name: 'BillingNode',
+                    meta: {title: '计费相邻节点'},
+                    component: () => import('../pages/calc/BillingNode'),
+                },
+                {
+                    path: 'BillingNodeDetail',
+                    name: 'BillingNodeDetail',
+                    meta: {title: '计费节点详情'},
+                    component: () => import('../pages/calc/BillingNodeDetail'),
+                },
+                {
+                    path: 'entityGantry',
+                    name: 'entityGantry',
+                    meta: {title: '计费实体门架'},
+                    component: () => import('../pages/calc/entityGantry'),
+                },
+                {
+                    path: 'TollBoothAgent',
+                    name: 'TollBoothAgent',
+                    meta: {title: '计费代收关系'},
+                    component: () => import('../pages/calc/TollBoothAgent'),
+                },
+            ]
+        },
+        {
             path: '/basicData', name: 'basicData', meta: {title: '基础数据'},
             component: index,
             children: [
@@ -158,30 +188,7 @@ const routers = new Router({
                     meta: {title: '全量门架查询'},
                     component: () => import('../pages/basicData/portal'),
                 },
-                {
-                    path: 'BillingNode',
-                    name: 'BillingNode',
-                    meta: {title: '计费相邻节点'},
-                    component: () => import('../pages/basicData/BillingNode'),
-                },
-                {
-                    path: 'BillingNodeDetail',
-                    name: 'BillingNodeDetail',
-                    meta: {title: '计费节点详情'},
-                    component: () => import('../pages/basicData/BillingNodeDetail'),
-                },
-                {
-                    path: 'entityGantry',
-                    name: 'entityGantry',
-                    meta: {title: '实体门架'},
-                    component: () => import('../pages/basicData/entityGantry'),
-                },
-                {
-                    path: 'TollBoothAgent',
-                    name: 'TollBoothAgent',
-                    meta: {title: '代收关系查询'},
-                    component: () => import('../pages/basicData/TollBoothAgent'),
-                },
+
                 {
                     path: 'TollLane',
                     name: 'TollLane',

@@ -3,11 +3,11 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix" inline>
                 <el-form-item label="设备编号：">
-                    <el-input size="mini" clearable maxlength="150" v-model="formItem.equipmentNumber"
+                    <el-input @keyup.enter.native="getData" size="mini" clearable maxlength="150" v-model="formItem.equipmentNumber"
                               placeholder="请输入设备编号"></el-input>
                 </el-form-item>
                 <el-form-item label="使用单位：">
-                    <el-input size="mini" clearable maxlength="150" v-model="formItem.state"
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.state"
                               placeholder="请输入芯片编号"></el-input>
                 </el-form-item>
                 <el-form-item label="设备厂商：">

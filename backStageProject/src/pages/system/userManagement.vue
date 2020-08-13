@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix" inline>
                 <el-form-item label="手机号：">
-                    <el-input size="mini" clearable v-model="formItem.phoneNumber" placeholder="请输入手机号"></el-input>
+                    <el-input size="mini"  @keyup.enter.native="refreshHandle" clearable v-model="formItem.phoneNumber" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">
@@ -84,7 +84,7 @@
             :before-close="resetCode"
             :visible.sync="synchronizationVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">用户管理-同步查询</span>
+                <span class="title">用户管理-添加用户</span>
             </div>
             <div class="synPhone">
                 <div class="box">

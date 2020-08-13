@@ -1,10 +1,10 @@
 <template>
     <div>
-        <!--  计费节点详情-->
+        <!--  实体门架-->
         <div class="formBox-top">
-            <el-form ref="provinceForm"  :model="formItem" class="clearFix" inline>
-                <el-form-item  label="省份" prop="province">
-                    <el-select clearable  size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
+            <el-form ref="provinceForm"  :model="formItem" class="clearFix"  inline>
+                <el-form-item  label="省份:" prop="province">
+                    <el-select clearable   size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
                         <el-option label="河北" value="13"></el-option>
@@ -37,14 +37,11 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-<!--                <el-form-item label="ID:">-->
-<!--                    <el-input  clearable  v-model="formItem.id" placeholder="请输入ID"></el-input>-->
-<!--                </el-form-item>-->
-                <el-form-item label="路网节点编号:">
-                    <el-input  clearable size="mini" v-model="formItem.roadNodeId" placeholder="请输入路网节点编号"></el-input>
+                <el-form-item label="ID:">
+                    <el-input  clearable  size="mini" @keyup.enter.native="getData" v-model="formItem.id" placeholder="请输入ID"></el-input>
                 </el-form-item>
-                <el-form-item label="路网节点名称:">
-                    <el-input  clearable size="mini"  v-model="formItem.roadNodeName" placeholder="请输入路网节点名称"></el-input>
+                <el-form-item label="名称:">
+                    <el-input  clearable  size="mini" @keyup.enter.native="getData" v-model="formItem.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">
@@ -57,16 +54,24 @@
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column  type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
-                <el-table-column prop="roadNodeId" label="路网节点编号" header-align="center" align="center"/>
-                <el-table-column prop="roadNodeName" label="路网节点名称" header-align="center" align="center"/>
-                <el-table-column  label="路网节点类型" header-align="center" align="center">
+                <el-table-column prop="unitName" label="名称" header-align="center" align="center"/>
+                <el-table-column prop="chargeUnitId" label="收费单元编号" header-align="center" align="center"/>
+                <el-table-column prop="gantryHex" label="门架Hex码" header-align="center" align="center"/>
+                <el-table-column prop="lat" label="纬度" header-align="center" align="center"/>
+                <el-table-column prop="lng" label="经度" header-align="center" align="center"/>
+                <el-table-column  label="上下行方向" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.roadNodeType == '1' ">普通收费单元</span>
-                        <span v-if="scope.row.roadNodeType == '2' ">省界收费单元</span>
-                        <span v-if="scope.row.roadNodeType == '3' ">收费站</span>
+                        <span v-if="scope.row.direction == '1' ">上行</span>
+                        <span v-if="scope.row.direction == '2' ">下行</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="gantrys" label="收费门架" header-align="center" align="center"/>
+                <el-table-column  label="是否省界收费单元" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.gantryMode == '1' ">路段门架</span>
+                        <span v-if="scope.row.gantryMode == '2' ">省界入口门架</span>
+                        <span v-if="scope.row.gantryMode == '3' ">省界出口门架</span>
+                    </template>
+                </el-table-column>
             </el-table>
             <Pages
                 class="pages"
@@ -84,17 +89,16 @@
     import {getDataTime} from '@/assets/js/time'
     import api from '../../uitls/api/basic'; //基础数据
     export default {
-        name: "BillingNodeDetail",
+        name: "entityGantry",
         data() {
             return {
                 formItem: {
                     province:'',
                     id: '',
-                    roadNodeId: '',
-                    roadNodeName: ''
+                    name: ''
                 },
                 tableData:[],
-                keyData :this.$store.state.province, // 省份
+                keyData : this.$store.state.province, // 省份
                 // 分页
                 options: {
                     total: 0, // 总条数
@@ -113,8 +117,7 @@
                 // 重置
                 this.formItem.province = '';
                 this.formItem.id = '';
-                this.formItem.roadNodeId = '';
-                this.formItem.roadNodeName = '';
+                this.formItem.name = '';
                 this.getData()
             },
             getData() {
@@ -128,18 +131,17 @@
                     openId: _t.$cookie.get('openId'),
                     province: _t.formItem.province?_t.formItem.province: null,
                     id: _t.formItem.id?_t.formItem.id:null,
-                    roadNodeId: _t.formItem.roadNodeId?_t.formItem.roadNodeId:null,
-                   roadNodeName : _t.formItem.roadNodeName?_t.formItem.roadNodeName:null,
+                    name: _t.formItem.name?_t.formItem.name:null,
                     pageNo: _t.options.currentPage, // 当前页
                     pageSize: _t.options.pageSize, // 显示条数
                 };
-                var filename = api.INFO + getDataTime() + '.json';
+                var filename = api.SOLID  + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
 
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
                         _t.tableData = JSON.parse(res.bizContent).data?JSON.parse(res.bizContent).data:[];
-                        _t.tableData.forEach(item =>{
+                        _t.tableData.forEach(item => {
                             for (var int in _t.keyData) {
                                 if (int == item.province) {
                                     item.province = _t.keyData[int]
@@ -150,8 +152,7 @@
                         var pages = JSON.parse(res.bizContent).totalCount
                         _t.options.total = pages ? pages : 0;
                     }else {
-                        _t.$store.commit('set_loading', false);
-                         _t.alertDialogTip(_t, res.errorMsg)
+                        _t.alertDialogTip(_t, res.errorMsg)
                     }
                 })
             },

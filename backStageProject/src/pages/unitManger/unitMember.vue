@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
                 <el-form-item label="手机号">
-                    <el-input clearable size="mini" v-model="formItem.mobile" placeholder="请输入手机号"></el-input>
+                    <el-input clearable @keyup.enter.native="getData" size="mini" v-model="formItem.mobile" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="角色">
                     <el-select clearable size="mini" v-model="formItem.roleId" filterable placeholder="请选择角色">
@@ -54,7 +54,7 @@
             <el-form :model="addEdit" :rules="rules" ref="addCollection" label-width="150px">
                 <el-form-item label="手机号：" prop="mobile">
                     <div style="display: flex; align-items: center;">
-                        <el-input :disabled="formAddItem" clearable v-model="addEdit.mobile"
+                        <el-input @keyup.enter.native="getSSO(addEdit.mobile,'add')" :disabled="formAddItem" clearable v-model="addEdit.mobile"
                                   placeholder="请输入手机号"></el-input>
                         <el-button style="margin: 0 30px;" class="yellowBtn" size="mini" round
                                    @click="getSSO(addEdit.mobile,'add')">查询
@@ -108,7 +108,7 @@
     import {getDataTime} from '@/assets/js/time';
     import api from '../../uitls/api/basic'; //基础数据
     export default {
-        name: "nuitMember",
+        name: "unitMember",
         data() {
             return {
                 formItem: {

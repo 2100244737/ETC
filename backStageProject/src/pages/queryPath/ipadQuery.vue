@@ -3,7 +3,7 @@
         <div id="formBox-top" class="formBox-top">
             <el-form :rules="rules" ref=pathForm :model="dataList" class="clearFix"  inline>
                 <el-form-item label="车牌号"  prop="carNumber">
-                    <el-input clearable size="mini" class="input"  @input="toUpperCode(dataList.carNumber)" v-model="dataList.carNumber" placeholder="请输入车牌号"></el-input>
+                    <el-input @keyup.enter.native="getData" clearable size="mini" class="input"  @input="toUpperCode(dataList.carNumber)" v-model="dataList.carNumber" placeholder="请输入车牌号"></el-input>
                 </el-form-item>
                 <el-form-item label="上传时间" prop="time">
                     <el-date-picker size="mini" v-model="dataList.time" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd"
@@ -44,8 +44,8 @@
                 <el-table-column prop="fee" label="金额(分)" header-align="center" align="center"/>
                 <el-table-column label="操作" width="250px" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini"  type="primary" @click="lookMap(scope.row)">查看地图</el-button>
-                        <el-button size="mini"  type="primary" @click="lookLog(scope.row)">查看日志</el-button>
+                        <el-button class="blueTableBtn" size="mini" round @click="lookMap(scope.row)">查看地图</el-button>
+                        <el-button class="blueTableBtn" size="mini" round @click="lookLog(scope.row)">查看日志</el-button>
                     </template>
                 </el-table-column>
             </el-table>

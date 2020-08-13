@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix"  inline>
                 <el-form-item label="设备编号：">
-                    <el-input size="mini"  clearable maxlength="150"  v-model="formItem.equipmentNumber" placeholder="设备编号"></el-input>
+                    <el-input size="mini"  @keyup.enter.native="getData" clearable maxlength="150"  v-model="formItem.equipmentNumber" placeholder="设备编号"></el-input>
                 </el-form-item>
                 <el-form-item label="厂商：">
                     <el-select
@@ -453,12 +453,11 @@
             },
             details(row) {
                 var _t = this;
-                console.log(row);
                 _t.detailsVisible = true;
                 _t.detailsData.deviceId =row.deviceId; //	设备编号
                  _t.detailsData.factory = row.factoryName; //	设备厂商
                  _t.detailsData.status = row.status != 0? '已指定':'未指定'; //	设备状态
-                 _t.detailsData.model = row.appVersion; //设备型号
+                 _t.detailsData.model = row.model; //设备型号
                 _t.detailsData.buyerName = row.buyerName;
                 _t.detailsData.openId = row.openId; //	操作人id
                 _t.detailsData.insertTime = row.insertTime.replace("T", ' '); //	插入时间

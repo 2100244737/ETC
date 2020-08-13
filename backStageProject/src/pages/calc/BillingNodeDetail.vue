@@ -1,6 +1,6 @@
 <template>
     <div>
-        <!--  收费站代理-->
+        <!--  计费节点详情-->
         <div class="formBox-top">
             <el-form ref="provinceForm"  :model="formItem" class="clearFix" inline>
                 <el-form-item  label="省份" prop="province">
@@ -37,14 +37,14 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="ID:">
-                    <el-input  clearable size="mini" v-model="formItem.id" placeholder="请输入ID"></el-input>
+<!--                <el-form-item label="ID:">-->
+<!--                    <el-input  clearable  v-model="formItem.id" placeholder="请输入ID"></el-input>-->
+<!--                </el-form-item>-->
+                <el-form-item label="路网节点编号:">
+                    <el-input  clearable size="mini" @keyup.enter.native="getData" v-model="formItem.roadNodeId" placeholder="请输入路网节点编号"></el-input>
                 </el-form-item>
-                <el-form-item label="名称:">
-                    <el-input  clearable size="mini"  v-model="formItem.name" placeholder="请输入名称"></el-input>
-                </el-form-item>
-                <el-form-item label="收费站编号:">
-                    <el-input  clearable size="mini" v-model="formItem.stationId" placeholder="请输入名称"></el-input>
+                <el-form-item label="路网节点名称:">
+                    <el-input  clearable size="mini" @keyup.enter.native="getData"  v-model="formItem.roadNodeName" placeholder="请输入路网节点名称"></el-input>
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">
@@ -57,10 +57,16 @@
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column  type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
-                <el-table-column prop="stationId" label="收费站编号" header-align="center" align="center"/>
-                <el-table-column prop="name" label="收费站名称" header-align="center" align="center"/>
-                <el-table-column prop="tollPlazaCount" label="收费广场数量" header-align="center" align="center"/>
-                <el-table-column prop="chargeUnit" label="代收收费单元" header-align="center" align="center"/>
+                <el-table-column prop="roadNodeId" label="路网节点编号" header-align="center" align="center"/>
+                <el-table-column prop="roadNodeName" label="路网节点名称" header-align="center" align="center"/>
+                <el-table-column  label="路网节点类型" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.roadNodeType == '1' ">普通收费单元</span>
+                        <span v-if="scope.row.roadNodeType == '2' ">省界收费单元</span>
+                        <span v-if="scope.row.roadNodeType == '3' ">收费站</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="gantrys" label="收费门架" header-align="center" align="center"/>
             </el-table>
             <Pages
                 class="pages"
@@ -75,17 +81,17 @@
 
 <script>
     import Pages from "../../components/pages";
-    import {getDataTime} from '@/assets/js/time';
+    import {getDataTime} from '@/assets/js/time'
     import api from '../../uitls/api/basic'; //基础数据
     export default {
-        name: "TollBoothAgent",
+        name: "BillingNodeDetail",
         data() {
             return {
                 formItem: {
                     province:'',
                     id: '',
-                    name: '',
-                    stationId:''
+                    roadNodeId: '',
+                    roadNodeName: ''
                 },
                 tableData:[],
                 keyData :this.$store.state.province, // 省份
@@ -102,14 +108,13 @@
         },
         mounted() {
         },
-
         methods: {
             resetHandle () {
                 // 重置
                 this.formItem.province = '';
                 this.formItem.id = '';
-                this.formItem.name = '';
-                this.formItem.stationId = '';
+                this.formItem.roadNodeId = '';
+                this.formItem.roadNodeName = '';
                 this.getData()
             },
             getData() {
@@ -122,14 +127,15 @@
                 const params = {
                     openId: _t.$cookie.get('openId'),
                     province: _t.formItem.province?_t.formItem.province: null,
-                    id: _t.formItem.id?_t.formItem.id: null,
-                    name: _t.formItem.name?_t.formItem.name:null,
-                    stationId: _t.formItem.stationId?_t.formItem.stationId:null,
+                    id: _t.formItem.id?_t.formItem.id:null,
+                    roadNodeId: _t.formItem.roadNodeId?_t.formItem.roadNodeId:null,
+                   roadNodeName : _t.formItem.roadNodeName?_t.formItem.roadNodeName:null,
                     pageNo: _t.options.currentPage, // 当前页
                     pageSize: _t.options.pageSize, // 显示条数
                 };
-                var filename = api.AGENCY + getDataTime() + '.json';
+                var filename = api.INFO + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
+
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
                         _t.tableData = JSON.parse(res.bizContent).data?JSON.parse(res.bizContent).data:[];
@@ -144,7 +150,8 @@
                         var pages = JSON.parse(res.bizContent).totalCount
                         _t.options.total = pages ? pages : 0;
                     }else {
-                        _t.alertDialogTip(_t, res.errorMsg)
+                        _t.$store.commit('set_loading', false);
+                         _t.alertDialogTip(_t, res.errorMsg)
                     }
                 })
             },

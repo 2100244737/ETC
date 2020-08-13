@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix" inline>
                 <el-form-item label="文件名：">
-                    <el-input size="mini" clearable  v-model="formItem.name"
+                    <el-input @keyup.enter.native="getData" size="mini" clearable  v-model="formItem.name"
                               placeholder="请输入文件名"></el-input>
                 </el-form-item>
                 <el-form-item label="版本类型：" prop="versionType">

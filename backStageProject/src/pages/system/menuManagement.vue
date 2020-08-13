@@ -58,17 +58,17 @@
                     <el-input clearable v-model="addEdit.path" placeholder="请输入菜单路由"></el-input>
                 </el-form-item>
                 <el-form-item label="父级菜单" >
-                    <el-input disabled v-model="addEdit.parentId" placeholder="请输入父级菜单"></el-input>
+                    <el-input disabled v-model="addEdit.parentName" placeholder="请输入父级菜单"></el-input>
                 </el-form-item>
-                <el-form-item label="菜单类型：">
-                    <el-input disabled v-model="addEdit.menuType" placeholder="请输入菜单类型"></el-input>
-                </el-form-item>
+<!--                <el-form-item label="菜单类型：">-->
+<!--                    <el-input disabled v-model="addEdit.menuType" placeholder="请输入菜单类型"></el-input>-->
+<!--                </el-form-item>-->
                 <el-form-item label="排序：" prop="list">
                     <el-input clearable v-model="addEdit.list" placeholder="请输入排序"></el-input>
                 </el-form-item>
-                <el-form-item label="图片地址：" prop="imgUrl">
-                    <el-input clearable v-model="addEdit.imgUrl" placeholder="请输入图片地址"></el-input>
-                </el-form-item>
+<!--                <el-form-item label="图片地址：" prop="imgUrl">-->
+<!--                    <el-input clearable v-model="addEdit.imgUrl" placeholder="请输入图片地址"></el-input>-->
+<!--                </el-form-item>-->
             </el-form>
             <div slot="footer">
                 <el-button class="redTableBtn" size="medium" round @click="resetAdd">取消</el-button>
@@ -131,16 +131,17 @@
                     path: '',
                     name: '',
                     parentId: '',
-                    imgUrl: '',
+                    imgUrl: 'el-icon-s-promotion',
                     menuType: '',
-                    list: ''
+                    list: '',
+                    parentName:''
                 },
                 amend: {
                     menuId: '',
                     path: '',
                     name: '',
                     parentId: '',
-                    imgUrl: '',
+                    imgUrl: 'el-icon-s-promotion',
                     menuType: '',
                     list: ''
                 },
@@ -238,7 +239,9 @@
                 this.$refs[formName].resetFields();
             },
             treeNodeClick(node) {
+
                 this.addEdit.parentId = node.id;
+                this.addEdit.parentName = node.name;
                 if (node.id == 'root') {
                     this.addEdit.menuType = '一级菜单'
                 } else {
@@ -250,7 +253,7 @@
             resetAdd() {
                 this.addEdit.path = '';
                 this.addEdit.name = '';
-                this.addEdit.imgUrl = '';
+                this.addEdit.imgUrl = 'el-icon-s-promotion';
                 this.addEdit.menuType = '';
                 this.addEdit.list = '';
                 this.addVisible = false;
@@ -271,6 +274,7 @@
                             accessToken: _t.$cookie.get('accessToken'),
                             openId: _t.$cookie.get('openId'),
                         };
+
                         var filename = api.MENU_ADD + getDataTime() + '.json';
                         var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
                         _t.$api.post('api/json', data, function (res) {
@@ -376,8 +380,6 @@
 
     .el-icon-folder {
         margin-right: 5px;
-        background:linear-gradient(270deg,rgba(137,215,248,1) 0%,rgba(80,147,252,1) 100%);
-        box-shadow:0px 0px 2px 0px rgba(134,211,248,0.5);
     }
 
     .menu-tree {
