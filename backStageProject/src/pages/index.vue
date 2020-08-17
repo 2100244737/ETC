@@ -7,6 +7,7 @@
                     <div class="user-message">
                         <p>上午好，{{this.$cookie.get('username')}}</p>
                         <p>手机号：{{this.$cookie.get('phone')}}</p>
+                        <p v-if="this.$cookie.get('companyName') !='null'">单位名称：{{this.$cookie.get('companyName')}}</p>
                     </div>
                     <p class="line-box"></p>
                 </div>
@@ -17,6 +18,7 @@
                         <div>
                             <p>上午好，{{this.$cookie.get('username')}}</p>
                             <p>手机号：{{this.$cookie.get('phone')}}</p>
+                            <p v-if="this.$cookie.get('companyName')!='null'">单位名称：{{this.$cookie.get('companyName')}}</p>
                         </div>
                         <img slot="reference" class="user-picture" src="../assets/img/profile-img.png" alt="">
                     </el-popover>
@@ -85,7 +87,6 @@
 
                 <!--        <footer class="footer">底部</footer>-->
             </div>
-
         </div>
 
     </div>
@@ -172,10 +173,6 @@
 
         },
         methods: {
-            // 侧边栏展开收起
-            toggleCollapse() {
-
-            },
             handleClick() {
                 this.$store.commit('toggleSideBar', this.active)
             },
@@ -234,15 +231,16 @@
                 this.$cookie.delete('phone');
                 this.$cookie.delete('username');
                 this.$cookie.delete('roleName');
-                sessionStorage.removeItem("MENU_LIST");
-                sessionStorage.removeItem('openId')
+                this.$cookie.delete('roleId');
+                this.$cookie.delete('companyName');
+                localStorage.removeItem("DEVICE_MENU_LIST");
             },
             loginOut() {
                 var _t = this;
                 //退出
                 window.close()
 
-                var url = 'https://testweb.datasw.cn/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')
+                var url = 'http://'+ location.hostname + '/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')
                 window.location.replace(url)
                 _t.clearCache()
                 // window.open(url);    //跳转
@@ -250,9 +248,13 @@
             },
         },
         created() {
-            // console.log(this.$cookie.get('roleName'));; // 角色
             this.$store.state.options = [];
             this.$store.state.activeIndex = '';
+            if(!this.$cookie.get('openId')){
+                localStorage.removeItem("DEVICE_MENU_LIST");
+                var url = 'https://testweb.datasw.cn/device/webLogin'
+                window.location.replace(url)
+            }
         }
 
     }

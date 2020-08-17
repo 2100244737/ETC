@@ -2,7 +2,7 @@ html, body, #app {
     width: 100%;
     height: 100%;
     font-size: 16px;
-
+    min-height: 400px;
     min-width: 1200px;
     overflow-y: auto;
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
@@ -123,7 +123,7 @@ h3 {
 .nest-menu .el-submenu > .el-submenu__title:hover,
 .el-submenu .el-menu-item:hover,
 .el-menu-item:hover {
-    width: 100%;
+    width: 90% ;
     height: 36px; /*no*/
 
     background: rgba(130, 178, 255, 1) !important;
@@ -144,6 +144,19 @@ h3 {
 
 .el-menu-item.is-active {
     display: inline-block;
+    width: 90%;
+    height: 36px; /*no*/
+    line-height: 36px; /*no*/
+    color: #fff;
+    background: rgba(130, 178, 255, 1) !important;
+    box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
+    border-radius: 100px 0px 0px 100px;
+}
+/*.el-menu--popup > .el-menu-item.is-active {*/
+/*    width:100%;*/
+/*}*/
+.mentHome.is-active{
+    display: inline-block;
     width: 100%;
     height: 36px; /*no*/
     line-height: 36px; /*no*/
@@ -151,4 +164,14 @@ h3 {
     background: rgba(130, 178, 255, 1) !important;
     box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
     border-radius: 100px 0px 0px 100px;
+}
+.mentHome:hover {
+    width: 100%;
+    height: 36px; /*no*/
+    background: rgba(130, 178, 255, 1) !important;
+    box-shadow: 0px 3px 8px 0px rgba(8, 85, 178, 0.4) !important;
+    border-radius: 100px 0px 0px 100px;
+}
+.el-icon-arrow-right:before {
+    color: #fff;
 }

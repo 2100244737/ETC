@@ -256,7 +256,7 @@
             httpRequest(param) {
                 var _t = this
                 let fd = new FormData()// FormData 对象
-                console.log(param);
+
                 fd.append('file', param.file)// 文件
                 fd.append('tempToken', _t.tempToken)
                 fd.append('path', 'app')

@@ -21,4 +21,7 @@ export default  {
     MENU_TREE :'DEVICE_MENU_TREE_REQ_' + number,  // 查询
     MENU_DELETE :'DEVICE_MENU_DELETE_REQ_' + number,  // 删除
     MENU_UPDATE :'DEVICE_MENU_UPDATE_REQ_' + number,  // 修改
+    DEVAPI_TREE :'DEVICE_API_TREE_REQ_' + number,  // 查询api配置
+    DEVMENU_CONFIG :'DEVICE_MENU_CONFIG_REQ_' + number,  // 保存api配置
+    DEVMENU_API :'DEVICE_MENU_API_REQ_' + number,  // 回显api配置
 }

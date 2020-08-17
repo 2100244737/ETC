@@ -33,6 +33,7 @@
                         <template slot-scope="scope">
                             <el-button class="cyanTableBtn" size="mini" round @click="changeMenuBtn(scope.row)">修改
                             </el-button>
+                            <el-button v-if="scope.row.menuType !='1'" class="blueTableBtn" size="mini" round  @click="deployAPI(scope.row)">配置api</el-button>
                             <el-button class="redTableBtn" size="mini" round @click="deleteMenu(scope.row)">删除
                             </el-button>
                         </template>
@@ -92,10 +93,59 @@
                 <el-form-item label="菜单路由：" prop="path">
                     <el-input clearable v-model="amend.path" placeholder="请输入菜单路由"></el-input>
                 </el-form-item>
+                <el-form-item label="排序：" prop="list">
+                    <el-input clearable v-model="amend.list" placeholder="请输入排序"></el-input>
+                </el-form-item>
+                <el-form-item label="图片地址：" >
+                    <el-input clearable v-model="amend.imgUrl" placeholder="请输入图片地址"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer">
                 <el-button class="redTableBtn" size="medium" round @click="resetAmend">取消</el-button>
                 <el-button class="blueTableBtn" size="medium" round @click="confirmAmend">保存</el-button>
+            </div>
+        </el-dialog>
+        <!--        配置api-->
+        <el-dialog
+            append-to-body
+            :close-on-click-modal="true"
+            :close-on-press-escape="false"
+            :before-close="deployAPIAccess"
+            width="75%"
+            top="10vh"
+            :visible.sync="deployAPIVisible">
+            <div slot="title" class="dialogTitle clearFix">
+                <span class="title">配置api</span>
+            </div>
+            <div class="roleContent">
+                <div class="query">
+                    <el-input placeholder="请输入查询内容" v-model="deploy.query"></el-input>
+                    <el-button class="yellowBtn" style="margin-left: 30px;" size="mini" round @click="getTree" >查询</el-button>
+                </div>
+                <div class="bottonContent">
+                    <div class="tree">
+                        <el-tree
+                            ref="tree"
+                            @check-change="changehandle"
+                            :data="deploy.treeList"
+                            :highlight-current="true"
+                            :default-expanded-keys="defaultShowNodes"
+                            show-checkbox
+                            node-key="id"
+                            :props="defaultProps">
+                        </el-tree>
+                    </div>
+                    <div class="treeBox">
+                        <h4>已勾权限</h4>
+                        <div class="tag">
+                            <el-tag v-for="(item, index) in pushTreeName" :key="index">{{item}}</el-tag>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <el-button class="redTableBtn" size="medium" round @click="deployAPIAccess">取消</el-button>
+                <el-button class="blueTableBtn" size="medium" round @click="deployAPISave">保存</el-button>
             </div>
         </el-dialog>
     </div>
@@ -111,7 +161,14 @@
             return {
                 addVisible: false,
                 amendVisible: false,
+                deployAPIVisible: false,
                 menuList: [],
+                pushTreeName: [],
+                defaultShowNodes: [],
+                deploy: {
+                    treeList: [],
+                    query: ''
+                },
                 rules: {
                     name: [
                         {required: true, message: '请输入菜单名称', trigger: 'blur'}
@@ -164,6 +221,149 @@
         mounted() {
         },
         methods: {
+
+            // 获取树形数据
+            getTree (val) {
+                var _t = this;
+                const params = {
+                    openId: _t.$cookie.get('openId'),
+                    menuId: _t.menuId,
+                    serviceId:'SMPW'
+                };
+                var filename = api.DEVAPI_TREE + getDataTime() + '.json';
+                var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
+                _t.$api.post('api/json', data, function (res) {
+                    if (res.statusCode == 0) {
+                        _t.deploy.treeList = JSON.parse(res.bizContent).list
+                        _t.getMenu()
+                    } else {
+                        _t.alertDialogTip(_t, res.errorMsg);
+                    }
+                })
+            },
+            // 获取菜单回显
+            getMenu () {
+                var _t = this;
+                const params = {
+                    openId: _t.$cookie.get('openId'),
+                    menuId: _t.menuId,
+                };
+                var filename = api.DEVMENU_API + getDataTime() + '.json';
+                var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
+                _t.$api.post('api/json', data, function (res) {
+                    if (res.statusCode == 0) {
+                        var MenuData = JSON.parse(res.bizContent).data?JSON.parse(res.bizContent).data: []
+                        MenuData.forEach(item => {
+                            _t.$nextTick(function () {
+                                _t.$refs.tree.setChecked(item, true, false)
+                                // _t.defaultShowNodes.push(item)
+                            })
+                        })
+                    } else {
+                        _t.alertDialogTip(_t, res.errorMsg);
+                    }
+                })
+            },
+            getSimpleCheckedNodes(store) {
+                const checkedNodes = [];
+                const traverse = function (node) {
+                    const childNodes = node.root ? node.root.childNodes : node.childNodes;
+                    childNodes.forEach(child => {
+                        if (child.checked) {
+                            checkedNodes.push(child.data);
+                        }
+                        if (child.indeterminate) {
+                            traverse(child);
+                        }
+                    });
+                };
+                traverse(store)
+
+                return checkedNodes;
+            },
+            changehandle () {
+                var _t = this;
+                var list = this.getSimpleCheckedNodes(this.$refs.tree);
+                _t.pushTreeName = []
+                var arr = []
+                list.forEach(item => {
+                    if (!item.children) {
+                        arr.push(item.name)
+                    } else {
+                        if (item.children) {
+                            item.children.forEach(val => {
+                                if (val.children) {
+                                    val.children.forEach(lit => {
+                                        arr.push(lit.name)
+                                    })
+                                } else {
+                                    arr.push(val.name)
+                                }
+
+                            })
+                        }
+
+                    }
+                })
+                _t.$nextTick(function () {
+                    _t.pushTreeName = arr
+                })
+            },
+            // 配置api 保存
+            deployAPISave () {
+                var _t = this;
+                var list = this.getSimpleCheckedNodes(this.$refs.tree);
+                // pushDataTree
+                _t.pushDataTree = []
+                var arr = []
+                list.forEach(item => {
+                    if (!item.children) {
+                        arr.push(item.id)
+                    } else {
+                        if (item.children) {
+                            item.children.forEach(val => {
+                                if (val.children) {
+                                    val.children.forEach(lit => {
+                                        arr.push(lit.id)
+                                    })
+                                } else {
+                                    arr.push(val.id)
+                                }
+
+                            })
+                        }
+
+                    }
+                })
+                _t.pushDataTree = arr
+                const params = {
+                    openId: _t.$cookie.get('openId'),
+                    menuId: _t.menuId,// row id
+                    apiIds: _t.pushDataTree,//角色id
+                };
+                var filename = api.DEVMENU_CONFIG + getDataTime() + '.json';
+                var data = _t.changeData(params, filename,  _t.$cookie.get('accessToken'));
+                _t.$api.post('api/json', data, function (res) {
+                    if (res.statusCode == 0) {
+                        _t.deployAPIVisible = false;
+                        _t.alertMessageTip(_t, res.errorMsg);
+                    } else {
+                        _t.alertDialogTip(_t, res.errorMsg);
+                    }
+                })
+            },
+            // 配置api
+            deployAPI(row) {
+                this.deployAPIVisible = true
+                this.menuId = row.id;
+                this.getTree(row.id);
+
+
+            },
+            // 配置api 取消
+            deployAPIAccess() {
+                this.deployAPIVisible = false
+            },
             resetAmend() {
                 this.amendVisible = false
                 this.resetForm('amend')
@@ -176,6 +376,8 @@
                         const params = {
                             name: _t.amend.name,
                             path: _t.amend.path,
+                            imgUrl:_t.amend.imgUrl,
+                            list:_t.amend.list,
                             menuId: _t.amend.menuId,
                             accessToken: _t.$cookie.get('accessToken'),
                             openId: _t.$cookie.get('openId'),
@@ -234,6 +436,8 @@
                 this.amend.path = row.path;
                 this.amend.parentId = row.parentId;
                 this.amend.name = row.name;
+                this.amend.imgUrl = row.imgUrl;
+                this.amend.list = row.list;
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
@@ -363,7 +567,9 @@
         background-color: rgb(255, 255, 255);
         color: rgb(64, 158, 255);
     }
+    .bottonContent {
 
+    }
     .menu-table {
         display: flex;
         overflow: hidden;
@@ -389,6 +595,48 @@
         border-radius: 10px;
         padding: 10px;
         height: calc(100vh - 190px);
+    }
+
+
+    .tag {
+        margin-top: 20px;
+    }
+
+    .bottonContent {
+        margin-top: 20px;
+        display: flex;
+        height: 100%;
+        width: 100%;
+
+    }
+
+    .tree {
+        width: 50%;
+        height: 50vh;
+        overflow: hidden;
         overflow-y: auto;
+
+        box-sizing: border-box;
+    }
+
+    h4 {
+        color: #888;
+    }
+
+    .bottonContent .treeBox {
+        width: 50%;
+        background: #eef1f6;
+        height: 50vh;
+        overflow: hidden;
+        overflow-y: auto;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .query {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 75%;
     }
 </style>

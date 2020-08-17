@@ -24,8 +24,9 @@
             <el-table :data="tableData"  size="small" stripe>
                 <el-table-column type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="userName" label="姓名" header-align="center" align="center"/>
-                <el-table-column prop="roleName" label="角色" header-align="center" align="center"/>
                 <el-table-column prop="mobile" label="手机号" header-align="center" align="center"/>
+                <el-table-column prop="roleName" label="角色" header-align="center" align="center"/>
+
                 <el-table-column label="操作" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button class="blueTableBtn" size="mini" round @click="amendRole(scope.row)">修改角色</el-button>
@@ -171,7 +172,7 @@
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
                         if (lt == 'add') {
-                            console.log(JSON.parse(res.bizContent));
+
 
                             _t.addEdit.userName = JSON.parse(res.bizContent).name
                             _t.addEdit.userOpenId = JSON.parse(res.bizContent).userOpenId
@@ -229,7 +230,7 @@
             },
             // 删除
             deleteRole(row) {
-                console.log(row);
+
                 var _t = this;
                 _t.$confirm('你确定要删除此成员吗？', '提示', {
                     confirmButtonText: '确定',
@@ -305,7 +306,6 @@
                             roleId: _t.addEdit.roleId,
                             userOpenId: _t.addEdit.userOpenId,
                         };
-                        console.log(params);
                         var filename = api.COMPANYUSER_ADD + getDataTime() + '.json';
                         var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                         _t.$api.post('api/json', data, function (res) {
@@ -351,7 +351,6 @@
                 _t.$api.post('/api/json', data, function (res) {
                     if (res.statusCode == 0) {
                         _t.tableData = JSON.parse(res.bizContent).data ? JSON.parse(res.bizContent).data : [];
-                        console.log(_t.tableData);
                         _t.tableData.forEach(item => {
                             for (var int in _t.keyData) {
                                 if (int == item.province) {

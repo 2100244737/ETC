@@ -15,6 +15,8 @@ import "./assets/css/element.css"
 import"./assets/css/base.css";
 // 页面自适应
 import 'lib-flexible/flexible'
+// iconFont
+import './assets/iconfont/iconfont.css'
 // 引入axios 接口
 import axios from './uitls/axios';
 // 设置cookie
@@ -101,32 +103,33 @@ Vue.prototype.alertMessageTip = (name, message) => {
         offset: 150
     });
 };
-Vue.directive('antiShake', {
-  // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
-  /**
-   * el 指令所绑定的元素，可以用来直接操作 DOM 。
-   * binding 一个对象，包含绑定的值
-   */
+// Vue.directive('antiShake', {
+//   // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
+//   /**
+//    * el 指令所绑定的元素，可以用来直接操作 DOM 。
+//    * binding 一个对象，包含绑定的值
+//    */
+//
+//   inserted: function(el, binding) {
+//     const { callback, time } = binding.value
+//     el.callback = callback
+//     el.time = time
+//     el.timeCall = null
+//     el.addEventListener('click', () => {
+//       clearTimeout(el.timeCall)
+//       el.timeCall = setTimeout(() => {
+//         el.callback()
+//       }, el.time || 500)
+//     })
+//   },
+//   // 所在组件的 VNode 更新时调用
+//   update: function(el, binding) {
+//     const { callback, time } = binding.value
+//     el.callback = callback
+//     el.time = time
+//   },
+// })
 
-  inserted: function(el, binding) {
-    const { callback, time } = binding.value
-    el.callback = callback
-    el.time = time
-    el.timeCall = null
-    el.addEventListener('click', () => {
-      clearTimeout(el.timeCall)
-      el.timeCall = setTimeout(() => {
-        el.callback()
-      }, el.time || 500)
-    })
-  },
-  // 所在组件的 VNode 更新时调用
-  update: function(el, binding) {
-    const { callback, time } = binding.value
-    el.callback = callback
-    el.time = time
-  },
-})
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 Vue.prototype.NProgress = NProgress
@@ -134,13 +137,16 @@ NProgress.inc(0.2);
 NProgress.configure({
     minimum: 0.3
 });
+import {
+    MessageBox
+} from 'element-ui';
 router.beforeEach((to, from, next) => {
     NProgress.start();
+
     if(to.path == '/login') {
         next()
     }else {
-        console.log(window.sessionStorage.getItem('openId'));
-        if(window.sessionStorage.getItem('openId') !=null) {
+        if(vueCookie.get('openId') !=null) {
             next()
         }else {
             MessageBox.confirm('openId不能为空！', '提示', {

@@ -1,0 +1,107 @@
+{
+  "id": "1992586",
+  "name": "特情app",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7961399",
+      "name": "基础",
+      "font_class": "jichu",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "15305258",
+      "name": "配置",
+      "font_class": "peizhi",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
+      "icon_id": "1999605",
+      "name": "数据",
+      "font_class": "shuju",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "4707270",
+      "name": "代收",
+      "font_class": "daishou",
+      "unicode": "e718",
+      "unicode_decimal": 59160
+    },
+    {
+      "icon_id": "7590738",
+      "name": "单位管理",
+      "font_class": "danweiguanli",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "5533349",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "5926353",
+      "name": "文件夹",
+      "font_class": "wenjianjia1",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "1253742",
+      "name": "放大镜",
+      "font_class": "fangdajing",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "1015114",
+      "name": "系统",
+      "font_class": "xitong-copy",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "3521530",
+      "name": "统计",
+      "font_class": "tongji",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "9545247",
+      "name": "日志",
+      "font_class": "rizhi",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "10412307",
+      "name": "基础数据",
+      "font_class": "jichushuju",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "12756501",
+      "name": "飞机 发送-2",
+      "font_class": "feijifasong-",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "14124471",
+      "name": "设备",
+      "font_class": "shebei",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    }
+  ]
+}

@@ -3,7 +3,7 @@
         <div class="formBox-top">
             <el-form :model="formItem" class="clearFix" inline>
                 <el-form-item label="设备编号：">
-                    <el-input @keyup.enter.native="getData" size="mini" clearable maxlength="150" v-model="formItem.equipmentNumber"
+                    <el-input @keyup.enter.native="getData" size="mini" clearable maxlength="50" v-model="formItem.equipmentNumber"
                               placeholder="请输入设备编号"></el-input>
                 </el-form-item>
                 <el-form-item label="使用单位：">
@@ -46,18 +46,23 @@
                 <el-table-column type="index" width="50px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="deviceId" label="设备编号" header-align="center" align="center"/>
                 <el-table-column prop="factoryName" label="厂商名称" header-align="center" align="center"/>
-                <el-table-column prop="buyerName" label="使用单位" header-align="center" align="center"/>
-                <el-table-column width="180px" label="更新时间" header-align="center" align="center">
+                <el-table-column  label="使用单位" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.buyerName">{{scope.row.buyerName}}</span>
+                        <span v-else>-</span>
+                    </template>
+                </el-table-column>
+                <el-table-column width="180px" label="状态更新时间" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-text="settime(scope.row.updateTime)"></span>
                     </template>
                 </el-table-column>
-                <el-table-column width="100px" label="状态" header-align="center" align="center">
+                <el-table-column width="100px" label="设备状态" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.status == '0' ">初始化</span>
-                        <span v-if="scope.row.status == '1' " style="color: red">从未部署</span>
-                        <span v-if="scope.row.status == '2' " style="color: #67C23A">已部署</span>
-                        <span v-if="scope.row.status == '3' " style="color: red">已取消部署</span>
+                        <span v-if="scope.row.status == '0' " style="color: #08B8D9">初始化</span>
+                        <span v-if="scope.row.status == '1' " style="color: #EBA80B">从未部署</span>
+                        <span v-if="scope.row.status == '2' " style="color: #05A52A">已部署</span>
+                        <span v-if="scope.row.status == '3' " style="color: #EC4F52">已取消部署</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作" width="220px" header-align="center" align="center">
@@ -66,13 +71,13 @@
                                    @click="deploy(scope.row)">部署
                         </el-button>
                         <el-button class="redTableBtn" size="mini" round v-if="scope.row.status == '2' "
-                                   @click="redeploy(scope.row)">停用
+                                   @click="redeploy(scope.row)">取消部署
                         </el-button>
                         <el-button class="blueTableBtn" size="mini" round v-if="scope.row.status == '2' "
                                    @click="details(scope.row)">详情
                         </el-button>
                         <el-button class="redTableBtn" size="mini" round v-if="scope.row.status  != '2' "
-                                   @click="release(scope.row)">释放
+                                   @click="release(scope.row)">移除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -93,7 +98,7 @@
             :before-close="resetCode"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备部署--添加</span>
+                <span class="title">设备部署-添加</span>
             </div>
             <el-form :model="addEdit" :rules="rules" ref="addList" label-width="150px">
                 <el-form-item label="设备编号：" prop="deviceId">
@@ -117,7 +122,7 @@
             :before-close="resetFlag"
             :visible.sync="deployVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备部署--{{deployTitleName}}</span>
+                <span class="title">设备部署-{{deployTitleName}}</span>
             </div>
             <el-form :model="deployAg" :rules="ruleLIst" ref="deployFlag" label-width="150px">
                 <el-row :gutter="20">
@@ -129,36 +134,36 @@
                                 @change="changeProvince(deployAg.province)"
                                 v-model="deployAg.province">
                                 <el-option label="北京" value="11"></el-option>
-                                <el-option label="天津市" value="12"></el-option>
-                                <el-option label="河北省" value="13"></el-option>
-                                <el-option label="山西省" value="14"></el-option>
-                                <el-option label="内蒙古自治区" value="15"></el-option>
-                                <el-option label="辽宁省" value="21"></el-option>
-                                <el-option label="吉林省" value="22"></el-option>
-                                <el-option label="黑龙江省" value="23"></el-option>
-                                <el-option label="上海市" value="31"></el-option>
-                                <el-option label="江苏省" value="32"></el-option>
-                                <el-option label="浙江省" value="33"></el-option>
-                                <el-option label="安徽省" value="34"></el-option>
-                                <el-option label="福建省" value="35"></el-option>
-                                <el-option label="江西省" value="36"></el-option>
-                                <el-option label="山东省" value="37"></el-option>
-                                <el-option label="河南省" value="41"></el-option>
-                                <el-option label="湖北省" value="42"></el-option>
-                                <el-option label="湖南省" value="43"></el-option>
-                                <el-option label="广东省" value="44"></el-option>
-                                <el-option label="广西壮族自治区" value="45"></el-option>
-                                <el-option label="重庆市" value="50"></el-option>
-                                <el-option label="四川省" value="51"></el-option>
-                                <el-option label="贵州省" value="52"></el-option>
-                                <el-option label="云南省" value="53"></el-option>
-                                <el-option label="陕西省" value="61"></el-option>
-                                <el-option label="甘肃省" value="62"></el-option>
-                                <el-option label="青海省" value="63"></el-option>
-                                <el-option label="宁夏回族自治区" value="64"></el-option>
-                                <el-option label="新疆维吾尔自治区" value="65"></el-option>
-                                <el-option label="海南省" value="46"></el-option>
-                                <el-option label="西藏自治区" value="54"></el-option>
+                                <el-option label="天津" value="12"></el-option>
+                                <el-option label="河北" value="13"></el-option>
+                                <el-option label="山西" value="14"></el-option>
+                                <el-option label="内蒙古" value="15"></el-option>
+                                <el-option label="辽宁" value="21"></el-option>
+                                <el-option label="吉林" value="22"></el-option>
+                                <el-option label="黑龙江" value="23"></el-option>
+                                <el-option label="上海" value="31"></el-option>
+                                <el-option label="江苏" value="32"></el-option>
+                                <el-option label="浙江" value="33"></el-option>
+                                <el-option label="安徽" value="34"></el-option>
+                                <el-option label="福建" value="35"></el-option>
+                                <el-option label="江西" value="36"></el-option>
+                                <el-option label="山东" value="37"></el-option>
+                                <el-option label="河南" value="41"></el-option>
+                                <el-option label="湖北" value="42"></el-option>
+                                <el-option label="湖南" value="43"></el-option>
+                                <el-option label="广东" value="44"></el-option>
+                                <el-option label="广西" value="45"></el-option>
+                                <el-option label="重庆" value="50"></el-option>
+                                <el-option label="四川" value="51"></el-option>
+                                <el-option label="贵州" value="52"></el-option>
+                                <el-option label="云南" value="53"></el-option>
+                                <el-option label="陕西" value="61"></el-option>
+                                <el-option label="甘肃" value="62"></el-option>
+                                <el-option label="青海" value="63"></el-option>
+                                <el-option label="宁夏" value="64"></el-option>
+                                <el-option label="新疆" value="65"></el-option>
+                                <el-option label="海南" value="46"></el-option>
+                                <el-option label="西藏" value="54"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="收费站：" prop="stationId">
@@ -190,7 +195,6 @@
                         <el-form-item label="收费车道：" prop="tollLaneId">
                             <el-select
                                 clearable
-                                placeholder="请选择Hex码"
                                 filterable
                                 v-model="deployAg.tollLaneId">
                                 <el-option
@@ -226,7 +230,7 @@
             center
             :visible.sync="detailsVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备部署--详情</span>
+                <span class="title">设备部署-详情</span>
             </div>
             <el-form :model="detailsData" ref="addEdit" label-width="120px">
                 <el-row :gutter="20">
@@ -234,6 +238,11 @@
                         <el-form-item label="设备编号：">
                             <el-tooltip :content="detailsData.deviceId" placement="top-start" effect="light">
                                 <el-input :disabled="true" v-model="detailsData.deviceId" placeholder="设备编号"></el-input>
+                            </el-tooltip>
+                        </el-form-item>
+                        <el-form-item label="芯片编号：">
+                            <el-tooltip :content="detailsData.seNo" placement="top-start" effect="light">
+                                <el-input :disabled="true" v-model="detailsData.seNo" placeholder="芯片编号"></el-input>
                             </el-tooltip>
                         </el-form-item>
                         <el-form-item label="设备厂商：">
@@ -252,38 +261,55 @@
                                 <el-input :disabled="true" v-model="detailsData.model" placeholder="设备型号"></el-input>
                             </el-tooltip>
                         </el-form-item>
+                        <el-form-item label="使用单位：">
+                            <el-tooltip :content="detailsData.buyerName" placement="top-start"
+                                        effect="light">
+                                <el-input :disabled="true" v-model="detailsData.buyerName" placeholder="使用单位"></el-input>
+                            </el-tooltip>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <!--                        <el-form-item label="操作员id：">-->
-                        <!--                            <el-input :disabled="true" v-model="detailsData.openId" placeholder="操作员id"></el-input>-->
-                        <!--                        </el-form-item>-->
-                        <el-form-item label="收费站名称：">
-                            <el-tooltip :content="detailsData.stationId?detailsData.stationId: '收费站名称'"
+                        <el-form-item label="状态更新时间：">
+                            <el-tooltip :content="detailsData.updateTime" placement="top-start" effect="light">
+                                <el-input :disabled="true" v-model="detailsData.updateTime"
+                                          placeholder="状态更新时间"></el-input>
+                            </el-tooltip>
+                        </el-form-item>
+                        <el-form-item label="省份：">
+                            <el-tooltip :content="detailsData.province" placement="top-start" effect="light">
+                                <el-input :disabled="true" v-model="detailsData.province"
+                                          placeholder="省份"></el-input>
+                            </el-tooltip>
+                        </el-form-item>
+                        <el-form-item label="收费站：">
+                            <el-tooltip :content="detailsData.stationId?detailsData.stationId: '收费站'"
                                         placement="top-start" effect="light">
                                 <el-input :disabled="true" v-model="detailsData.stationId"
-                                          placeholder="收费站名称"></el-input>
+                                          placeholder="收费站"></el-input>
                             </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="收费广场名称：">
-                            <el-tooltip :content="detailsData.tollPlazaId?detailsData.tollPlazaId: '收费广场名称'"
+                        <el-form-item label="收费广场：">
+                            <el-tooltip :content="detailsData.tollPlazaId?detailsData.tollPlazaId: '收费广场'"
                                         placement="top-start" effect="light">
                                 <el-input :disabled="true" v-model="detailsData.tollPlazaId"
-                                          placeholder="收费广场名称"></el-input>
+                                          placeholder="收费广场"></el-input>
                             </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="收费车道编号：">
-                            <el-tooltip :content="detailsData.tollLaneId?detailsData.tollLaneId: '收费车道编号'"
+                        <el-form-item label="收费车道：">
+                            <el-tooltip :content="detailsData.tollLaneId?detailsData.tollLaneId: '收费车道'"
                                         placement="top-start" effect="light">
                                 <el-input :disabled="true" v-model="detailsData.tollLaneId"
-                                          placeholder="收费车道编号"></el-input>
+                                          placeholder="收费车道"></el-input>
                             </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="添加时间：">
-                            <el-tooltip :content="detailsData.insertTime" placement="top-start" effect="light">
-                                <el-input :disabled="true" v-model="detailsData.insertTime"
-                                          placeholder="添加时间"></el-input>
+                        <el-form-item label="代收门架：">
+                            <el-tooltip :content="detailsData.agencyGantrys"
+                                        placement="top-start" effect="light">
+                                <el-input :disabled="true" v-model="detailsData.agencyGantrys"
+                                          placeholder="代收门架"></el-input>
                             </el-tooltip>
                         </el-form-item>
+
                         <!--                        <el-form-item v-if="this.$cookie.get('roleName') && this.$cookie.get('roleName')=='超级管理员'">-->
                         <!--                            <el-button type="danger" @click="removeBinding">解除绑定</el-button>-->
                         <!--                        </el-form-item>-->
@@ -363,14 +389,19 @@
                     factory: '', //	设备厂商
                     status: '', //	设备状态
                     model: '', //设备型号
+                    province:'',
+                    agencyGantrys:'',
                     seNo: '', //	设备se芯片编号
                     stationId: '',//	收费站编号
                     tollPlazaId: '',//	收费广场编号
                     tollLaneId: '',//	收费车道编号
                     openId: '', //	操作人id
                     insertTime: '', //	插入时间
+                    buyerName:'',
+                    updateTime:''
                 },
                 detailShow: false,
+                keyData:this.$store.state.province, // 省份
                 showtextdetail: '',
                 // 添加表单对象
                 addEdit: {
@@ -461,7 +492,12 @@
                 var filename = api.PAGE_STATION + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
-                    _t.stationIdList = JSON.parse(res.bizContent).data
+                    if (res.statusCode == 0) {
+                        _t.stationIdList = JSON.parse(res.bizContent).data
+                    }else {
+                        _t.alertDialogTip(_t, res.errorMsg)
+                    }
+
                 })
             },
             changeTollPlazaId(val) {
@@ -476,7 +512,7 @@
                 var filename = api.AGENCY_FIND + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
-                    console.log(JSON.parse(res.bizContent).hasData);
+
                     if (res.statusCode == 0) {
                         if (JSON.parse(res.bizContent).hasData) {
                             _t.getStatus(val)
@@ -509,7 +545,12 @@
                 var filename = api.PAGE_LANE + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
-                    _t.tollLaneIdList = JSON.parse(res.bizContent).data
+                    if (res.statusCode == 0) {
+                        _t.tollLaneIdList = JSON.parse(res.bizContent).data
+                    }else {
+                        _t.alertDialogTip(_t, res.errorMsg)
+                    }
+
                 })
             },
             changeStationIdLIst(val) {
@@ -547,13 +588,18 @@
                 var filename = api.PAGE_PLAZA + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
-                    _t.tollPlazaIdList = JSON.parse(res.bizContent).data
+                    if (res.statusCode == 0) {
+                        _t.tollPlazaIdList = JSON.parse(res.bizContent).data
+                    }else {
+                        _t.alertDialogTip(_t, res.errorMsg)
+                    }
+
                 })
             },
             details(row) {
                 // 详情
                 this.removeDeviceId = row.deviceId;
-                this.detailsVisible = true;
+
                 var _t = this;
                 const params = {
                     accessToken: _t.$cookie.get('accessToken'),
@@ -564,6 +610,7 @@
                 var filename = api.BIND_FIND + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
+                    _t.detailsVisible = true;
                     _t.detailsList = JSON.parse(res.bizContent)
 
                     if (JSON.parse(res.bizContent).agencyGantrys) {
@@ -586,19 +633,26 @@
                     }else if(value == '3'){
                         status = '已取消部署'
                     }
-                    console.log(_t.detailsData);
+                    for (var int in _t.keyData) {
+                        if (int == _t.detailsList.province) {
+                            _t.detailsData.province = _t.keyData[int]
+                        }
+                    }
+
                     _t.detailsData.status = status; //	设备状态
-                    _t.detailsData.model = _t.detailsList.model; //设备型号
-                    _t.detailsData.seNo = _t.detailsList.seNo; //	设备se芯片编号
+                    _t.detailsData.model = row.model; //设备型号
+                    _t.detailsData.seNo = row.seNo; //	设备se芯片编号
                     _t.detailsData.stationId = _t.detailsList.stationName;//	收费站编号
+                    _t.detailsData.buyerName = row.buyerName;// 使用单位
                     _t.detailsData.tollPlazaId = _t.detailsList.tollPlazaName;//	收费广场编号
                     _t.detailsData.tollLaneId = _t.detailsList.tollLaneId;//	收费车道编号
                     _t.detailsData.sysVersion = _t.detailsList.sysVersion; //	系统版本号
                     _t.detailsData.hardVersion = _t.detailsList.hardVersion;//	硬件版本号
                     _t.detailsData.appVersion = _t.detailsList.appVersion; //	App版本号
                     _t.detailsData.openId = _t.detailsList.openId; //	操作人id
+                    _t.detailsData.agencyGantrys = _t.detailsList.agencyGantrys?_t.detailsList.agencyGantrys:'-'; //代收门架
                     _t.detailsData.insertTime = _t.detailsList.insertTime.replace("T", " "); //	插入时间
-                    _t.detailsData.updateTime = _t.detailsList.updateTime; //	更新时间
+                    _t.detailsData.updateTime =row.updateTime.replace("T", " "); //	更新时间
                 })
 
 
@@ -737,6 +791,9 @@
                 this.deployAg.province = ''; // 省份
                 this.deployAg.tollPlazaId = '';// 收费广场
                 this.deployAg.tollLaneId = '';// 收费车道
+                this.stationIdList =[]
+                this.tollPlazaIdList =[]
+                this.tollLaneIdList =[]
                 this.flag = 1;
                 this.show = false;
                 this.resetForm('deployFlag'); // 清除验证

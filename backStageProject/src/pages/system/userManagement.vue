@@ -5,6 +5,32 @@
                 <el-form-item label="手机号：">
                     <el-input size="mini"  @keyup.enter.native="refreshHandle" clearable v-model="formItem.phoneNumber" placeholder="请输入手机号"></el-input>
                 </el-form-item>
+                <el-form-item label="单位：" >
+                    <el-select clearable  v-model="formItem.factoryName" filterable placeholder="选择单位">
+                        <el-option label="数软" value="1"></el-option>
+                        <el-option label="设备厂商" value="2"></el-option>
+                        <el-option label="客户" value="3"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="角色：">
+                    <el-select
+                        clearable
+                        v-model="formItem.roleId">
+                        <el-option
+                            v-for="(item,index) in roleList"
+                            :key="index"
+                            :label="item.name"
+                            :value="item.id"/>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="状态：" prop="role">
+                    <el-select
+                        clearable
+                        v-model="amend.userStatus">
+                        <el-option label="启用" value="1"/>
+                        <el-option label="停用" value="2"/>
+                    </el-select>
+                </el-form-item>
                 <br>
                 <el-form-item class="fr">
                     <el-button  class="yellowBtn"  size="mini" round @click="refreshHandle">查询</el-button>
@@ -15,13 +41,14 @@
         </div>
         <div class="tableWp marginTop2">
             <el-table :data="tableData" size="small" stripe>
-                <el-table-column prop="nickName" label="用户名" header-align="center" align="center"/>
+                <el-table-column type="index" width="50px" label="序号" header-align="center" align="center"/>
+                <el-table-column prop="nickName" label="姓名" header-align="center" align="center"/>
                 <el-table-column prop="roleId" label="角色" header-align="center" align="center"/>
                 <el-table-column prop="mobile" label="手机号" header-align="center" align="center"/>
-                <el-table-column prop="factoryName" label="用户所属单位" header-align="center" align="center">
+                <el-table-column prop="factoryName" label="所属单位" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.factoryName">{{scope.row.factoryName}}</span>
-                        <span v-else>——</span>
+                        <span v-else>-</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="userStatus" label="状态" header-align="center" align="center">
@@ -62,6 +89,7 @@
                 <el-form-item label="角色：" prop="role">
                     <el-select
                         clearable
+                        placeholder="请选择角色"
                         v-model="amend.role">
                         <el-option
                             v-for="(item,index) in roleList"
@@ -91,8 +119,8 @@
                     <el-form :model="addEdit" :rules="rules" ref="addSynBtn" label-width="150px">
                         <el-form-item label="手机号：" prop="cellPhone">
                             <div class="synbox">
-                                <el-input  clearable maxlength="11" v-model="addEdit.cellPhone" placeholder="手机号"></el-input>
-                                <el-button class="synBtn cyanBtn"  size="mini" round @click="synBtn">同步</el-button>
+                                <el-input  clearable maxlength="11" v-model="addEdit.cellPhone" placeholder="请输入手机号"></el-input>
+                                <el-button class="synBtn cyanBtn"  size="mini" round @click="synBtn">查询</el-button>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -179,10 +207,9 @@
                 // 表单数据
                 formItem: {
                     phoneNumber: '', // 手机号
-                    nickname: '', // 昵称
-                    user: '', // 角色
-                    cellPhone: '', // 手机号
-                    extendompetence: [], // 权限范围
+                    userStatus:'',
+                    roleId:'',
+                    factoryName:'',
                 },
                 amend: {
                     roleId:'',
@@ -400,6 +427,9 @@
                 // 查询功能
                 var _t = this
                 const params = {
+                    userStatus: _t.formItem.userStatus,
+                    roleId: _t.formItem.roleId,
+                    factoryName: _t.formItem.factoryName,
                     mobile: _t.formItem.phoneNumber,
                     // mapAppType: _t.formItem.user,
                     accessToken: _t.$cookie.get('accessToken'),
@@ -432,30 +462,13 @@
 
                 })
             },
-            disposeData (row) {
-                // 数组 对象 合并某个value 值
-                var old = row
-                var hash = {};
-                var i = 0;
-                var res = [];
-                old.forEach(function(item) {
-                    var name = item.mobile;
-                    hash[name] ? res[hash[name] - 1].mapAppType.push(item.mapAppType) : hash[name] = ++i && res.push({
-                        mapAppType: [item.mapAppType],
-                        roleId: item.roleId,
-                        mobile: item.mobile,
-                        nickName: item.nickName,
-                        userStatus: item.userStatus
-                    })
 
-                });
-
-            },
             resetHandle() {
                 // 重置功能
                 this.formItem.phoneNumber = ''; // 手机号
-                this.formItem.nickname = ''; // 昵称
-                this.formItem.user = ''; // 角色
+                this.formItem.roleId = '';
+                this.formItem.factoryName = '';
+                this.formItem.userStatus = '';
                 this.refreshHandle();
 
             },
@@ -470,6 +483,7 @@
             resetamend () {
                 this.amendVisible = false;
                 this.amend.role = ''
+                this.resetForm('amend') // 清除验证
             },
             amendData() {
                 // 修改保存
@@ -516,6 +530,7 @@
         created() {
             this.$store.commit('set_loading', true);
             this.refreshHandle()
+            this.getRoleLIst()
         }
     }
 </script>

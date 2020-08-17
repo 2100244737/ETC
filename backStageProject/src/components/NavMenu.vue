@@ -11,8 +11,8 @@
                 class="el-menu-vertical-demo height"
                 background-color="#5093FC"
                 text-color="#fff">
-                <el-menu-item index="/index">
-                    <i class="el-icon-s-promotion"></i>
+                <el-menu-item class="mentHome" index="/index">
+                    <i class="iconfont iconfeijifasong-"></i>
                     <template slot="title">
                         <span>首页</span>
                     </template>
@@ -24,16 +24,16 @@
 <!--                    </template>-->
 <!--                </el-menu-item>-->
 
-                <template v-for="(item,index) in menuLists">
-                    <el-submenu   v-if="item.children.length > 0" :index="item.path">
+                <template  v-for="(item,index) in menuLists" >
+                    <el-submenu    v-if="item.children.length > 0" :index="item.path">
                         <template slot="title">
-                            <i class="el-icon-s-promotion"></i>
+                            <i class='iconfont' :class="item.imgUrl"></i>
                             <span>{{item.name}}</span>
                         </template>
                         <div v-for="(val,j) in item.children">
                             <el-submenu   class="second_level" v-if="val.children.length > 0" :index="val.path">
                                 <div slot="title">
-                                    <i class="el-icon-s-promotion"></i>
+<!--                                    <i class="el-icon-s-promotion"></i>-->
                                     {{val.name}}
                                 </div>
                                 <el-menu-item   class="third_level" v-for="(i,index2) in val.children" :key="index2" :index="i.path">
@@ -63,17 +63,6 @@
             return {
                 menuLists:[],
                 nvaBarList: [],
-                logQuery: false, // 查询日志
-                system: false, // 系统管理
-                role: false, // 角色管理
-                user: false, // 角色管理
-                device: false, // 设备管理
-                deploy: false, // 设备部署
-                records: false,
-                queryPath: false, // 查询路径
-                query: false, // 路径查询
-                stat: false, // 统计调用
-                compute: false, // 接口调用
             }
         },
         computed: {
@@ -111,13 +100,7 @@
             },
             menuList() {
 
-                this.system = false;// 系统管理
-                // 设备管理
-                this.device = false;
-                // 设备部署
-                this.deploy = false;
-                 this.menuLists = JSON.parse(sessionStorage.getItem("MENU_LIST"));
-
+                 this.menuLists = JSON.parse(localStorage.getItem("DEVICE_MENU_LIST"));
             }
         },
         created() {
@@ -152,8 +135,20 @@
     .scrollbar {
 
     }
-
-
+.second_level {
+    margin-left: 20px;
+    overflow: initial !important;
+}
+.submenu_level {
+    overflow: hidden;
+}
+.iconfont {
+    margin-right: 5px;
+    color: #fff;
+    width: 11px;
+    height: 11px;
+    /*font-size: 16px;*/
+}
 
     /deep/ .el-menu {
         /*导航栏展开后子菜单宽度多出1px问题*/

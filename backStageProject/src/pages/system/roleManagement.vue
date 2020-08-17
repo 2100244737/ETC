@@ -24,13 +24,13 @@
                        <span v-if="scope.row.group == '3'">客户</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="comments" label="描述" header-align="center" align="center"/>
+                <el-table-column prop="comments" label="备注信息" header-align="center" align="center"/>
                 <el-table-column label="操作" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button  class="cyanTableBtn" size="mini" round @click="upDataBtn(scope.row)">更新</el-button>
+                        <el-button v-if="!scope.row.systemRole" class="cyanTableBtn" size="mini" round @click="upDataBtn(scope.row)">修改</el-button>
                         <el-button  class="blueTableBtn" size="mini" round @click="allocation(scope.row)">配置</el-button>
                         <el-button v-if="!scope.row.systemRole" class="redTableBtn" size="mini" round @click="deleteRole(scope.row)">删除</el-button>
-<!--                        <span v-if="scope.row.systemRole">系统默认角色</span>-->
+                        <span v-if="scope.row.systemRole">系统默认角色</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -224,6 +224,7 @@
                     parentId:row.parentId,
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
+                    roleId: _t.$cookie.get('roleId')
                 };
                 var filename = api.MENU_TREE + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
@@ -286,7 +287,7 @@
                         MenuData.forEach(item => {
 
                             if(item.menuType == 2) {
-                                console.log(item,'22222');
+
                                 _t.$nextTick(function () {
                                     _t.$refs.tree.setChecked(item.id, true, false)
                                 })
@@ -428,7 +429,7 @@
                             accessToken: _t.$cookie.get('accessToken'),
                             openId: _t.$cookie.get('openId'),
                         };
-                        console.log(params, 'pwww');
+
                         var filename = api.ROLE_UPDATE + getDataTime() + '.json';
                         var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
                         _t.$api.post('api/json', data, function (res) {

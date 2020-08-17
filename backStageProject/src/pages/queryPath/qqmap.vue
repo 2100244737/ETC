@@ -260,7 +260,7 @@
                             // JSON.parse(sessionStorage.setItem("QQMAPJSON"))
 
                             sessionStorage.setItem("QQMAPJSON", JSON.stringify(json))
-                            console.log(JSON.stringify(json),'json');
+
                             // _t.setData(0)
 
                             _t.qqShow = true

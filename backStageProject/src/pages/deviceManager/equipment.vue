@@ -46,19 +46,23 @@
             <el-table :data="tableData" ref="table"   size="small" stripe>
                 <el-table-column type="index" width="50px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="deviceId" label="设备编号" header-align="center" align="center"/>
-                <el-table-column prop="factoryName" label="厂商名" header-align="center" align="center"/>
-                <el-table-column prop="buyerName" label="使用单位" header-align="center" align="center"/>
+                <el-table-column prop="factoryName" label="厂商" header-align="center" align="center"/>
+                <el-table-column  label="使用单位" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.buyerName">{{scope.row.buyerName}}</span>
+                        <span v-else>-</span>
+                    </template>
+                </el-table-column>
                 <el-table-column width="180px"  label="备案时间" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-text="settime(scope.row.insertTime)"></span>
                     </template>
                 </el-table-column>
-                <el-table-column width="300px" label="操作" header-align="center" align="center">
+                <el-table-column width="290px" label="操作" header-align="center"  align="center" >
                     <template slot-scope="scope">
-
                         <el-button class="blueTableBtn" size="mini" round @click="details(scope.row)">详情</el-button>
                         <el-button v-if="scope.row.status =='0'" class="blueTableBtn" size="mini" round @click="designateUnit(scope.row)">选定使用单位</el-button>
-                        <el-button class="redTableBtn" size="mini" round @click="deleteDevice(scope.row)">删除</el-button>
+           <el-button  class="redTableBtn"  v-if="scope.row.roleName =='1'"  size="mini" round @click="deleteDevice(scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
 
@@ -80,7 +84,7 @@
             :before-close="resetCode"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备备案--添加</span>
+                <span class="title">设备备案-添加</span>
             </div>
             <el-form :model="addEdit" :rules="rules" ref="addDevice" label-width="150px">
                 <el-form-item label="设备编号：" prop="deviceId">
@@ -117,14 +121,14 @@
             :before-close="resetDesignate"
             :visible.sync="designateVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备备案--选定使用单位</span>
+                <span class="title">设备备案-选定使用单位</span>
             </div>
             <el-form :model="designate" :rules="rules" ref="designate" label-width="120px">
                 <el-form-item label="单位名称：" prop="unitName">
                     <el-input  clearable maxlength="50" v-model="designate.unitName" placeholder="请输入单位名称"></el-input>
                 </el-form-item>
                 <el-form-item label="设备编号：">
-                    <el-input disabled v-model="designate.deviceId" placeholder="请输入设备编号"></el-input>
+                    <el-input disabled maxlength="50" v-model="designate.deviceId" placeholder="请输入设备编号"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer">
@@ -168,7 +172,7 @@
             :before-close="resetdetails"
             :visible.sync="detailsVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">设备备案--详情</span>
+                <span class="title">设备备案-详情</span>
             </div>
             <el-form  :model="detailsData" ref="addEdit" label-width="120px">
                 <el-row :gutter="20">
@@ -206,7 +210,12 @@
                                 <el-input :disabled="true" v-model="detailsData.insertTime" placeholder="添加时间"></el-input>
                             </el-tooltip>
                         </el-form-item>
-                        <el-form-item label="备案更新时间：">
+                        <el-form-item label="芯片编号：">
+                            <el-tooltip :content="detailsData.seNo" placement="top-start" effect="light">
+                                <el-input :disabled="true" v-model="detailsData.seNo" placeholder="设备编号"></el-input>
+                            </el-tooltip>
+                        </el-form-item>
+                        <el-form-item label="状态更新时间：">
                             <el-tooltip :content="detailsData.insertTime" placement="top-start" effect="light">
                                 <el-input :disabled="true" v-model="detailsData.updateTime" placeholder="添加时间"></el-input>
                             </el-tooltip>
@@ -249,6 +258,7 @@
                     deviceId:'',
                     unitName:''
                 },
+
                 designateVisible: false,
                 rules: {
                     deviceId: [
@@ -453,12 +463,14 @@
             },
             details(row) {
                 var _t = this;
+                console.log(row);
                 _t.detailsVisible = true;
                 _t.detailsData.deviceId =row.deviceId; //	设备编号
                  _t.detailsData.factory = row.factoryName; //	设备厂商
                  _t.detailsData.status = row.status != 0? '已指定':'未指定'; //	设备状态
-                 _t.detailsData.model = row.model; //设备型号
+                 _t.detailsData.model = row.model?row.model:'-'; //设备型号
                 _t.detailsData.buyerName = row.buyerName;
+                _t.detailsData.seNo = row.seNo;
                 _t.detailsData.openId = row.openId; //	操作人id
                 _t.detailsData.insertTime = row.insertTime.replace("T", ' '); //	插入时间
                 _t.detailsData.updateTime = row.updateTime.replace("T", ' '); //	更新时间
@@ -525,6 +537,9 @@
                             _t.$store.commit('set_loading', false);
                         }, 500);
                         _t.tableData = JSON.parse(res.bizContent).data? JSON.parse(res.bizContent).data:[];
+                        _t.tableData.forEach(item =>{
+                            item.roleName = _t.$cookie.get('roleName')
+                        })
                         var pages = JSON.parse(res.bizContent).totalCount;
                         _t.options.total = pages ? pages : 0;
                     }else {
@@ -586,7 +601,7 @@
             },
         },
         created() {
-
+            console.log(this.$cookie.get('roleName'));
             this.getData()
         }
     }

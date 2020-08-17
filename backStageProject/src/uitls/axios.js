@@ -82,18 +82,20 @@ function apiAxios(method, url, params, success) {
             //     success(res.data);
             //     // ElementUI.Message.warning(i18n.messages[i18n.locale].public.includeWords);
             // } else
-            if (res.data.statusCode == 1000) {
-                MessageBox.confirm('登陆时间过长，请重新登录！', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    // _this.$router.push('/login')
-                }).catch(() => {
-                    // _this.$router.push('/login')
-                    return false
-                });
-            }
+            // if (res.data.statusCode == 701) {
+            //     MessageBox.confirm('openId为空！，登陆状态失效，请重新登录！', '提示', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     }).then(() => {
+            //         var url = 'https://testweb.datasw.cn/device/webLogin'
+            //         window.location.replace(url)
+            //     }).catch(() => {
+            //         var url = 'https://testweb.datasw.cn/device/webLogin'
+            //         window.location.replace(url)
+            //         return false
+            //     });
+            // }
         }
     }).catch(function (err) {
         // 异常时回调

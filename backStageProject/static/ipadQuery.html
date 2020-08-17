@@ -223,7 +223,7 @@
 <!--</div>-->
 <!-- 收费单元 -->
 <div class="left_menu hidden-xs"
-     style="padding:0px 0px 0px 0px;height:6%;width:18%;position:fixed; top:7px; right:330px ; min-height: calc(90% - 160px); height: calc(90% - 120px); overflow-y: auto;">
+     style="padding:0px 0px 0px 0px;height:6%;width:25%;position:fixed; top:7px; right:330px ; min-height: calc(90% - 160px); height: calc(90% - 120px); overflow-y: auto;">
     <div class="left_menu_bg">
         <ul id="intervals">
         </ul>
@@ -395,18 +395,19 @@
         var hash = {};
         var i = 0;
         var res = [];
+
         unit.forEach(function (item) {
             var name = item.roadName;
-            hash[name] ? res[hash[name] - 1].id.push(item.id) : hash[name] = ++i && res.push({
-                id: [item.id],
+            hash[name] ? res[hash[name] - 1].nodeName.push(item.nodeName) : hash[name] = ++i && res.push({
+                nodeName: [item.nodeName],
                 provune: item.id,
                 amendStatus: item.amendStatus,
                 roadName: item.roadName,
-                nodeName: item.nodeName,
+                valName:item.nodeName
             })
 
         });
-
+        console.log(unit,'22222222');
         const container = document.getElementById('intervals');
         const keyData = {
             "37": "山东",
@@ -504,7 +505,7 @@
                     div.style.color = '#4095ee';
                     div.className = 'B';
                     div.style.paddingLeft = '10px'
-                    div.innerText = str.nodeName;
+                    div.innerText = str.roadName;
 
                     li.appendChild(div)
                     ulA.appendChild(li)
@@ -519,13 +520,15 @@
                             ul.style.display = 'block';
                         }
                     })
-                    str.id.forEach(val => {
+                    console.log(str,'str');
+                    str.nodeName.forEach(val => {
                         var lic = document.createElement('li');
                         lic.innerText = val
                         lic.style.color = '#4095ee';
+                        lic.style.fontSize = '12px';
                         ul.className = "C"
                         // ul.style.backgroundColor = '#8888';
-                        ul.style.paddingLeft = '20px'
+                        ul.style.paddingLeft = '40px'
                         ul.appendChild(lic)
                         li.appendChild(ul)
                     })
@@ -539,7 +542,7 @@
                     div.style.color = '#238E68';
                     div.className = 'B';
                     div.style.paddingLeft = '10px'
-                    div.innerText = str.nodeName;
+                    div.innerText = str.roadName;
 
                     li.appendChild(div)
                     ulA.appendChild(li)
@@ -553,13 +556,14 @@
                             ul.style.display = 'block';
                         }
                     })
-                    str.id.forEach(val => {
+                    str.nodeName.forEach(val => {
                         var lic = document.createElement('li');
                         lic.innerText = val
                         lic.style.color = '#238E68';
+                        lic.style.fontSize = '12px';
                         ul.className = "C"
                         // ul.style.backgroundColor = '#8888';
-                        ul.style.paddingLeft = '30px'
+                        ul.style.paddingLeft = '40px'
                         ul.appendChild(lic)
                         li.appendChild(ul)
                     })

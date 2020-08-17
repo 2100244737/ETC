@@ -119,7 +119,7 @@ const routers = new Router({
                 {
                     path: 'agencyManage',
                     name: 'agencyManage',
-                    meta: {title: '代收关系维护'},
+                    meta: {title: '代收关系管理'},
                     component: () => import('../pages/agency/collectionRelation'),
                 },
             ]

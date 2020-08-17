@@ -80,13 +80,14 @@
         </div>
         <!--        详情-->
         <el-dialog
+            width="50%"
             append-to-body
             :close-on-click-modal="true"
             :close-on-press-escape="false"
             :before-close="resetdetails"
             :visible.sync="detailsVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">地址配置--详情</span>
+                <span class="title">地址配置-详情</span>
             </div>
             <el-form :model="detailsData" ref="addEdit" label-width="150px">
                 <el-row :gutter="20">
@@ -138,9 +139,9 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <div slot="footer">
-                <el-button class="redTableBtn" size="medium" round @click="resetdetails">关闭</el-button>
-            </div>
+<!--            <div slot="footer">-->
+<!--                <el-button class="redTableBtn" size="medium" round @click="resetdetails">关闭</el-button>-->
+<!--            </div>-->
         </el-dialog>
         <!--        添加-->
         <el-dialog
@@ -152,7 +153,7 @@
             :before-close="resetADD"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">地址配置--添加</span>
+                <span class="title">地址配置-添加</span>
             </div>
             <div class="addBody">
                 <div class="steps">

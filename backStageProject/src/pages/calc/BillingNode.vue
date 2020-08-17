@@ -129,7 +129,7 @@
                 };
                 var filename = api.NODE + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
-                console.log(999);
+
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
                         _t.tableData = JSON.parse(res.bizContent).data ? JSON.parse(res.bizContent).data : [];

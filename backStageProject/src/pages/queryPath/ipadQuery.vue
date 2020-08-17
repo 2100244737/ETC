@@ -39,9 +39,21 @@
         <div v-show="tableShow" class="tableWp marginTop2">
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column prop="plateNum" label="车牌号" header-align="center" align="center"/>
-                <el-table-column prop="insertTime" label="上传时间" header-align="center" align="center"/>
-                <el-table-column prop="enTime" label="计费时间" header-align="center" align="center"/>
-                <el-table-column prop="fee" label="金额(分)" header-align="center" align="center"/>
+                <el-table-column label="上传时间" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="settime(scope.row.insertTime)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column  label="计费时间" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="settime(scope.row.enTime)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column  label="金额(元)" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="changeMoney(scope.row.fee)"></span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="250px" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button class="blueTableBtn" size="mini" round @click="lookMap(scope.row)">查看地图</el-button>
@@ -57,7 +69,7 @@
                 <el-table-column prop="fileName" label="数据名称" header-align="center" align="center"/>
                 <el-table-column label="操作"  header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text"  @click="looklook(scope.row)">查看</el-button>
+                        <el-button class="blueTableBtn" size="mini" round  @click="looklook(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -84,12 +96,12 @@
                 sort
             ></json-viewer>
             <div slot="footer">
-                <el-button @click="clear">关 闭</el-button>
-                <el-button type="primary" @click="download">下载</el-button>
+                <el-button class="redTableBtn" size="medium" round @click="clear">关闭</el-button>
+                <el-button class="blueTableBtn" size="medium" round  @click="download">下载</el-button>
             </div>
         </el-dialog>
         <div v-if="show"  class="iframe marginTop2">
-            <iframe  id="iframepage"  src="/static/ipadQuery.html" width="100%"
+            <iframe  id="iframepage"  src="/device/html/static/ipadQuery.html" width="100%"
                      height="600px"
                    frameborder="0" ></iframe>
         </div>
@@ -151,6 +163,22 @@
             });
         },
         methods: {
+            //分转元
+            changeMoney(num) {
+                var regexp = /(?:\.0*|(\.\d+?)0+)$/
+                if (num > 1000000) {
+                    num = JSON.stringify(num).slice(0, JSON.stringify(num).length - 4) / 100
+                    return num + '万'
+                } else {
+                    num = (num / 100).toFixed(2)
+                    num = num.replace(regexp, '$1')
+                    return num
+                }
+            },
+            settime (row) {
+                // 编辑 table 时间
+                return   row.replace("T", ' ')
+            },
             toUpperCode (val) {
                 this.dataList.carNumber =  val.toUpperCase()
             },
@@ -323,7 +351,7 @@
                 const time = row.enTime.replace(/:/g, "-");
 
                 var t1 = row.insertTime.split('T')
-                console.log(t1, 't1');
+
                 const params = {
                     openId: _t.$cookie.get('openId'),
                     fileId: t1[0]+ "/" + time + "_" + row.plateNum + '_' + row.plateColor

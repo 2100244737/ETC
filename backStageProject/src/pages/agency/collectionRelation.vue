@@ -3,10 +3,10 @@
         <!--        代收关系查询-->
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
-                <el-form-item label="收费站名称">
+                <el-form-item label="收费站名称：">
                     <el-input @keyup.enter.native="getData" clearable size="mini" v-model="formItem.stationName" placeholder="请输入收费站名称"></el-input>
                 </el-form-item>
-                <el-form-item label="省份" prop="province">
+                <el-form-item label="省份：" prop="province">
                     <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
@@ -54,7 +54,12 @@
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
                 <el-table-column prop="stationName" label="收费站" header-align="center" align="center"/>
                 <el-table-column prop="plazaName" label="收费广场" header-align="center" align="center"/>
-                <el-table-column prop="gantryId" label="代收门架编号" header-align="center" align="center"/>
+                <el-table-column  label="代收门架编号" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.gantryId">{{scope.row.gantryId}}</span>
+                        <span v-else>-</span>
+                    </template>
+                </el-table-column>
                 <el-table-column  label="操作" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button  class="blueTableBtn" size="mini" round @click="amendRelation(scope.row)">修改</el-button>
@@ -78,7 +83,7 @@
             :before-close="resetCode"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">代收关系--添加</span>
+                <span class="title">代收关系-添加</span>
             </div>
             <el-form :model="addEdit" :rules="rules" ref="addCollection" label-width="150px">
                 <el-form-item label="省份" prop="province">
@@ -136,7 +141,13 @@
                             :value="item.plazaId"/>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="代收门架编号：">
+                <el-form-item label="是否代收门架：">
+                    <el-radio-group @change="changeGantry(gantry)" v-model="gantry" size="small">
+                        <el-radio :label="true" border>是</el-radio>
+                        <el-radio :label="false" border>否</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item v-if="gantry" label="代收门架编号：" prop="gantryId" :rules="this.gantry?rules.gantryId:[{ required: false, message: '代收门架编号', trigger: 'blur' }]">
                     <el-input clearable v-model="addEdit.gantryId" placeholder="请输入代收门架编号"></el-input>
                 </el-form-item>
             </el-form>
@@ -153,7 +164,7 @@
             :before-close="resetAmend"
             :visible.sync="amendVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">代收关系--修改</span>
+                <span class="title">代收关系-修改</span>
             </div>
             <el-form :model="amend" :rules="rules" ref="amend" label-width="150px">
 
@@ -192,7 +203,7 @@
                         {required: true, message: '请选择省份', trigger: 'change'},
                     ],
                     plazaId: [
-                        {required: true, message: '请输入收费广场编号', trigger: 'blur'}
+                        {required: true, message: '请输入收费广场编号', trigger: 'change'}
                     ],
                     stationId: [
                         {required: true, message: '请输入收费站编号', trigger: 'change'}
@@ -204,6 +215,7 @@
                 },
                 addVisible: false,
                 amendVisible: false,
+                gantry: true,
                 addEdit: {
                     province: '',
                     gantryId: '',
@@ -229,6 +241,11 @@
 
         },
         methods: {
+            changeGantry (row){
+                if(!row) {
+                    this.addEdit.gantryId = '';
+                }
+            },
             // 修改保存
             amendADD () {
                 var _t = this
@@ -305,7 +322,10 @@
             },
             // 获取收费车站
             getStation(row) {
+
                 var _t = this;
+                _t.addEdit.stationId = '';
+                _t.addEdit.plazaId = '';
                 const params = {
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
@@ -325,6 +345,7 @@
             //收费广场编号
             getPlazaId(row) {
                 var _t = this;
+                _t.addEdit.plazaId = ''
                 const params = {
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
@@ -333,7 +354,6 @@
                 var filename = api.PAGE_PLAZA + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
-                    console.log(res);
                     if (res.statusCode == 0) {
                         _t.plazaIdList = JSON.parse(res.bizContent).data;
                     } else {
@@ -345,10 +365,13 @@
             // 新增 取消
             resetCode() {
                 this.addVisible = false
+                this.gantry = true
                 this.addEdit.province = '';
                 this.addEdit.gantryId = '';
                 this.addEdit.plazaId = '';
                 this.addEdit.stationId = '';
+                this.stationList = [];
+                this.plazaIdList = [];
                 this.resetForm('addCollection')
             },
             // 添加
@@ -361,6 +384,10 @@
             // 新增保存
             amendData() {
                 var _t = this
+                // if(this.gantry && !_t.addEdit.gantryId) {
+                //     _t.alertDialogTip(_t, '请输入代收门架编号');
+                //     return false
+                // }
                 _t.$refs.addCollection.validate((valid) => {
                     if (valid) {
                         const params = {

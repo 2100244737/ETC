@@ -43,8 +43,16 @@
             <el-table :data="tableData" size="mini" stripe>
                 <el-table-column prop="plateNum" label="车牌号" header-align="center" align="center"/>
 
-                <el-table-column prop="uploadTime" label="上传时间" header-align="center" align="center"/>
-                <el-table-column width="200px" prop="enTime" label="入口时间" header-align="center" align="center"/>
+                <el-table-column  label="上传时间" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="settime(scope.row.uploadTime)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column width="200px"  label="入口时间" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="settime(scope.row.enTime)"></span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="enTime" label="地图类型" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.mapType == 1">高德地图</span>
@@ -53,7 +61,11 @@
                 </el-table-column>
                 <el-table-column prop="pathCount" label="路径数" header-align="center" align="center"/>
                 <el-table-column prop="msg" label="信息" header-align="center" align="center"/>
-                <el-table-column prop="fee" label="金额(分)" header-align="center" align="center"/>
+                <el-table-column  label="金额(元)" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="changeMoney(scope.row.fee)"></span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="250px" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button class="blueTableBtn" size="mini" round @click="lookMap(scope.row)">查看地图</el-button>
@@ -76,7 +88,7 @@
                 <el-table-column prop="fileName" label="数据名称" header-align="center" align="center"/>
                 <el-table-column label="操作"  header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary"  @click="looklook(scope.row)">查看</el-button>
+                        <el-button class="blueTableBtn" size="mini" round  @click="looklook(scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -105,8 +117,8 @@
                 sort
             ></json-viewer>
             <div slot="footer">
-                <el-button @click="clear">关 闭</el-button>
-                <el-button type="primary" @click="download">下载</el-button>
+                <el-button class="redTableBtn" size="medium" round @click="clear">关闭</el-button>
+                <el-button class="blueTableBtn" size="medium" round @click="download">下载</el-button>
 <!--                <el-button v-clipboard:copy="json"-->
 <!--                           v-clipboard:success="onCopy"-->
 <!--                           v-clipboard:error="onError" type="primary" @click="copy">复制JSON-->
@@ -114,12 +126,12 @@
             </div>
         </el-dialog>
         <div class="iframe marginTop2" v-if="show">
-            <iframe id="iframe" v-if="show" src="/static/view.html"
+            <iframe id="iframe" v-if="show" src="/device/html/static/ipadQuery.html"
                     style="height:calc(100vh - 100px);"
                     width="100%" frameborder="0"></iframe>
         </div>
         <div class="iframe marginTop2" v-if="qqShow">
-            <iframe  v-if="qqShow"  src="/static/qqMap.html"
+            <iframe  v-if="qqShow"  src="/device/html/static/qqMap.html"
                     style="height:calc(100vh - 100px);"
                     width="100%" frameborder="0"></iframe>
         </div>
@@ -172,6 +184,22 @@
           //  Pages
         },
         methods: {
+            //分转元
+            changeMoney(num) {
+                var regexp = /(?:\.0*|(\.\d+?)0+)$/
+                if (num > 1000000) {
+                    num = JSON.stringify(num).slice(0, JSON.stringify(num).length - 4) / 100
+                    return num + '万'
+                } else {
+                    num = (num / 100).toFixed(2)
+                    num = num.replace(regexp, '$1')
+                    return num
+                }
+            },
+            settime (row) {
+                // 编辑 table 时间
+                return   row.replace("T", ' ')
+            },
             toUpperCode (val) {
                 this.dataList.carNumber =  val.toUpperCase()
             },

@@ -73,13 +73,14 @@
         </div>
 <!--        详情-->
         <el-dialog
+            width="50%"
             append-to-body
             :close-on-click-modal="true"
             :close-on-press-escape="false"
             :before-close="resetdetails"
             :visible.sync="detailsVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">地址管理--详情</span>
+                <span class="title">地址管理-详情</span>
             </div>
             <el-form :model="detailsData" ref="addEdit" label-width="150px">
                 <el-row :gutter="20">
@@ -126,9 +127,9 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <div slot="footer">
-                <el-button class="redTableBtn" size="medium" round  @click="resetdetails">关闭</el-button>
-            </div>
+<!--            <div slot="footer">-->
+<!--                <el-button class="redTableBtn" size="medium" round  @click="resetdetails">关闭</el-button>-->
+<!--            </div>-->
         </el-dialog>
 <!--        添加-->
         <el-dialog
@@ -138,7 +139,7 @@
             :before-close="resetADD"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">地址管理--添加</span>
+                <span class="title">地址管理-添加</span>
             </div>
             <el-form :model="addEdit" :rules="rules" ref="addSite" label-width="150px">
                 <el-form-item label="省份：" prop="province">
@@ -214,7 +215,7 @@
             :before-close="resetUpDate"
             :visible.sync="upDateVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">地址管理--更新</span>
+                <span class="title">地址管理-更新</span>
             </div>
             <el-form :model="upDateItem" :rules="rules" ref="upDateForm" label-width="150px">
                 <el-form-item label="地址配置编号：" prop="id">
@@ -337,7 +338,7 @@
         methods: {
             // 更新
             update(row) {
-                console.log(row);
+
                 this.upDateVisible = true;
              this.upDateItem.id = row.id;
              this.upDateItem.appServiceType = row.serverType+ '';

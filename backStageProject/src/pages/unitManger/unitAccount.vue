@@ -7,7 +7,7 @@
                     <el-input clearable size="mini" @keyup.enter.native="getData" v-model="formItem.name" placeholder="请输入单位名称"></el-input>
                 </el-form-item>
                 <el-form-item label="单位类型">
-                    <el-select clearable size="mini" v-model="formItem.companyType" filterable placeholder="请输入单位类型">
+                    <el-select clearable size="mini" v-model="formItem.companyType" filterable placeholder="请选择单位类型">
                         <el-option label="数软" value="1"></el-option>
                         <el-option label="设备厂商" value="2"></el-option>
                         <el-option label="客户" value="3"></el-option>
@@ -59,7 +59,7 @@
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="name" label="单位名称" header-align="center" align="center"/>
-                <el-table-column prop="creditCode" label="统一社会信用代码" header-align="center" align="center"/>
+                <el-table-column prop="creditCode" width="300px" label="统一社会信用代码" header-align="center" align="center"/>
                 <el-table-column label="单位类型" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.companyType == '1'">数软</span>
@@ -67,12 +67,12 @@
                         <span v-if="scope.row.companyType == '3'">客户</span>
                     </template>
                 </el-table-column>
-                <el-table-column prop="province" label="省份" header-align="center" align="center"/>
-                <el-table-column prop="managerName" label="管理员名称" header-align="center" align="center"/>
+                <el-table-column prop="province" width="80px" label="所属省份" header-align="center" align="center"/>
+                <el-table-column prop="managerName"  label="管理员名称" header-align="center" align="center"/>
                 <el-table-column prop="managerTel" label="管理员手机号" header-align="center" align="center"/>
                 <el-table-column label="操作" width="300px" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <el-button class="blueTableBtn" size="mini" round @click="amendData(scope.row)">修改</el-button>
+                        <el-button class="blueTableBtn" size="mini" round @click="amendData(scope.row)">修改信息</el-button>
                         <el-button class="blueTableBtn" size="mini" round @click="amendUser(scope.row)">更改管理员
                         </el-button>
                         <el-button v-if="scope.row.companyStatus =='1'" class="redTableBtn" size="mini" round
@@ -100,7 +100,7 @@
             :before-close="resetCode"
             :visible.sync="addVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">单位账户管理--添加</span>
+                <span class="title">单位账户管理-添加</span>
             </div>
             <el-form :model="addEdit" :rules="rules" ref="addEdit" label-width="170px">
                 <el-form-item label="单位名称：" prop="name">
@@ -119,7 +119,7 @@
                 <el-form-item label="统一社会信用代码：" prop="licence">
                     <el-input clearable v-model="addEdit.licence" placeholder="请输入统一社会信用代码"></el-input>
                 </el-form-item>
-                <el-form-item label="省份" prop="province">
+                <el-form-item label="所属省份：" prop="province">
                     <el-select clearable @change="getStation(addEdit.province)" v-model="addEdit.province" filterable
                                placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
@@ -182,13 +182,13 @@
             :before-close="resetAmned"
             :visible.sync="amendVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">单位账户管理--修改</span>
+                <span class="title">单位账户管理-修改</span>
             </div>
             <el-form :model="amend" :rules="rules" ref="amend" label-width="170px">
                 <el-form-item label="单位名称：" prop="name">
                     <el-input clearable v-model="amend.name" placeholder="请输入单位名称"></el-input>
                 </el-form-item>
-                <el-form-item label="省份" prop="province">
+                <el-form-item label="省份：" prop="province">
                     <el-select clearable v-model="amend.province" filterable
                                placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
@@ -241,7 +241,7 @@
             :before-close="resetUpdata"
             :visible.sync="updataVisible">
             <div slot="title" class="dialogTitle clearFix">
-                <span class="title">单位账户管理--更换管理员</span>
+                <span class="title">单位账户管理-更换管理员</span>
             </div>
             <el-form :model="updataAdd" :rules="rules" ref="updataAdd" label-width="150px">
                 <el-form-item label="姓名：">
