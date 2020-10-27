@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="formBox-top">
-            <el-form :model="formItem" label-width="70px" class="clearFix"  inline>
+            <el-form :model="formItem" label-width="70px" class="clearFix" inline>
                 <el-form-item label="日期：" class="marBottom7">
                     <el-date-picker
                         size="mini"
@@ -15,9 +15,9 @@
                 </el-form-item>
                 <br>
                 <el-form-item class="fr">
-                    <el-button  class="yellowBtn"  size="mini" round  @click="getData">查询</el-button>
-                    <el-button  class="blueBtn"  size="mini" round  @click="deriveTable">导出文件</el-button>
-                    <el-button  class="redBtn"  size="mini" round  @click="resetHandle">重置</el-button>
+                    <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
+                    <el-button class="blueBtn" size="mini" round @click="deriveTable">导出文件</el-button>
+                    <el-button class="redBtn" size="mini" round @click="resetHandle">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -41,30 +41,25 @@
                 <el-table-column prop="failCount" label="总数量" header-align="center" align="center"/>
                 <el-table-column  label="成功率(%)" header-align="center" align="center">
                     <template slot-scope="scope">
-                    <span v-if="scope.row.successRate > '80'" style="color: #67C23A" >{{scope.row.successRate  |numberData}}</span>
-                    <span v-if="'60'< scope.row.successRate && scope.row.successRate < '80'" style="color:#E6A23C" >{{scope.row.successRate |numberData}}</span>
-                    <span  v-if="scope.row.successRate < '60'" style="color:red">{{scope.row.successRate |numberData}}</span>
+                        <span v-if="scope.row.successRate > '80'" style="color: #67C23A" >{{scope.row.successRate  |numberData}}</span>
+                        <span v-if="'60'< scope.row.successRate && scope.row.successRate < '80'" style="color:#E6A23C" >{{scope.row.successRate |numberData}}</span>
+                        <span  v-if="scope.row.successRate < '60'" style="color:red">{{scope.row.successRate |numberData}}</span>
                     </template>
 
                 </el-table-column>
             </el-table>
 
         </div>
-
     </div>
 </template>
 
 <script>
-    import {STAT_COMPUTE} from '@/uitls/filenamme';
-    import {getDataTime} from '@/assets/js/time'
+    import api from "../../uitls/api/statistical";
+    import {getDataTime} from '@/assets/js/time' // 获取当前时间
     import FileSaver from 'file-saver';
     import XLSX from 'xlsx';
-
     export default {
-        name: "Interface",
-        components: {
-
-        },
+        name: "deviceCompute",
         data() {
             return {
                 search: '',
@@ -84,13 +79,11 @@
                         return time.getTime() > Date.now() - 8.64e7;
                     }
                 },
-                // 分页
-                options: {
-                    total: 0, // 总条数
-                    currentPage: 1, // 当前页码
-                    pageSize: 10, // 显示条数
-                },
             }
+        },
+        components: {},
+        mounted() {
+            this.getOrderNumber()
         },
         computed: {
             // yesterday() {
@@ -99,14 +92,9 @@
             //     var month=yesterday.getMonth();
             //     var day=yesterday.getDate();
             //
-            //     yesterday=yesterday.getFullYear() + "-" + ((yesterday.getMonth()+1)> 9 ? (yesterday.getMonth() + 1) : "0" + (yesterday.getMonth() + 1)) + "-" +(yesterday.getDate()> 9 ? (yesterday.getDate()) : "0" + (yesterday.getDate()));
+            //     yesterday=yesterday.getFullYear() + "-" + (yesterday.getMonth()> 9 ? (yesterday.getMonth() + 1) : "0" + (yesterday.getMonth() + 1)) + "-" +(yesterday.getDate()> 9 ? (yesterday.getDate()) : "0" + (yesterday.getDate()));
             //     return yesterday
             // }
-        },
-        mounted() {
-            // this.formItem.date = this.yesterday
-            this.getOrderNumber()
-
         },
         filters: {
             numFilter(value) {
@@ -140,33 +128,28 @@
             },
             resetHandle() {
                 // 重置
-                // this.formItem.date = this.yesterday
                 this.formItem.date = this.$time().subtract(1, "days").format("YYYY-MM-DD");
                 this.getData()
             },
             getData() {
                 // 查询功能
                 var _t = this
-                _t.$store.commit('set_loading', true);
                 const params = {
                     date: _t.formItem.date,
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
                 };
 
-                var filename = STAT_COMPUTE + getDataTime() + '.json';
+                var filename = api.STAT_DEVCOMPUTE + getDataTime() + '.json';
                 var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
-                        // _t.$store.commit('set_loading', false);
                         _t.tableData = JSON.parse(res.bizContent).result ? JSON.parse(res.bizContent).result : [];
                         if (_t.tableData.length == 0) {
                             _t.alertDialogTip(_t, '未查到该天数据')
                         }
                         _t.mode(_t.tableData)
                         _t.getOrderNumber()
-                        // var pages = JSON.parse(res.bizContent).totalCount;
-                        // _t.options.total = pages ? pages : 0;
                     } else {
                         _t.alertDialogTip(_t, res.errorMsg)
                     }
@@ -326,11 +309,10 @@
             },
         },
         created() {
-
+            this.$store.commit('set_loading', false);
             this.formItem.date = this.$time().subtract(1, "days").format("YYYY-MM-DD");
             this.getOrderNumber()
-             this.getData()
-
+            this.getData()
         }
     }
 </script>

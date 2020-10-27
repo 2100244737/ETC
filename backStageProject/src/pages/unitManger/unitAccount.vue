@@ -3,18 +3,18 @@
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
 
-                <el-form-item label="单位名称">
+                <el-form-item label="单位名称：">
                     <el-input clearable size="mini" @keyup.enter.native="getData" v-model="formItem.name" placeholder="请输入单位名称"></el-input>
                 </el-form-item>
-                <el-form-item label="单位类型">
+                <el-form-item label="单位类型：">
                     <el-select clearable size="mini" v-model="formItem.companyType" filterable placeholder="请选择单位类型">
                         <el-option label="数软" value="1"></el-option>
-                        <el-option label="设备厂商" value="2"></el-option>
+                        <el-option label="厂商" value="2"></el-option>
                         <el-option label="客户" value="3"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="省份" prop="province">
-                    <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
+                <el-form-item label="省份：" prop="province">
+                    <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
                         <el-option label="河北" value="13"></el-option>
@@ -58,18 +58,28 @@
         <div class="tableWp marginTop2">
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column type="index" width="80px" label="序号" header-align="center" align="center"/>
-                <el-table-column prop="name" label="单位名称" header-align="center" align="center"/>
-                <el-table-column prop="creditCode" width="300px" label="统一社会信用代码" header-align="center" align="center"/>
+                <el-table-column prop="name"  label="单位名称" header-align="center" align="center"/>
+                <el-table-column prop="creditCode" width="200px" label="统一社会信用代码" header-align="center" align="center"/>
                 <el-table-column label="单位类型" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-if="scope.row.companyType == '1'">数软</span>
-                        <span v-if="scope.row.companyType == '2'">设备厂商</span>
+                        <span v-if="scope.row.companyType == '2'">厂商</span>
                         <span v-if="scope.row.companyType == '3'">客户</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="province" width="80px" label="所属省份" header-align="center" align="center"/>
-                <el-table-column prop="managerName"  label="管理员名称" header-align="center" align="center"/>
-                <el-table-column prop="managerTel" label="管理员手机号" header-align="center" align="center"/>
+                <el-table-column   label="管理员名称" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.managerName">{{scope.row.managerName}}</span>
+                        <span v-else>-</span>
+                    </template>
+                </el-table-column>
+                <el-table-column  label="管理员手机号" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.managerTel">{{scope.row.managerTel}}</span>
+                        <span v-else>-</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" width="300px" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button class="blueTableBtn" size="mini" round @click="amendData(scope.row)">修改信息</el-button>
@@ -391,7 +401,7 @@
             amendUser(row) {
                 this.updataVisible = true;
                 this.updataAdd.id = row.id;
-                this.updataAdd.name = row.name;
+                this.updataAdd.name = row.managerName;
                 this.updataAdd.phone = row.managerTel;
 
             },

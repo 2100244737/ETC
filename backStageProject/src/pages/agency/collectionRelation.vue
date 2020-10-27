@@ -203,13 +203,13 @@
                         {required: true, message: '请选择省份', trigger: 'change'},
                     ],
                     plazaId: [
-                        {required: true, message: '请输入收费广场编号', trigger: 'change'}
+                        {required: true, message: '请输入收费广场', trigger: 'change'}
                     ],
                     stationId: [
-                        {required: true, message: '请输入收费站编号', trigger: 'change'}
+                        {required: true, message: '请输入收费站', trigger: 'change'}
                     ],
                     gantryId: [
-                        {required: true, message: '请输入代收门架编号', trigger: 'blur'},
+                        {required: true, message: '请输入代收门架', trigger: 'blur'},
                     ],
 
                 },
@@ -350,6 +350,7 @@
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
                     stationId: row,
+                    containExit: true
                 };
                 var filename = api.PAGE_PLAZA + getDataTime() + '.json';
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));

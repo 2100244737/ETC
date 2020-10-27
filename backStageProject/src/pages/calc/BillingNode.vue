@@ -3,7 +3,7 @@
         <!--  计费相邻节点-->
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
-                <el-form-item label="省份" prop="province">
+                <el-form-item label="省份：" prop="province">
                     <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
@@ -37,13 +37,13 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="ID:">
+                <el-form-item label="ID：">
                     <el-input @keyup.enter.native="getData"  clearable size="mini" v-model="formItem.id" placeholder="请输入ID"></el-input>
                 </el-form-item>
-                <el-form-item label="入口节点编号:">
+                <el-form-item label="入口节点编号：">
                     <el-input @keyup.enter.native="getData"  clearable size="mini" v-model="formItem.enRoadNodeId" placeholder="请输入入口节点编号"></el-input>
                 </el-form-item>
-                <el-form-item label="出口节点编号:">
+                <el-form-item label="出口节点编号：">
                     <el-input @keyup.enter.native="getData" clearable size="mini" v-model="formItem.exRoadNodeId" placeholder="请输入出口节点编号"></el-input>
                 </el-form-item>
                 <br>

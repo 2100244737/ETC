@@ -3,7 +3,7 @@
         <!--  全量门架查询-->
         <div class="formBox-top">
             <el-form ref="provinceForm"  :model="formItem" class="clearFix" inline>
-                <el-form-item label="省份" prop="province">
+                <el-form-item label="省份：" prop="province">
                     <el-select clearable  size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
                         <el-option label="天津" value="12"></el-option>
@@ -40,10 +40,10 @@
                 <el-form-item label="ID">
                     <el-input  clearable @keyup.enter.native="getData"  size="mini" v-model="formItem.id" placeholder="请输入ID"></el-input>
                 </el-form-item>
-                <el-form-item label="名称">
+                <el-form-item label="名称：">
                     <el-input  clearable @keyup.enter.native="getData" size="mini" v-model="formItem.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
-                <el-form-item label="Hex码">
+                <el-form-item label="Hex码：">
                     <el-input  clearable @keyup.enter.native="getData" size="mini" v-model="formItem.stationHex" placeholder="请输入Hex码"></el-input>
                 </el-form-item>
                 <br>

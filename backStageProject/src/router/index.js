@@ -50,6 +50,14 @@ const routers = new Router({
                         url: '/index'
                     }, component: home,
                 },
+                {
+                    path: '/err', name: 'err',
+                    meta: {
+                        title: 'err',
+                        url: '/err'
+                    },
+                    component: () => import('../pages/err/403'),
+                }
             ]
         },
         {
@@ -109,6 +117,7 @@ const routers = new Router({
                 {path: 'siteConfiguration', name: 'siteConfiguration', meta: {title: '地址配置'}, component: ()=> import('../pages/deviceManager/siteConfiguration'),},
                 {path: 'appManage', name: 'appManage', meta: {title: 'APP软件管理'}, component: ()=> import('../pages/deviceManager/appManage'),},
                 {path: 'SDKManage', name: 'SDKManage', meta: {title: 'SDK管理'}, component: () => import('../pages/deviceManager/SDKManage'),},
+                {path: 'licence', name: 'licence', meta: {title: '许可证管理'}, component: () => import('../pages/deviceManager/licence'),},
             ]
         },
         {
@@ -133,6 +142,17 @@ const routers = new Router({
                     name: 'Interface',
                     meta: {title: '车道调用统计'},
                     component: () => import('../pages/statisticalQuery/Interface'),
+                },
+                {
+                    path: 'deviceStatus',
+                    name: 'deviceStatus',
+                    meta: {title: '设备状态统计'},
+                    component: () => import('../pages/statisticalQuery/deviceStatus'),
+                }, {
+                    path: 'deviceCompute',
+                    name: 'deviceCompute',
+                    meta: {title: '终端调用统计'},
+                    component: () => import('../pages/statisticalQuery/deviceCompute'),
                 },
             ]
         },
@@ -196,7 +216,8 @@ const routers = new Router({
                     component: () => import('../pages/basicData/TollLane'),
                 },
             ]
-        }
+        },
+
     ]
 })
 export default routers

@@ -8,6 +8,7 @@ export default  {
     ROLE_LIST :'DEVICE_ROLE_LIST_REQ_' + number,  // 添加查询角色
     USER_STATUS :'DEVICE_USER_STATUS_REQ_' + number,  // 停用
     USER_ROLE :'DEVICE_USER_ROLE_REQ_' + number,  // 修改
+    COMPANY_LIST :'DEVICE_COMPANY_LIST_REQ_' + number,  //获取 单位
     // 角色管理
     ROLE_PAGE :'DEVICE_ROLE_PAGE_REQ_' + number,  // 查询
     ROLE_ADD :'DEVICE_ROLE_ADD_REQ_' + number,  // 添加

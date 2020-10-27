@@ -6,31 +6,24 @@
                     <el-input @keyup.enter.native="getData" size="mini" clearable maxlength="50" v-model="formItem.equipmentNumber"
                               placeholder="请输入设备编号"></el-input>
                 </el-form-item>
-                <el-form-item label="使用单位：">
-                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.state"
-                              placeholder="请输入芯片编号"></el-input>
-                </el-form-item>
                 <el-form-item label="设备厂商：">
-                    <el-select
-                        clearable
-                        size="mini"
-                        v-model="formItem.manufacturer">
-                        <el-option label="北京无限感测科技有限公司" value="0"/>
-                        <!--                        <el-option-->
-                        <!--                            v-for="(item,index) in manufacturerList"-->
-                        <!--                            :key="index"-->
-                        <!--                            :label="item"-->
-                        <!--                            :value="item"/>-->
-                    </el-select>
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.factoryName"
+                              placeholder="请输入设备厂商"></el-input>
                 </el-form-item>
+                <el-form-item label="使用单位：">
+                    <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.buyerName"
+                              placeholder="请输入使用单位"></el-input>
+                </el-form-item>
+
                 <el-form-item label="设备状态：">
                     <el-select
                         size="mini"
                         clearable
                         @change="StatusChange(formItem.deviceStatus)"
                         v-model="formItem.deviceStatus">
+                        <el-option label="从未部署" value="1"/>
                         <el-option label="已部署" value="2"/>
-                        <el-option label="未部署" value="1"/>
+                        <el-option label="已取消部署" value="3"/>
                     </el-select>
                 </el-form-item>
                 <br>
@@ -187,7 +180,7 @@
                                 v-model="deployAg.tollPlazaId">
                                 <el-option
                                     v-for="(item,index) in tollPlazaIdList"
-                                    :key="index"
+                                    :key="item.plazaId"
                                     :label="item.plazaName"
                                     :value="item.plazaId"/>
                             </el-select>
@@ -315,10 +308,10 @@
                         <!--                        </el-form-item>-->
                     </el-col>
                 </el-row>
-                <div v-if="detailShow" class="class">
-                    <p class="titletext">注意! 代收关系: </p>
-                    <p> {{showtextdetail}}</p>
-                </div>
+<!--                <div v-if="detailShow" class="class">-->
+<!--                    <p class="titletext">注意! 代收关系: </p>-->
+<!--                    <p> {{showtextdetail}}</p>-->
+<!--                </div>-->
             </el-form>
             <!--            <div slot="footer">-->
             <!--                <el-button class="redTableBtn" size="medium" round @click="resetData">关闭</el-button>-->
@@ -357,7 +350,8 @@
                 formItem: {
                     equipmentNumber: '', // 设备编号
                     deviceStatus: '', // 设备状态
-                    manufacturer: '', // 厂商
+                    factoryName: '', // 厂商
+                    buyerName: '',
                     state: '', //设备se芯片编号
                 },
                 rules: {
@@ -501,36 +495,46 @@
                 })
             },
             changeTollPlazaId(val) {
-
                 // 收费广场
-                var _t = this;
-                const params = {
-                    accessToken: _t.$cookie.get('accessToken'),
-                    openId: _t.$cookie.get('openId'),
-                    plazaId: val
-                }
-                var filename = api.AGENCY_FIND + getDataTime() + '.json';
-                var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
-                _t.$api.post('api/json', data, function (res) {
-
-                    if (res.statusCode == 0) {
-                        if (JSON.parse(res.bizContent).hasData) {
-                            _t.getStatus(val)
-                            _t.showtext = JSON.parse(res.bizContent).gantryId ? JSON.parse(res.bizContent).gantryId : 'null'
-                            _t.show = true
-                        } else {
-                            var value = '请联系运营人员维护代收关系！'
-                            _t.deployAg.tollPlazaId = ''
-                            _t.showtext = ''
-                            _t.show = false
-                            _t.alertDialogTip(_t, value)
-                        }
-
-                    } else {
-                        _t.alertDialogTip(_t, res.errorMsg)
-                    }
+                var lt = null
+                this.tollLaneIdList = []
+                this.tollPlazaIdList.forEach(item =>{
+                     if(item.plazaId == val) {
+                         lt = item
+                     }
                 })
 
+                var _t = this;
+                if(lt.plazaLaneType != 1) {
+                    const params = {
+                        accessToken: _t.$cookie.get('accessToken'),
+                        openId: _t.$cookie.get('openId'),
+                        plazaId: val
+                    }
+                    var filename = api.AGENCY_FIND + getDataTime() + '.json';
+                    var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
+                    _t.$api.post('api/json', data, function (res) {
+
+                        if (res.statusCode == 0) {
+                            if (JSON.parse(res.bizContent).hasData) {
+                                _t.getStatus(val)
+                                _t.showtext = JSON.parse(res.bizContent).gantryId ? JSON.parse(res.bizContent).gantryId : 'null'
+                                _t.show = true
+                            } else {
+                                var value = '请联系运营人员维护代收关系！'
+                                _t.deployAg.tollPlazaId = ''
+                                _t.showtext = ''
+                                _t.show = false
+                                _t.alertDialogTip(_t, value)
+                            }
+
+                        } else {
+                            _t.alertDialogTip(_t, res.errorMsg)
+                        }
+                    })
+                }else {
+                    _t.getStatus(val)
+                }
 
             },
             getStatus(val) {
@@ -640,7 +644,7 @@
                     }
 
                     _t.detailsData.status = status; //	设备状态
-                    _t.detailsData.model = row.model; //设备型号
+                    _t.detailsData.model = row.model?row.model :'-'; //设备型号
                     _t.detailsData.seNo = row.seNo; //	设备se芯片编号
                     _t.detailsData.stationId = _t.detailsList.stationName;//	收费站编号
                     _t.detailsData.buyerName = row.buyerName;// 使用单位
@@ -803,6 +807,8 @@
                 this.formItem.equipmentNumber = '';
                 this.formItem.state = '';
                 this.formItem.deviceStatus = '';
+                this.formItem.buyerName = '';
+                this.formItem.factoryName = '';
                 this.formItem.manufacturer = '';
                 this.refreshHandle()
             },
@@ -851,12 +857,10 @@
                 var _t = this
                 this.$store.commit('set_loading', true);
                 const params = {
-                    province: null,
-                    stationId: null,
-                    tollPlazaId: null,
-                    tollLaneId: null,
-                    deviceId: null,
-                    status: null,
+                    factoryName:_t.formItem.factoryName,
+                    buyerName:_t.formItem.buyerName,
+                    deviceId: _t.formItem.equipmentNumber,
+                    status: _t.formItem.deviceStatus,
                     accessToken: _t.$cookie.get('accessToken'),
                     openId: _t.$cookie.get('openId'),
                     pageNo: _t.options.currentPage, // 当前页

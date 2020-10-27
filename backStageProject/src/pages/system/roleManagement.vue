@@ -28,7 +28,7 @@
                 <el-table-column label="操作" header-align="center" align="center">
                     <template slot-scope="scope">
                         <el-button v-if="!scope.row.systemRole" class="cyanTableBtn" size="mini" round @click="upDataBtn(scope.row)">修改</el-button>
-                        <el-button  class="blueTableBtn" size="mini" round @click="allocation(scope.row)">配置</el-button>
+                        <el-button v-if="!scope.row.systemRole" class="blueTableBtn" size="mini" round @click="allocation(scope.row)">配置</el-button>
                         <el-button v-if="!scope.row.systemRole" class="redTableBtn" size="mini" round @click="deleteRole(scope.row)">删除</el-button>
                         <span v-if="scope.row.systemRole">系统默认角色</span>
                     </template>

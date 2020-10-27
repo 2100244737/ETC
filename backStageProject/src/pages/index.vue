@@ -5,7 +5,7 @@
                 <div v-if="!active" class="profile">
                     <img class="profile-img" src="../assets/img/profile-img.png" alt="">
                     <div class="user-message">
-                        <p>上午好，{{this.$cookie.get('username')}}</p>
+                        <p>{{timeState}}，{{this.$cookie.get('username')}}</p>
                         <p>手机号：{{this.$cookie.get('phone')}}</p>
                         <p v-if="this.$cookie.get('companyName') !='null'">单位名称：{{this.$cookie.get('companyName')}}</p>
                     </div>
@@ -16,7 +16,7 @@
                         placement="right"
                         trigger="hover">
                         <div>
-                            <p>上午好，{{this.$cookie.get('username')}}</p>
+                            <p>{{timeState}}，{{this.$cookie.get('username')}}</p>
                             <p>手机号：{{this.$cookie.get('phone')}}</p>
                             <p v-if="this.$cookie.get('companyName')!='null'">单位名称：{{this.$cookie.get('companyName')}}</p>
                         </div>
@@ -104,6 +104,7 @@
         name: 'index',
         data() {
             return {
+                timeState:'上午好',
                 loginForm: {
                     openId: '',
                     accessToken: ''
@@ -160,12 +161,15 @@
                     }
                 }
                 if (!flag) {
-                    _t.$store.commit('add_tabs', {
-                        route: to.path,
-                        title: to.meta.title,
-                        name: to.name
-                    });
-                    _t.$store.commit('set_active_index', to.name);
+                    if(to.name != 'err') {
+                        _t.$store.commit('add_tabs', {
+                            route: to.path,
+                            title: to.meta.title,
+                            name: to.name
+                        });
+                        _t.$store.commit('set_active_index', to.name);
+                    }
+
                 }
             },
         },
@@ -240,21 +244,35 @@
                 //退出
                 window.close()
 
-                var url = 'http://'+ location.hostname + '/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')
+                var url = 'https://'+ location.hostname + '/device/webLogin/common/logout?openId=' + _t.$cookie.get('openId')+ '&accessToken=' + _t.$cookie.get('accessToken')
                 window.location.replace(url)
                 _t.clearCache()
                 // window.open(url);    //跳转
 
             },
+               getTimeState () {
+                // 获取当前时间
+                let timeNow = new Date();
+                // 获取当前小时
+                let hours = timeNow.getHours();
+                // 设置默认文字
+                // 判断当前时间段
+                if (hours >= 0 && hours <= 10) {
+                    this.timeState = `早上好`;
+                } else if (hours > 10 && hours <= 14) {
+                    this.timeState = `中午好`;
+                } else if (hours > 14 && hours <= 18) {
+                    this.timeState = `下午好`;
+                } else if (hours > 18 && hours <= 24) {
+                    this.timeState = `晚上好`;
+                }
+                // 返回当前时间段对应的状态
+            }
         },
         created() {
+             this.getTimeState()
             this.$store.state.options = [];
             this.$store.state.activeIndex = '';
-            if(!this.$cookie.get('openId')){
-                localStorage.removeItem("DEVICE_MENU_LIST");
-                var url = 'https://testweb.datasw.cn/device/webLogin'
-                window.location.replace(url)
-            }
         }
 
     }

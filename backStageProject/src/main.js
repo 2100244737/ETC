@@ -1,10 +1,13 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import 'babel-polyfill'
 //  引入 element ui 库
 import ElementUI from 'element-ui';
+import moment from 'moment'
 //  引入 element css
 import 'element-ui/lib/theme-chalk/index.css';
 // 引入初始化样式
@@ -31,8 +34,8 @@ import {store} from './uitls/vuex';
 // 获取时间
 import {getTime} from "./assets/js/time";
 // 复制功能
-import VueClipboard from 'vue-clipboard2'
-import JSONView from 'vue-json-viewer'
+import VueClipboard from 'vue-clipboard2';
+import JSONView from 'vue-json-viewer';
 
 var http1 = '';
 if (process.env.NODE_ENV === "development") {
@@ -45,6 +48,7 @@ if (process.env.NODE_ENV === "development") {
 // 调用api接口
 Vue.prototype.$api = axios;
 Vue.prototype.$http1 = http1;
+Vue.prototype.$time = moment
 // Vue.prototype.$md5 = md5;
 Vue.config.productionTip = false;
 
@@ -54,9 +58,6 @@ const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
     return originalPush.call(this, location).catch(err => err)
 }
-// 表格自适应高度
-import adaptive from './uitls/el-table'
-Vue.use(adaptive)
 
 Vue.prototype.changeData = function (content,filename,token){
   var params = {
@@ -103,32 +104,7 @@ Vue.prototype.alertMessageTip = (name, message) => {
         offset: 150
     });
 };
-// Vue.directive('antiShake', {
-//   // 被绑定元素插入父节点时调用 (仅保证父节点存在，但不一定已被插入文档中)。
-//   /**
-//    * el 指令所绑定的元素，可以用来直接操作 DOM 。
-//    * binding 一个对象，包含绑定的值
-//    */
-//
-//   inserted: function(el, binding) {
-//     const { callback, time } = binding.value
-//     el.callback = callback
-//     el.time = time
-//     el.timeCall = null
-//     el.addEventListener('click', () => {
-//       clearTimeout(el.timeCall)
-//       el.timeCall = setTimeout(() => {
-//         el.callback()
-//       }, el.time || 500)
-//     })
-//   },
-//   // 所在组件的 VNode 更新时调用
-//   update: function(el, binding) {
-//     const { callback, time } = binding.value
-//     el.callback = callback
-//     el.time = time
-//   },
-// })
+
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
@@ -146,7 +122,7 @@ router.beforeEach((to, from, next) => {
     if(to.path == '/login') {
         next()
     }else {
-        if(vueCookie.get('openId') !=null) {
+        if(vueCookie.get('openId') !='null') {
             next()
         }else {
             MessageBox.confirm('openId不能为空！', '提示', {
@@ -154,10 +130,10 @@ router.beforeEach((to, from, next) => {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                var url = 'https://testweb.datasw.cn/device/webLogin'
+                var url ='https://'+ location.hostname + '/device/webLogin'
                 window.location.replace(url)
             }).catch(() => {
-                var url = 'https://testweb.datasw.cn/device/webLogin'
+                var url ='https://'+ location.hostname + '/device/webLogin'
                 window.location.replace(url)
                 return false
             });

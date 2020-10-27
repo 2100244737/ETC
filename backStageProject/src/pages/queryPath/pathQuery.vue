@@ -126,7 +126,7 @@
             </div>
         </el-dialog>
         <div class="iframe marginTop2" v-if="show">
-            <iframe id="iframe" v-if="show" src="/device/html/static/ipadQuery.html"
+            <iframe id="iframe" v-if="show" src="/device/html/static/view.html"
                     style="height:calc(100vh - 100px);"
                     width="100%" frameborder="0"></iframe>
         </div>
@@ -186,15 +186,8 @@
         methods: {
             //分转元
             changeMoney(num) {
-                var regexp = /(?:\.0*|(\.\d+?)0+)$/
-                if (num > 1000000) {
-                    num = JSON.stringify(num).slice(0, JSON.stringify(num).length - 4) / 100
-                    return num + '万'
-                } else {
-                    num = (num / 100).toFixed(2)
-                    num = num.replace(regexp, '$1')
-                    return num
-                }
+                if ( typeof num !== "number" || isNaN( num ) ) return null;
+                return ( num / 100 ).toFixed( 2 );
             },
             settime (row) {
                 // 编辑 table 时间
@@ -428,6 +421,7 @@
                               // 高德
                                 _t.qqShow = false
                                 const data = JSON.parse(response.bizContent)
+
                                 sessionStorage.setItem("JSON", JSON.stringify(data))
                                 _t.show = true
                             }else {
@@ -470,6 +464,15 @@
 <style scoped>
     /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner {
         width: 180px;/*no*/
+    }
+    .iframe {
+        box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+        border-radius:10px;
+        padding: 5px;
+    }
+     #iframe {
+        box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+        border-radius:10px;
     }
    .path {
        position: relative;

@@ -195,8 +195,7 @@
     </style>
     <title>路径还原</title>
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
-    <script
-        src="https://webapi.amap.com/maps?v=1.4.15&key=key=142567df3f87fb5698fcd0056ee0b842&plugin=AMap.PolyEditor"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=142567df3f87fb5698fcd0056ee0b842&plugin=AMap.PolyEditor"></script>
     <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 
@@ -205,23 +204,7 @@
 
 
 <div id="container"></div>
-<!-- 路径还原选择 -->
-<!--<div class="left_menu hidden-xs"-->
-<!--     style="padding:0px 0px 0px 0px;height:6%;width:10%;position:fixed; top:10%; left:10% ;">-->
-<!--    <div class="left_menu_bg">-->
-<!--        <ul>-->
-<!--            <li class="has-sub " id="mySelection">-->
-<!--                <a href="#none">-->
-<!--                    <div class="menu_wz" style="text-align:center"> 选择路径</div>-->
-<!--                    <div class="menu_jt">-->
-<!--                        <i class="fa fa-caret-down fa-lg"></i></div>-->
-<!--                </a>-->
 
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</div>-->
-<!-- 收费单元 -->
 <div class="left_menu hidden-xs"
      style="padding:0px 0px 0px 0px;height:6%;width:25%;position:fixed; top:7px; right:330px ; min-height: calc(90% - 160px); height: calc(90% - 120px); overflow-y: auto;">
     <div class="left_menu_bg">
@@ -357,7 +340,6 @@
                 pathList[i].className = 'pathListSpan'
             }
         }
-        console.log(valueIndex);
         showIntervals(jsonData, valueIndex);
         map = drawLine(jsonData, valueIndex);
     }
@@ -407,7 +389,6 @@
             })
 
         });
-        console.log(unit,'22222222');
         const container = document.getElementById('intervals');
         const keyData = {
             "37": "山东",
@@ -520,7 +501,6 @@
                             ul.style.display = 'block';
                         }
                     })
-                    console.log(str,'str');
                     str.nodeName.forEach(val => {
                         var lic = document.createElement('li');
                         lic.innerText = val
@@ -674,8 +654,8 @@
         }
 
         // 入出口位置标示
-        var enNode = jsonData.route[index].enNode.nodeName;
-        var exNode = jsonData.route[index].exNode.nodeName;
+        var enNode = jsonData.route[index].exNode.nodeName ;
+        var exNode =  jsonData.route[index].enNode.nodeName;
         // var enNode = "${enTollStationName}"
         // var exNode = "${exTollStationName}"
         if (enNode == null) {

@@ -16,6 +16,7 @@
     "element-ui": "^2.13.1",
     "file-saver": "^2.0.2",
     "js-base64": "^3.4.1",
+    "moment": "^2.29.1",
     "normalize.css": "^8.0.1",
     "postcss-px2rem-exclude": "0.0.6",
     "screenfull": "^5.0.2",

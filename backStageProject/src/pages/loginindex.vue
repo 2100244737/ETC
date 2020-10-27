@@ -36,7 +36,7 @@
                 this.$cookie.delete('roleId');
                 this.$cookie.delete('companyName');
                 localStorage.removeItem("DEVICE_MENU_LIST");
-                sessionStorage.removeItem ('openId')
+
             },
             // 获取openId
             getTokenAndId () {
@@ -44,11 +44,10 @@
                 this.loginForm.accessToken = this.GetQueryValue1 ('accessToken')
                 var millisecond = new Date().getTime();
                 var expiresTime = new Date(millisecond + 60 * 1000 *60 * 6);
-                // this.$cookie.set('openId', this.loginForm.openId,{
-                //     expires: expiresTime,
-                // });
                 this.$cookie.set('openId', this.loginForm.openId);
-                this.loginForm.accessToken= this.loginForm.accessToken.slice(0, this.loginForm.accessToken.length-1)
+                if(this.loginForm.accessToken) {
+                    this.loginForm.accessToken= this.loginForm.accessToken.slice(0, this.loginForm.accessToken.length-1)
+                }
                 this.$cookie.set('accessToken', this.loginForm.accessToken);
 
 
@@ -56,6 +55,7 @@
             // 获取菜单权限
             getMenu () {
                 var _t = this;
+
                 const params = {
                     openId: _t.loginForm.openId,
                     accessToken:_t.loginForm.accessToken
@@ -67,7 +67,6 @@
                         var menuList = JSON.parse(res.bizContent).menus
                         localStorage.setItem("DEVICE_MENU_LIST", JSON.stringify(menuList));
                         const mobile = JSON.parse(res.bizContent).mobile;
-
                         const name = JSON.parse(res.bizContent).name;
                         const roleId = JSON.parse(res.bizContent).roleId;
                         const companyName = JSON.parse(res.bizContent).companyName;
@@ -77,9 +76,13 @@
                         _t.$cookie.set('roleId', roleId); // 角色Id
                         _t.$cookie.set('companyName', companyName); // 单位名称
                         _t.$cookie.set('roleName', roleName); // 角色  1:数软 ，2：厂商， 3：客户
-                         _t.handleLogin()
+                        _t.$nextTick(function () {
+                            _t.handleLogin()
+                        })
+
                     } else {
                         var alertName = ''
+
                         if(res.statusCode == '701') {
                             alertName = 'openId不能为空！'
                         }else {
@@ -90,10 +93,10 @@
                             cancelButtonText: '取消',
                             type: 'warning'
                         }).then(() => {
-                            var url = 'https://testweb.datasw.cn/device/webLogin'
+                            var url = 'https://device.cywetc.com/device/webLogin'
                             window.location.replace(url)
                         }).catch(() => {
-                            var url = 'https://testweb.datasw.cn/device/webLogin'
+                            var url = 'https://device.cywetc.com/device/webLogin'
                             window.location.replace(url)
                             return false
                         });
@@ -113,13 +116,12 @@
             },
             handleLogin() {
                 var _t = this;
-              //  var url ='https://testweb.datasw.cn/device/html/#/index'
-
-                // 测试
-                // var url = 'http://10.10.10.155:8080/smpw/html/#/index'
-                 var url = '/device/html/#/index'
+               // 正式
+               var url ='https://'+ location.hostname + '/device/html/#/index'
+                //测试
+               //var url ='/device/html/#/index'
                 window.location.replace(url)
-                // _t.$router.replace("/smpw/html/index");
+                //_t.$router.replace("/index");
             },
         },
         created() {

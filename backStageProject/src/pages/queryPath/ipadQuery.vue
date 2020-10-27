@@ -41,7 +41,12 @@
                 <el-table-column prop="plateNum" label="车牌号" header-align="center" align="center"/>
                 <el-table-column label="上传时间" header-align="center" align="center">
                     <template slot-scope="scope">
-                        <span v-text="settime(scope.row.insertTime)"></span>
+                        <span v-text="settime(scope.row.uploadTime)"></span>
+                    </template>
+                </el-table-column>
+                <el-table-column   label="入口时间" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-text="settime(scope.row.enTime)"></span>
                     </template>
                 </el-table-column>
                 <el-table-column  label="计费时间" header-align="center" align="center">
@@ -49,6 +54,14 @@
                         <span v-text="settime(scope.row.enTime)"></span>
                     </template>
                 </el-table-column>
+                <el-table-column prop="enTime" label="地图类型" header-align="center" align="center">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.mapType == 1">高德地图</span>
+                        <span v-else>腾讯地图</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="pathCount" label="路径数" header-align="center" align="center"/>
+                <el-table-column prop="msg" label="信息" header-align="center" align="center"/>
                 <el-table-column  label="金额(元)" header-align="center" align="center">
                     <template slot-scope="scope">
                         <span v-text="changeMoney(scope.row.fee)"></span>
@@ -101,6 +114,7 @@
             </div>
         </el-dialog>
         <div v-if="show"  class="iframe marginTop2">
+<!--            /device/html/static/ipadQuery.html-->
             <iframe  id="iframepage"  src="/device/html/static/ipadQuery.html" width="100%"
                      height="600px"
                    frameborder="0" ></iframe>
@@ -165,19 +179,12 @@
         methods: {
             //分转元
             changeMoney(num) {
-                var regexp = /(?:\.0*|(\.\d+?)0+)$/
-                if (num > 1000000) {
-                    num = JSON.stringify(num).slice(0, JSON.stringify(num).length - 4) / 100
-                    return num + '万'
-                } else {
-                    num = (num / 100).toFixed(2)
-                    num = num.replace(regexp, '$1')
-                    return num
-                }
+                if ( typeof num !== "number" || isNaN( num ) ) return null;
+                return ( num / 100 ).toFixed( 2 );
             },
             settime (row) {
                 // 编辑 table 时间
-                return   row.replace("T", ' ')
+                return row? row.replace("T", ' '):'-'
             },
             toUpperCode (val) {
                 this.dataList.carNumber =  val.toUpperCase()
@@ -262,7 +269,6 @@
             lookLog(row) {
                 // 查看日志
                 var _t = this;
-
                 _t.tableShow = false;
                 _t.logBtn = true;
                 const params = {
@@ -270,7 +276,7 @@
                     enTime: row.enTime,
                     plateNum: row.plateNum,
                     plateColor: row.plateColor, // 转Number
-                    insertTime: row.insertTime
+                    insertDate: row.uploadTime
                 }
                 var fileName = api.DEVLOG_DETAIL +getDataTime()+'.json'
                 var data = _t.changeData(params, fileName, _t.$cookie.get('accessToken'));
@@ -334,6 +340,9 @@
                         _t.$api.post('api/json', data, function (res) {
                             if (res.statusCode == 0) {
                                 _t.tableData = JSON.parse(res.bizContent).data
+                                if(JSON.parse(res.bizContent).data.length == 0) {
+                                    _t.alertDialogTip(_t, '未查到相关数据')
+                                }
                             } else {
                                 _t.alertDialogTip(_t, res.errorMsg)
                             }
@@ -348,17 +357,17 @@
                 _t.show = false;
                 _t.showBtn = true;
                 _t.$store.commit('set_loading', true);
-                const time = row.enTime.replace(/:/g, "-");
+                console.log(row);
+                //const time = row.enTime.replace(/:/g, "-");
 
-                var t1 = row.insertTime.split('T')
+                 var t1 = row.enTime.split('T').join('')
 
                 const params = {
                     openId: _t.$cookie.get('openId'),
-                    fileId: t1[0]+ "/" + time + "_" + row.plateNum + '_' + row.plateColor
+                    fileId: row.uploadTime+ "/" + row.enTime + "_" + row.plateNum + '_' + row.plateColor
                 }
                 var fileName = api.DEVLOG_MAP + getDataTime() +'.json'
                 var data = _t.changeData(params, fileName, _t.$cookie.get('accessToken'));
-                // https://device.cywetc.com/fcs/api/json
                 _t.$api.post('api/json', data, function (response) {
                     if (response.statusCode != 0) {
                         _t.alertDialogTip(_t, response.errorMsg)
@@ -411,6 +420,15 @@
 </script>
 
 <style scoped>
+    .iframe {
+        box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+        border-radius:10px;
+        padding: 5px;
+    }
+    #iframepage {
+        box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
+        border-radius:10px;
+    }
     /deep/.el-date-editor.el-input, .el-date-editor.el-input__inner {
         width: 180px;/*no*/
     }

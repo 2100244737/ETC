@@ -11,16 +11,17 @@ module.exports = {
     assetsPublicPath: '/', //  修改打包路径
     proxyTable: {
       '/api': {
-         // target: 'https://testgw.datasw.cn',
-          //target: 'http://10.10.10.155:10082/csc',
-         target: 'http://10.147.18.103:82/device',
+        // target: 'https://device.cywetc.com/device',
+        // target: 'https://web.datasw.cn/device',
+        // target: 'https://testweb.datasw.cn',
+          target: 'http://10.147.18.103:82/device',
         changeOrigin: true,
         pathRewrite: {
           '/api': '/'
         }
       },
         '/json': {
-           target: 'http://10.10.10.155/device',
+           target: 'http://10.10.10.185:10081/csc',
             changeOrigin: true,
             pathRewrite: {
                 '/json': '/'

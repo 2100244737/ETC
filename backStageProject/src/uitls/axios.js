@@ -8,6 +8,7 @@ import {
 import {
     message
 } from './resetMessage';
+import vueCookie from "vue-cookie";
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let cancelToken = axios.CancelToken;//初始化取消请求的构造函数
@@ -72,30 +73,26 @@ function apiAxios(method, url, params, success) {
     }).then(function (res) {
 // 成功时回调
         if (success) {
-
             success(res.data);
             store.commit('set_loading', false);
 
-            // 全局提示敏感词汇
-            // if (res.data.statusCode === 0) {
-            //     // 警告提示
-            //     success(res.data);
-            //     // ElementUI.Message.warning(i18n.messages[i18n.locale].public.includeWords);
-            // } else
-            // if (res.data.statusCode == 701) {
-            //     MessageBox.confirm('openId为空！，登陆状态失效，请重新登录！', '提示', {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //         type: 'warning'
-            //     }).then(() => {
-            //         var url = 'https://testweb.datasw.cn/device/webLogin'
-            //         window.location.replace(url)
-            //     }).catch(() => {
-            //         var url = 'https://testweb.datasw.cn/device/webLogin'
-            //         window.location.replace(url)
-            //         return false
-            //     });
-            // }
+            if (res.data.statusCode == 1000) {
+                MessageBox.confirm('登陆状态失效，请重新登录！', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    var url = 'https://web.datasw.cn/device/webLogin'
+                    window.location.replace(url)
+                }).catch(() => {
+                    var url = 'https://web.datasw.cn/device/webLogin'
+                    window.location.replace(url)
+                    return false
+                });
+            }
+            if(res.data.statusCode === 403) {
+                 _this.$router.replace('/err')
+            }
         }
     }).catch(function (err) {
         // 异常时回调
@@ -103,12 +100,28 @@ function apiAxios(method, url, params, success) {
         return false;
     });
 }
+function out () {
+    MessageBox.confirm('登陆状态失效，请重新登录！', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+        var url = 'https://web.datasw.cn/device/webLogin'
+        window.location.replace(url)
+    }).catch(() => {
+        var url = 'https://web.datasw.cn/device/webLogin'
+        window.location.replace(url)
+        return false
+    });
+}
 axios.interceptors.request.use(
     config => {
         _this.NProgress.start()
         // 该处可以将config打印出来看一下，该部分将发送给后端（server端）
-        if (!_this.$cookie.get('openId')) {
-           // _this.$router.push('/login')
+        console.log(vueCookie.get('openId'));
+        if (vueCookie.get('openId') === 'null') {
+            // _this.$router.push('/login')
+            out()
         }
         if(config.method==='post'&& !config.headers.upData) {
             config.cancelToken = new cancelToken((c) => {

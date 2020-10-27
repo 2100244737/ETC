@@ -9,6 +9,7 @@ export default  {
     DEVICE_ASSIGN :'DEVICE_DEVICE_ASSIGN_REQ_' + number,  // 删除
     DEVICE_IMPORT :'DEVICE_DEVICE_IMPORT_REQ_' + number,  // 批量导入 保存
     COMPANY_LIST :'DEVICE_COMPANY_LIST_REQ_' + number,  // 获取厂商
+    DEVICE_IMPCHK :'DEVICE_DEVICE_IMPCHK_REQ_' + number,  // 获取厂商
 
     // 设备部署
     BIND_RELEASE :'DEVICE_BIND_RELEASE_REQ_' + number, // 解除绑定
@@ -37,6 +38,14 @@ export default  {
     APP_ADD:'DEVICE_APP_ADD_REQ_' + number, // 上传保存功能
     APP_PAGE:'DEVICE_APP_PAGE_REQ_' + number, // 查询
     TOKEN_GAIN:'CSC_TOKEN_GAIN_REQ_' + number, // 获取key
+    APP_AUDIT:'DEVICE_APP_AUDIT_REQ_' + number, // 审核
+
     //SDK 管理
     SDK_PAGE:'DEVICE_SDK_PAGE_REQ_' + number, // 查询
+    SDK_ADD:'DEVICE_SDK_ADD_REQ_' + number, // 新增
+    SDK_AUDIT:'DEVICE_SDK_AUDIT_REQ_' + number, // 审核
+    // 许可证管理
+    LICENCE_PAGE:'DEVICE_LICENCE_PAGE_REQ_' + number, // 查询
+    LICENCE_ADD:'DEVICE_LICENCE_ADD_REQ_' + number, // 添加
+    LICENCE_DELETE:'DEVICE_LICENCE_DELETE_REQ_' + number, // 删除
 }

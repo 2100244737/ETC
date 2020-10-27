@@ -76,7 +76,7 @@
         mounted() {
             // 刷新时以当前路由做为tab加入tabs
             var _t = this;
-            if (_t.$route.name !== 'index') {
+            if (_t.$route.name !== 'index' && _t.$route.name !== 'err') {
                 // 非首页且非详情页
                 _t.$store.commit('add_tabs', {route: '/index', title: '首页', name: 'index'});
                 _t.$store.commit('add_tabs', {

@@ -8,23 +8,8 @@
 
 
     export default {
-        name: 'App',
-        data() {
-            return {
-
-            }
-        },
-        mounted() {
-
-        },
-        methods: {
-
-
-        },
-        created() {
-
+        name: 'App'
         }
-    }
 </script>
 
 <style scoped>

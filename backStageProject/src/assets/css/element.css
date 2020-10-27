@@ -116,6 +116,9 @@
     border-radius:21px;
     border:1px solid rgba(242,243,245,0.3);
 }
+.formBox-top .el-select .el-input__inner {
+    height: 33px;
+}
 .el-pagination__editor.el-input .el-input__inner {
     border-radius: 0px;
     box-shadow: transparent;
@@ -139,11 +142,10 @@
     box-shadow:0px 0px 4px 2px rgba(253,155,157,0.5);
 }
 .yellowBtn {
-    width: 100px; /*no*/
-    height: 33px; /*no*/
+    width: 100px;
+    height: 33px;
     font-size:14px;
     color: #fff;
-    /*padding: 7px 36px !important;*/
     background:linear-gradient(270deg,rgba(255,216,125,1) 0%,rgba(246,188,51,1) 100%);
     box-shadow:0px 0px 4px 2px rgba(253,200,93,0.5);
 }
@@ -151,7 +153,6 @@
 .el-button:focus, .el-button:hover {
     color: #fff;
     border-color: transparent;
-    background-color: transparent;
 }
 .el-button {
     border-color: transparent;

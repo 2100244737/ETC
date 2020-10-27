@@ -6,15 +6,19 @@
                     <el-input size="mini"  @keyup.enter.native="refreshHandle" clearable v-model="formItem.phoneNumber" placeholder="请输入手机号"></el-input>
                 </el-form-item>
                 <el-form-item label="单位：" >
-                    <el-select clearable  v-model="formItem.factoryName" filterable placeholder="选择单位">
-                        <el-option label="数软" value="1"></el-option>
-                        <el-option label="设备厂商" value="2"></el-option>
-                        <el-option label="客户" value="3"></el-option>
+
+                    <el-select clearable  v-model="formItem.factoryName" filterable placeholder="请选择单位">
+                        <el-option
+                            v-for="(item,index) in factoryNameList"
+                            :key="index"
+                            :label="item.name"
+                            :value="item.id"/>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="角色：">
                     <el-select
                         clearable
+                        placeholder="请选择角色"
                         v-model="formItem.roleId">
                         <el-option
                             v-for="(item,index) in roleList"
@@ -26,7 +30,8 @@
                 <el-form-item label="状态：" prop="role">
                     <el-select
                         clearable
-                        v-model="amend.userStatus">
+                        placeholder="请选择状态"
+                        v-model="formItem.userStatus">
                         <el-option label="启用" value="1"/>
                         <el-option label="停用" value="2"/>
                     </el-select>
@@ -183,6 +188,7 @@
                 userList: [],// 角色数组
                 tableData: [],//  表格数据
                 roleList: [], // 角色数据
+                factoryNameList: [],
                 extendompetenceList: [], // 权限范围
                 configurationVisible: false, // 配置
                 synchronizationVisible: false, // 同步查询
@@ -239,7 +245,23 @@
             Pages
         },
         methods: {
+            getFactory() {
+                var _t = this;
+                const params = {
+                    accessToken: _t.$cookie.get('accessToken'),
+                    openId: _t.$cookie.get('openId'),
+                };
+                var filename = api.COMPANY_LIST + getDataTime() + '.json';
+                var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));
+                _t.$api.post('api/json', data, function (res) {
+                    if (res.statusCode == 0) {
 
+                        _t.factoryNameList = JSON.parse(res.bizContent).list
+                    } else {
+                        _t.alertDialogTip(_t, res.errorMsg);
+                    }
+                })
+            },
             startRoStop(row) {
                 var _t = this;
                 if(row.userStatus == '1') {
@@ -429,7 +451,7 @@
                 const params = {
                     userStatus: _t.formItem.userStatus,
                     roleId: _t.formItem.roleId,
-                    factoryName: _t.formItem.factoryName,
+                    factoryId: _t.formItem.factoryName,
                     mobile: _t.formItem.phoneNumber,
                     // mapAppType: _t.formItem.user,
                     accessToken: _t.$cookie.get('accessToken'),
@@ -531,6 +553,7 @@
             this.$store.commit('set_loading', true);
             this.refreshHandle()
             this.getRoleLIst()
+            this.getFactory()
         }
     }
 </script>

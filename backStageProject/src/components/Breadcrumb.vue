@@ -19,7 +19,7 @@
         components: {},
         computed: {
             getBreadcrumb() {
-                return this.$route.matched.filter(item => item.meta && item.meta.title && item.meta.title !== '首页');
+                return this.$route.matched.filter(item => item.meta && item.meta.title && item.meta.title !== '首页'&& item.meta.title !== 'err');
             }
         },
         watch: {

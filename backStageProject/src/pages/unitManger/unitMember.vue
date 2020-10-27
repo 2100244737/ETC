@@ -2,10 +2,10 @@
     <div>
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
-                <el-form-item label="手机号">
+                <el-form-item label="手机号：">
                     <el-input clearable @keyup.enter.native="getData" size="mini" v-model="formItem.mobile" placeholder="请输入手机号"></el-input>
                 </el-form-item>
-                <el-form-item label="角色">
+                <el-form-item label="角色：">
                     <el-select clearable size="mini" v-model="formItem.roleId" filterable placeholder="请选择角色">
                         <el-option v-for="(item) in roleList" :label="item.name" :key="item.id"
                                    :value="item.id"></el-option>
