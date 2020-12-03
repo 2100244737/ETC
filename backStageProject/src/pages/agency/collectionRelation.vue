@@ -3,9 +3,7 @@
         <!--        代收关系查询-->
         <div class="formBox-top">
             <el-form ref="provinceForm" :model="formItem" class="clearFix" inline>
-                <el-form-item label="收费站名称：">
-                    <el-input @keyup.enter.native="getData" clearable size="mini" v-model="formItem.stationName" placeholder="请输入收费站名称"></el-input>
-                </el-form-item>
+
                 <el-form-item label="省份：" prop="province">
                     <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
@@ -40,7 +38,9 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-                <br>
+                <el-form-item label="收费站名称：">
+                    <el-input @keyup.enter.native="getData" clearable size="mini" v-model="formItem.stationName" placeholder="请输入收费站名称"></el-input>
+                </el-form-item>
                 <el-form-item class="fr">
                     <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
                     <el-button class="cyanBtn" size="mini" round @click="setAddHandle">添加</el-button>

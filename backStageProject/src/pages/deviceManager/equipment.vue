@@ -641,9 +641,7 @@
                 var data = this.changeData(params, filename, _t.$cookie.get('accessToken'));
                 _t.$api.post('api/json', data, function (res) {
                     if (res.statusCode == 0) {
-                        setTimeout(() => {
-                            _t.$store.commit('set_loading', false);
-                        }, 500);
+                        _t.$store.commit('set_loading', false);
                         _t.tableData = JSON.parse(res.bizContent).data ? JSON.parse(res.bizContent).data : [];
                         _t.tableData.forEach(item => {
                             item.roleName = _t.$cookie.get('roleName')

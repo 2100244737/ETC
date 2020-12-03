@@ -24,7 +24,7 @@
                     </el-popover>
                     <p class="line-user"></p>
                 </div>
-                <NavMenu class="NavMenu"/>
+                <NavMenu  class="NavMenu"/>
 
                 <div v-if="!active" class="operation">
                     <p class="line-box2"></p>
@@ -267,9 +267,45 @@
                     this.timeState = `晚上好`;
                 }
                 // 返回当前时间段对应的状态
-            }
+            },
+            // 获取菜单权限
+            getMenu () {
+                var _t = this;
+                const params = {
+                    accessToken: _t.$cookie.get('accessToken'),
+                    openId: _t.$cookie.get('openId'),
+                };
+                var filename = 'DEVICE_USER_LOGIN_REQ_99999925_' + getDataTime() + '.json';
+                var data = _t.changeData(params, filename, _t.loginForm.accessToken);
+                _t.$api.post('api/json', data, function (res) {
+                    if (res.statusCode == 0) {
+
+                    } else {
+                        var alertName = ''
+
+                        if(res.statusCode == '701') {
+                            alertName = 'openId不能为空！'
+                        }else {
+                            alertName = res.errorMsg
+                        }
+                        var url ='https://'+ location.hostname + '/device/webLogin'
+                        _t.$confirm(alertName, '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+
+                            window.location.replace(url)
+                        }).catch(() => {
+                            window.location.replace(url)
+                            return false
+                        });
+                    }
+                })
+            },
         },
         created() {
+             this.getMenu()
              this.getTimeState()
             this.$store.state.options = [];
             this.$store.state.activeIndex = '';
@@ -310,7 +346,8 @@
 
     .el-tabs--border-card > .el-tabs__header .el-tabs__item + .el-tabs__item, .el-tabs--border-card > /deep/ .el-tabs__header .el-tabs__item:first-child {
         /*// 标签页首页移动*/
-        /*margin-left: -10px;*/
+        margin-left: 1px;
+
     }
 
     .el-tabs /deep/ .el-tabs__item {
@@ -349,15 +386,15 @@
 
     .main {
         width: 100%;
-        height: calc(100vh - 160px);
+        height: calc(100vh - 110px);
         overflow-y: auto;
-        margin-top: 35px;
+        margin-top: 20px;
         box-sizing: border-box;
     }
 
     .routerView {
 
-        padding: 0 30px;
+        padding: 0 19px;
     }
 
     .content {
@@ -426,7 +463,7 @@
         height: 2px;
         background: rgba(199, 224, 255, 1);
         border-radius: 1px;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
 
     .operation-message {
@@ -467,14 +504,14 @@
     .profile-img {
         height: 80px; /*no*/
         width: 80px; /*no*/
-        margin-top: 70px;
+        margin-top: 20px;
     }
 
     .line-box {
         width: 49px;
         height: 2px;
-        margin-top: 34px;
-        margin-bottom: 26px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         background: rgba(199, 224, 255, 1);
         border-radius: 1px;
     }
@@ -493,15 +530,17 @@
         /*width: 100%;*/
         /*height: 100%;*/
         flex: 1;
-        padding-top: 30px;
+        padding-top: 20px;
         background: rgba(245, 247, 250, 1);
         border-radius: 31px 0px 0px 31px;
     }
 
     .tabs {
-        padding: 0 30px;
+        padding: 0 20px;
     }
-
+    /deep/.el-tabs--border-card>.el-tabs__content {
+        display: none;
+    }
     .template-tabs {
         height: 30px;
         margin-left: -1px;
@@ -509,7 +548,7 @@
 
     .header {
         width: 100%;
-        padding: 0 25px;
+        padding: 0 13px;
     }
 
     .fullAll {

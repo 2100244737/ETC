@@ -4,10 +4,13 @@
     background:rgba(255,255,255,1);
     box-shadow:0px 0px 11px 5px rgba(227,227,227,0.5);
     border-radius:10px;
-    padding: 30px 10px 0 10px;
-    margin-bottom: 40px; /*no*/
+    padding: 8px 8px 0 8px;
+    margin-bottom: 20px;
     box-sizing: border-box;
 
+}
+.formBox-top .el-form-item{
+    margin-bottom: 15px;
 }
 .el-button {
     border: 0px solid #DCDFE6;

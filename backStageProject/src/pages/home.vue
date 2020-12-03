@@ -42,7 +42,7 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        height: calc(100vh - 160px);
+        height: calc(100vh - 120px);
         width: 100%;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 0px 11px 5px rgba(227, 227, 227, 0.5);

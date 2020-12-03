@@ -39,7 +39,6 @@
 <!--                <el-form-item label="车站名称：">-->
 <!--                    <el-input clearable maxlength="150" v-model="formItem.stationName" placeholder="请输入车站名称"></el-input>-->
 <!--                </el-form-item>-->
-                <br>
                 <el-form-item class="fr" >
                     <el-button  class="yellowBtn"  size="mini" round @click="getData">查询</el-button>
                     <el-button class="cyanBtn" size="mini" round @click="AddSever">添加</el-button>

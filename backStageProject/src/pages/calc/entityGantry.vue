@@ -37,13 +37,12 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="ID：">
-                    <el-input  clearable  size="mini" @keyup.enter.native="getData" v-model="formItem.id" placeholder="请输入ID"></el-input>
+                <el-form-item label="门架Hex码：">
+                    <el-input  clearable  size="mini" @keyup.enter.native="getData" v-model="formItem.gantryHex" placeholder="请输入门架Hex码"></el-input>
                 </el-form-item>
                 <el-form-item label="名称：">
                     <el-input  clearable  size="mini" @keyup.enter.native="getData" v-model="formItem.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
-                <br>
                 <el-form-item class="fr">
                     <el-button class="yellowBtn"  size="mini" round @click="getData">查询</el-button>
                     <el-button class="redBtn"  size="mini" round @click="resetHandle">重置</el-button>
@@ -54,7 +53,8 @@
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column  type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
-                <el-table-column prop="unitName" label="名称" header-align="center" align="center"/>
+                <el-table-column prop="gantryName" label="名称" header-align="center" align="center"/>
+                <el-table-column prop="id" label="id" header-align="center" align="center"/>
                 <el-table-column prop="chargeUnitId" label="收费单元编号" header-align="center" align="center"/>
                 <el-table-column prop="gantryHex" label="门架Hex码" header-align="center" align="center"/>
                 <el-table-column prop="lat" label="纬度" header-align="center" align="center"/>
@@ -118,6 +118,7 @@
                 this.formItem.province = '';
                 this.formItem.id = '';
                 this.formItem.name = '';
+                this.formItem.gantryHex = '';
                 this.getData()
             },
             getData() {
@@ -130,8 +131,9 @@
                 const params = {
                     openId: _t.$cookie.get('openId'),
                     province: _t.formItem.province?_t.formItem.province: null,
-                    id: _t.formItem.id?_t.formItem.id:null,
-                    name: _t.formItem.name?_t.formItem.name:null,
+                    gantryId: _t.formItem.id?_t.formItem.id:null,
+                    gantryHex: _t.formItem.gantryHex?_t.formItem.gantryHex:null,
+                    gantryName: _t.formItem.name?_t.formItem.name:null,
                     pageNo: _t.options.currentPage, // 当前页
                     pageSize: _t.options.pageSize, // 显示条数
                 };

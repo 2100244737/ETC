@@ -46,8 +46,6 @@
                     <el-input size="mini" @keyup.enter.native="getData" clearable maxlength="150" v-model="formItem.stationName"
                               placeholder="请输入收费站名称"></el-input>
                 </el-form-item>
-                <br>
-                <br>
                 <el-form-item class="fr">
                     <el-button class="yellowBtn"  size="mini" round @click="getData">查询</el-button>
                     <el-button class="cyanBtn"  size="mini" round @click="AddSever">添加</el-button>

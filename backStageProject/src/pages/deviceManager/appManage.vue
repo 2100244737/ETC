@@ -23,7 +23,6 @@
                 <!--                        <el-option label="阿里APP" value="1"></el-option>-->
                 <!--                    </el-select>-->
                 <!--                </el-form-item>-->
-                <br>
                 <el-form-item class="fr">
                     <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
                     <el-button class="blueBtn" size="mini" round @click="upData">上传</el-button>
@@ -133,6 +132,40 @@
                             <el-select clearable v-model="upDataForm.versionType" filterable placeholder="请选择版本类型">
                                 <el-option label="测试版本" value="0"></el-option>
                                 <el-option label="正式版本" value="1"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item label="省份：">
+                            <el-select clearable  v-model="upDataForm.province" filterable placeholder="请选择查询省份">
+                                <el-option label="北京" value="11"></el-option>
+                                <el-option label="天津" value="12"></el-option>
+                                <el-option label="河北" value="13"></el-option>
+                                <el-option label="山西" value="14"></el-option>
+                                <el-option label="内蒙古" value="15"></el-option>
+                                <el-option label="辽宁" value="21"></el-option>
+                                <el-option label="吉林" value="22"></el-option>
+                                <el-option label="黑龙江" value="23"></el-option>
+                                <el-option label="上海" value="31"></el-option>
+                                <el-option label="江苏" value="32"></el-option>
+                                <el-option label="安徽" value="34"></el-option>
+                                <el-option label="浙江" value="33"></el-option>
+                                <el-option label="福建" value="35"></el-option>
+                                <el-option label="江西" value="36"></el-option>
+                                <el-option label="山东" value="37"></el-option>
+                                <el-option label="河南" value="41"></el-option>
+                                <el-option label="湖北" value="42"></el-option>
+                                <el-option label="广东" value="44"></el-option>
+                                <el-option label="广西" value="45"></el-option>
+                                <el-option label="海南" value="46"></el-option>
+                                <el-option label="重庆" value="50"></el-option>
+                                <el-option label="四川" value="51"></el-option>
+                                <el-option label="贵州" value="52"></el-option>
+                                <el-option label="云南" value="53"></el-option>
+                                <el-option label="西藏" value="54"></el-option>
+                                <el-option label="陕西" value="61"></el-option>
+                                <el-option label="甘肃" value="62"></el-option>
+                                <el-option label="青海" value="63"></el-option>
+                                <el-option label="宁夏" value="64"></el-option>
+                                <el-option label="新疆" value="65"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="是否强制升级：" prop="gradeType">
@@ -250,6 +283,7 @@
                     appClientType: '',
                     versionType: '',
                     name: '',
+                    province: '',
                     version: '',
                     description: ''
                 },
@@ -390,6 +424,7 @@
                 this.upDataForm.versionType = '';
                 this.upDataForm.serverVersion = '';
                 this.upDataForm.name = '';
+                this.upDataForm.province = '';
                 this.upDataForm.version = '';
                 this.upDataForm.description = '';
                 this.uploadFile = null
@@ -412,7 +447,8 @@
                             serverVersion: _t.upDataForm.serverVersion,//APP服务端版本号
                             versionType: _t.upDataForm.versionType,//版本类型
                             gradeType: _t.upDataForm.gradeType,//是否强制升级
-                            description: _t.upDataForm.description//描述
+                            description: _t.upDataForm.description,//描述
+                            province: _t.upDataForm.province//省份
                         };
                         var filename = api.APP_ADD + getDataTime() + '.json';
                         var data = _t.changeData(params, filename, _t.$cookie.get('accessToken'));

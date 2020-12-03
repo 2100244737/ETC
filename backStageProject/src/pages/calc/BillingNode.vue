@@ -57,6 +57,7 @@
             <el-table :data="tableData" size="small" stripe>
                 <el-table-column type="index" width="80px" label="序号" header-align="center" align="center"/>
                 <el-table-column prop="province" label="省份" header-align="center" align="center"/>
+                <el-table-column prop="id" label="id" header-align="center" align="center"/>
                 <el-table-column prop="enRoadNodeId" label="入口节点编号" header-align="center" align="center"/>
                 <el-table-column prop="exRoadNodeId" label="出口节点编号" header-align="center" align="center"/>
                 <el-table-column prop="miles" label="物理里程（米）" header-align="center" align="center"/>

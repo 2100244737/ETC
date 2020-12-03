@@ -40,8 +40,10 @@
             },
             // 获取openId
             getTokenAndId () {
-                this.loginForm.openId = this.GetQueryValue1('openId')
-                this.loginForm.accessToken = this.GetQueryValue1 ('accessToken')
+                 this.loginForm.openId = this.GetQueryValue1('openId')
+                 this.loginForm.accessToken = this.GetQueryValue1 ('accessToken')
+                // this.loginForm.openId = '266b5c9e6c244ff891db9cc70685ab02'
+                // this.loginForm.accessToken = 'd0c9f14d1c4e44bc85446a123f49ccf5'
                 var millisecond = new Date().getTime();
                 var expiresTime = new Date(millisecond + 60 * 1000 *60 * 6);
                 this.$cookie.set('openId', this.loginForm.openId);
@@ -93,10 +95,10 @@
                             cancelButtonText: '取消',
                             type: 'warning'
                         }).then(() => {
-                            var url = 'https://device.cywetc.com/device/webLogin'
+                            var url ='https://'+ location.hostname + '/device/webLogin'
                             window.location.replace(url)
                         }).catch(() => {
-                            var url = 'https://device.cywetc.com/device/webLogin'
+                            var url ='https://'+ location.hostname + '/device/webLogin'
                             window.location.replace(url)
                             return false
                         });
@@ -119,7 +121,7 @@
                // 正式
                var url ='https://'+ location.hostname + '/device/html/#/index'
                 //测试
-               //var url ='/device/html/#/index'
+              // var url ='/device/html/#/index'
                 window.location.replace(url)
                 //_t.$router.replace("/index");
             },

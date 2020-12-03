@@ -357,7 +357,6 @@
                 _t.show = false;
                 _t.showBtn = true;
                 _t.$store.commit('set_loading', true);
-                console.log(row);
                 //const time = row.enTime.replace(/:/g, "-");
 
                  var t1 = row.enTime.split('T').join('')

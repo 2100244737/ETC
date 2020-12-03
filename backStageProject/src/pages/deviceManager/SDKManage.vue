@@ -18,7 +18,6 @@
 <!--                        <el-option label="非强制升级" value="2"></el-option>-->
 <!--                    </el-select>-->
 <!--                </el-form-item>-->
-                <br>
                 <el-form-item class="fr">
                     <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
                     <el-button class="blueBtn" size="mini" round @click="upData">上传</el-button>

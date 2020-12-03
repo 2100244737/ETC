@@ -1,6 +1,5 @@
 <template>
     <el-breadcrumb class="app-breadcrumb" separator=">">
-
         <el-breadcrumb-item  :to="{ path: '/index' }"> <span :class="pathUrl =='/index'?'dot-bg':'dot'"></span> <span :class="pathUrl=='/index'?'home-bg':'home'">首页</span></el-breadcrumb-item>
         <el-breadcrumb-item v-for="(item, index) in getBreadcrumb" :key="index">
             <span :class="pathUrl == item.path?'dot-bg':'dot'"></span> <span :class="pathUrl== item.path?'home-bg':'home'">{{item.meta.title}}</span>
@@ -65,7 +64,7 @@
         margin-left: 8px;
         text-align: center;
         padding-bottom: 5px;
-        margin-bottom: 20px;
+        margin-bottom: 8px;
     }
     .home-bg {
         font-weight: 600;

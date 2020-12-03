@@ -77,15 +77,14 @@ function apiAxios(method, url, params, success) {
             store.commit('set_loading', false);
 
             if (res.data.statusCode == 1000) {
+                var url ='https://'+ location.hostname + '/device/webLogin'
                 MessageBox.confirm('登陆状态失效，请重新登录！', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    var url = 'https://web.datasw.cn/device/webLogin'
                     window.location.replace(url)
                 }).catch(() => {
-                    var url = 'https://web.datasw.cn/device/webLogin'
                     window.location.replace(url)
                     return false
                 });
@@ -101,15 +100,14 @@ function apiAxios(method, url, params, success) {
     });
 }
 function out () {
+    var url ='https://'+ location.hostname + '/device/webLogin'
     MessageBox.confirm('登陆状态失效，请重新登录！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-        var url = 'https://web.datasw.cn/device/webLogin'
         window.location.replace(url)
     }).catch(() => {
-        var url = 'https://web.datasw.cn/device/webLogin'
         window.location.replace(url)
         return false
     });
@@ -118,10 +116,10 @@ axios.interceptors.request.use(
     config => {
         _this.NProgress.start()
         // 该处可以将config打印出来看一下，该部分将发送给后端（server端）
-        console.log(vueCookie.get('openId'));
         if (vueCookie.get('openId') === 'null') {
-            // _this.$router.push('/login')
+
             out()
+            return false;
         }
         if(config.method==='post'&& !config.headers.upData) {
             config.cancelToken = new cancelToken((c) => {

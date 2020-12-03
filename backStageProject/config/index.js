@@ -13,8 +13,8 @@ module.exports = {
       '/api': {
         // target: 'https://device.cywetc.com/device',
         // target: 'https://web.datasw.cn/device',
-        // target: 'https://testweb.datasw.cn',
-          target: 'http://10.147.18.103:82/device',
+         target: 'https://testweb.datasw.cn',
+          //target: 'http://10.147.18.103:82/device',
         changeOrigin: true,
         pathRewrite: {
           '/api': '/'

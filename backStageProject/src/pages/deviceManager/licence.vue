@@ -24,7 +24,6 @@
                         end-placeholder="结束日期">
                     </el-date-picker>
                 </el-form-item>
-                <br>
                 <el-form-item class=" fr marBottom7">
                     <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
                     <el-button class="cyanBtn" size="mini" round @click="setAddHandle">添加</el-button>

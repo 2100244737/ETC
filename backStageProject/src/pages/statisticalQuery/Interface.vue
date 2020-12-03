@@ -13,7 +13,6 @@
                         placeholder="选择日期">
                     </el-date-picker>
                 </el-form-item>
-                <br>
                 <el-form-item class="fr">
                     <el-button  class="yellowBtn"  size="mini" round  @click="getData">查询</el-button>
                     <el-button  class="blueBtn"  size="mini" round  @click="deriveTable">导出文件</el-button>
@@ -120,6 +119,7 @@
                 return realVal
             },
             numberData (value) {
+
                 let realVal = ''
                 realVal = value.replace('%','')
                 // if (!isNaN(value) && value !== '') {
@@ -326,11 +326,9 @@
             },
         },
         created() {
-
             this.formItem.date = this.$time().subtract(1, "days").format("YYYY-MM-DD");
             this.getOrderNumber()
              this.getData()
-
         }
     }
 </script>

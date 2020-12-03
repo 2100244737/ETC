@@ -2,17 +2,6 @@
     <div>
         <div class="formBox-top">
             <el-form :model="formItem" label-width="70px" class="clearFix" inline>
-                <el-form-item label="日期：" class="marBottom7">
-                    <el-date-picker
-                        size="mini"
-                        value-format="yyyy-MM-dd" format="yyyy-MM-dd"
-                        v-model="formItem.date"
-                        align="right"
-                        type="date"
-                        :picker-options="pickerOptions"
-                        placeholder="选择日期">
-                    </el-date-picker>
-                </el-form-item>
                 <el-form-item label="省份：" prop="province">
                     <el-select clearable size="mini" v-model="formItem.province" filterable placeholder="请选择查询省份">
                         <el-option label="北京" value="11"></el-option>
@@ -47,7 +36,19 @@
                         <el-option label="新疆" value="65"></el-option>
                     </el-select>
                 </el-form-item>
-                <br>
+                <el-form-item label="日期：" class="marBottom7">
+                    <el-date-picker
+                        size="mini"
+                        value-format="yyyy-MM-dd" format="yyyy-MM-dd"
+                        v-model="formItem.date"
+                        align="right"
+                        type="date"
+                        :picker-options="pickerOptions"
+                        placeholder="选择日期">
+                    </el-date-picker>
+                </el-form-item>
+
+
                 <el-form-item class="fr">
                     <el-button class="yellowBtn" size="mini" round @click="getData">查询</el-button>
                     <el-button class="blueBtn" size="mini" round @click="deriveTable">导出文件</el-button>

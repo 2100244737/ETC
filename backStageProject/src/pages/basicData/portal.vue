@@ -144,7 +144,7 @@
                     openId: _t.$cookie.get('openId'),
                     province: _t.formItem.province?_t.formItem.province: null,
                     id: _t.formItem.id?_t.formItem.id:null,
-                    stationHex: _t.formItem.stationHex?_t.formItem.stationHex:null,
+                    gantryHex: _t.formItem.stationHex?_t.formItem.stationHex:null,
                     name: _t.formItem.name?_t.formItem.name:null,
                     pageNo: _t.options.currentPage, // 当前页
                     pageSize: _t.options.pageSize, // 显示条数
